@@ -539,7 +539,7 @@ export default function DepreciationCalculator() {
                         Depreciation Rate:
                       </span>
                       <span className="font-semibold text-sm sm:text-base">
-                        {results.depreciationRate.toFixed(0)}%
+                        {results.depreciationRate.toFixed(2)}%
                       </span>
                     </div>
 
@@ -549,7 +549,7 @@ export default function DepreciationCalculator() {
                       </span>
                       <div className="text-right">
                         <span className="font-semibold text-sm sm:text-base block">
-                          {results.annualDepreciationRate.toFixed(0)}%
+                          {results.annualDepreciationRate.toFixed(2)}%
                         </span>
                         <span className="text-xs text-gray-500">
                           (per year)
