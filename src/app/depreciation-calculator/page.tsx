@@ -1,24 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo, memo, useRef } from "react";
+import { useState, useEffect, useCallback, useMemo, memo } from "react";
 import Link from "next/link";
-
-// Custom hook for debouncing
-function useDebounce<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-}
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
 interface COEPrices {
   category_a: number; // Cars 1600cc & below and taxis
@@ -36,53 +21,85 @@ interface CalculationResults {
   annualDepreciationRate: number;
   valueRetention: number;
   yearsSinceReg: number;
+  daysSinceReg: number;
   coeRemainingValue: number;
   coeRemainingYears: number;
+  coeRemainingDays: number;
   currentCoePrice: number;
 }
 
-// Optimized Input Component
-const OptimizedInput = memo(
+// Formik Field Component
+const FormikField = memo(
   ({
     label,
     name,
-    value,
-    onChange,
     placeholder,
     type = "text",
   }: {
     label: string;
     name: string;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     placeholder?: string;
     type?: string;
   }) => (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label
+        htmlFor={name}
+        className="block text-sm font-medium text-gray-700 mb-2"
+      >
         {label}
       </label>
-      <input
-        type={type}
+      <Field
+        id={name}
         name={name}
-        value={value}
-        onChange={onChange}
+        type={type}
         placeholder={placeholder}
-        className="w-full border border-gray-300 rounded-md px-3 py-3 sm:py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full border border-gray-300 rounded-md px-3 py-3 sm:py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      />
+      <ErrorMessage
+        name={name}
+        component="div"
+        className="mt-1 text-sm text-red-600"
       />
     </div>
   )
 );
 
-OptimizedInput.displayName = "OptimizedInput";
+FormikField.displayName = "FormikField";
+
+// Validation Schema
+const validationSchema = Yup.object()
+  .shape({
+    newCarPrice: Yup.number()
+      .required("New price is required")
+      .positive("Price must be positive")
+      .min(1000, "Price must be at least S$1,000")
+      .max(1000000, "Price must be less than S$1,000,000"),
+    currentPrice: Yup.number()
+      .required("Current price is required")
+      .positive("Price must be positive")
+      .min(100, "Price must be at least S$100")
+      .max(1000000, "Price must be less than S$1,000,000"),
+    registrationDate: Yup.date()
+      .required("Registration date is required")
+      .max(new Date(), "Registration date cannot be in the future")
+      .min(new Date("2000-01-01"), "Registration date must be after 2000"),
+  })
+  .test(
+    "currentPrice",
+    "Current price must be less than new price",
+    function (values) {
+      const { newCarPrice, currentPrice } = values;
+      if (newCarPrice && currentPrice && currentPrice >= newCarPrice) {
+        return this.createError({
+          path: "currentPrice",
+          message: "Current price must be less than new price",
+        });
+      }
+      return true;
+    }
+  );
 
 export default function DepreciationCalculator() {
-  const [formData, setFormData] = useState({
-    newCarPrice: "",
-    currentPrice: "",
-    registrationDate: "",
-  });
-
   const [coePrice, setCoePrice] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [calculating, setCalculating] = useState(false);
@@ -90,24 +107,16 @@ export default function DepreciationCalculator() {
   const [error, setError] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Debounce form data for performance
-  const debouncedFormData = useDebounce(formData, 300);
-
-  // Use ref to prevent unnecessary re-renders during rapid typing
-  const inputTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  // Initial form values
+  const initialValues = {
+    newCarPrice: "",
+    currentPrice: "",
+    registrationDate: "",
+  };
 
   // Fetch COE prices from LTA
   useEffect(() => {
     fetchCOEPrices();
-  }, []);
-
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (inputTimeoutRef.current) {
-        clearTimeout(inputTimeoutRef.current);
-      }
-    };
   }, []);
 
   const fetchCOEPrices = async () => {
@@ -133,147 +142,74 @@ export default function DepreciationCalculator() {
     }
   };
 
-  const handleInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, value } = e.target;
-
-      // Clear any existing timeout
-      if (inputTimeoutRef.current) {
-        clearTimeout(inputTimeoutRef.current);
+  // Handle form submission
+  const handleSubmit = useCallback(
+    (values: typeof initialValues) => {
+      if (!coePrice) {
+        alert("COE price is not available. Please try again.");
+        return;
       }
 
-      // Use a small timeout to batch rapid state updates
-      inputTimeoutRef.current = setTimeout(() => {
-        setFormData((prev) => ({
-          ...prev,
-          [name]: value,
-        }));
-      }, 100);
+      setCalculating(true);
+
+      // Use requestAnimationFrame for better performance
+      requestAnimationFrame(() => {
+        const newPrice = parseFloat(values.newCarPrice);
+        const currentPrice = parseFloat(values.currentPrice);
+        const regDate = new Date(values.registrationDate);
+        const currentDate = new Date();
+
+        // Calculate days since registration
+        const daysSinceReg = Math.floor(
+          (currentDate.getTime() - regDate.getTime()) / (1000 * 60 * 60 * 24)
+        );
+
+        // Calculate years for display purposes
+        const yearsSinceReg = daysSinceReg / 365.25;
+
+        // COE is valid for 10 years (3652.5 days), after which it depreciates to 0
+        const totalCoeDays = 10 * 365.25; // 3652.5 days
+        const coeRemainingDays = Math.max(0, totalCoeDays - daysSinceReg);
+        const coeRemainingYears = coeRemainingDays / 365.25;
+        const coeRemainingValue = (coeRemainingDays / totalCoeDays) * coePrice;
+
+        // Calculate depreciation
+        const totalDepreciation = newPrice - currentPrice;
+        const depreciationRate = (totalDepreciation / newPrice) * 100;
+        const annualDepreciationRate = depreciationRate / yearsSinceReg;
+
+        // Calculate value retention
+        const valueRetention = (currentPrice / newPrice) * 100;
+
+        setResults({
+          newPrice,
+          currentPrice,
+          totalDepreciation,
+          depreciationRate,
+          annualDepreciationRate,
+          valueRetention,
+          yearsSinceReg,
+          daysSinceReg,
+          coeRemainingValue,
+          coeRemainingYears,
+          coeRemainingDays,
+          currentCoePrice: coePrice,
+        });
+
+        setCalculating(false);
+      });
     },
-    []
+    [coePrice]
   );
 
-  // Memoize form validation using debounced data
-  const isFormValid = useMemo(() => {
-    return !!(
-      debouncedFormData.newCarPrice &&
-      debouncedFormData.currentPrice &&
-      debouncedFormData.registrationDate &&
-      coePrice
-    );
-  }, [
-    debouncedFormData.newCarPrice,
-    debouncedFormData.currentPrice,
-    debouncedFormData.registrationDate,
-    coePrice,
-  ]);
-
-  const calculateDepreciation = useCallback(() => {
-    if (!isFormValid) {
-      alert("Please fill in all fields");
-      return;
-    }
-
-    setCalculating(true);
-
-    // Use requestAnimationFrame for better performance
-    requestAnimationFrame(() => {
-      const newPrice = parseFloat(debouncedFormData.newCarPrice);
-      const currentPrice = parseFloat(debouncedFormData.currentPrice);
-      const regDate = new Date(debouncedFormData.registrationDate);
-      const currentDate = new Date();
-
-      // Calculate years since registration
-      const yearsSinceReg =
-        (currentDate.getTime() - regDate.getTime()) /
-        (1000 * 60 * 60 * 24 * 365.25);
-
-      // COE is valid for 10 years, after which it depreciates to 0
-      const coeRemainingYears = Math.max(0, 10 - yearsSinceReg);
-      const coeRemainingValue = (coeRemainingYears / 10) * coePrice!;
-
-      // Calculate depreciation
-      const totalDepreciation = newPrice - currentPrice;
-      const depreciationRate = (totalDepreciation / newPrice) * 100;
-      const annualDepreciationRate = depreciationRate / yearsSinceReg;
-
-      // Calculate value retention
-      const valueRetention = (currentPrice / newPrice) * 100;
-
-      setResults({
-        newPrice,
-        currentPrice,
-        totalDepreciation,
-        depreciationRate,
-        annualDepreciationRate,
-        valueRetention,
-        yearsSinceReg,
-        coeRemainingValue,
-        coeRemainingYears,
-        currentCoePrice: coePrice!,
-      });
-
-      setCalculating(false);
-    });
-  }, [debouncedFormData, coePrice, isFormValid]);
-
   const resetCalculator = useCallback(() => {
-    // Clear any pending timeouts
-    if (inputTimeoutRef.current) {
-      clearTimeout(inputTimeoutRef.current);
-    }
-
-    setFormData({
-      newCarPrice: "",
-      currentPrice: "",
-      registrationDate: "",
-    });
     setResults(null);
   }, []);
 
   // Memoize button disabled state
   const isCalculateDisabled = useMemo(() => {
-    return calculating || loading || !isFormValid;
-  }, [calculating, loading, isFormValid]);
-
-  // Memoize input components to prevent unnecessary re-renders
-  const inputComponents = useMemo(
-    () => (
-      <>
-        <OptimizedInput
-          label="New Price (S$)"
-          name="newCarPrice"
-          value={formData.newCarPrice}
-          onChange={handleInputChange}
-          placeholder="e.g., 25000"
-          type="number"
-        />
-
-        <OptimizedInput
-          label="Current Market Price (S$)"
-          name="currentPrice"
-          value={formData.currentPrice}
-          onChange={handleInputChange}
-          placeholder="e.g., 18000"
-          type="number"
-        />
-
-        <OptimizedInput
-          label="Registration Date"
-          name="registrationDate"
-          value={formData.registrationDate}
-          onChange={handleInputChange}
-          type="date"
-        />
-      </>
-    ),
-    [
-      formData.newCarPrice,
-      formData.currentPrice,
-      formData.registrationDate,
-      handleInputChange,
-    ]
-  );
+    return calculating || loading;
+  }, [calculating, loading]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -451,6 +387,9 @@ export default function DepreciationCalculator() {
               <p className="text-xs sm:text-sm text-blue-700">
                 Category D - Motorcycles (from LTA Singapore)
               </p>
+              <p className="text-xs text-blue-600 mt-1">
+                Results displayed in days for precise calculation
+              </p>
             </div>
             <div className="text-left sm:text-right">
               {loading ? (
@@ -487,26 +426,59 @@ export default function DepreciationCalculator() {
               Vehicle Information
             </h2>
 
-            <div className="space-y-4 sm:space-y-6">
-              {inputComponents}
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={handleSubmit}
+              enableReinitialize
+            >
+              {({ isValid, dirty, resetForm }) => (
+                <Form className="space-y-4 sm:space-y-6">
+                  <FormikField
+                    label="New Price (S$)"
+                    name="newCarPrice"
+                    placeholder="e.g., 25000"
+                    type="number"
+                  />
 
-              <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
-                <button
-                  onClick={calculateDepreciation}
-                  disabled={isCalculateDisabled}
-                  className="flex-1 bg-blue-600 text-white py-4 sm:py-3 px-4 rounded-md font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-base transition-colors"
-                >
-                  {calculating ? "Calculating..." : "Calculate Depreciation"}
-                </button>
+                  <FormikField
+                    label="Current Market Price (S$)"
+                    name="currentPrice"
+                    placeholder="e.g., 18000"
+                    type="number"
+                  />
 
-                <button
-                  onClick={resetCalculator}
-                  className="flex-1 bg-gray-200 text-gray-700 py-4 sm:py-3 px-4 rounded-md font-medium hover:bg-gray-300 text-base transition-colors"
-                >
-                  Reset
-                </button>
-              </div>
-            </div>
+                  <FormikField
+                    label="Registration Date"
+                    name="registrationDate"
+                    type="date"
+                  />
+
+                  <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                    <button
+                      type="submit"
+                      disabled={isCalculateDisabled || !isValid || !dirty}
+                      className="flex-1 bg-blue-600 text-white py-4 sm:py-3 px-4 rounded-md font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-base transition-colors"
+                    >
+                      {calculating
+                        ? "Calculating..."
+                        : "Calculate Depreciation"}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        resetForm();
+                        resetCalculator();
+                      }}
+                      className="flex-1 bg-gray-200 text-gray-700 py-4 sm:py-3 px-4 rounded-md font-medium hover:bg-gray-300 text-base transition-colors"
+                    >
+                      Reset
+                    </button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
           </div>
 
           {/* Results */}
@@ -571,18 +543,28 @@ export default function DepreciationCalculator() {
                       <span className="text-sm sm:text-base text-gray-600">
                         Annual Depreciation Rate:
                       </span>
-                      <span className="font-semibold text-sm sm:text-base">
-                        {results.annualDepreciationRate.toFixed(1)}%
-                      </span>
+                      <div className="text-right">
+                        <span className="font-semibold text-sm sm:text-base block">
+                          {results.annualDepreciationRate.toFixed(1)}%
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          (per year)
+                        </span>
+                      </div>
                     </div>
 
                     <div className="flex justify-between items-center">
                       <span className="text-sm sm:text-base text-gray-600">
-                        Years Since Registration:
+                        Days Since Registration:
                       </span>
-                      <span className="font-semibold text-sm sm:text-base">
-                        {results.yearsSinceReg.toFixed(1)} years
-                      </span>
+                      <div className="text-right">
+                        <span className="font-semibold text-sm sm:text-base block">
+                          {results.daysSinceReg.toLocaleString()} days
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          ({results.yearsSinceReg.toFixed(1)} years)
+                        </span>
+                      </div>
                     </div>
 
                     <div className="flex justify-between items-center border-t pt-3">
@@ -596,20 +578,30 @@ export default function DepreciationCalculator() {
 
                     <div className="flex justify-between items-center">
                       <span className="text-sm sm:text-base text-gray-600">
-                        COE Remaining Years:
+                        COE Remaining Days:
                       </span>
-                      <span className="font-semibold text-sm sm:text-base">
-                        {results.coeRemainingYears.toFixed(1)} years
-                      </span>
+                      <div className="text-right">
+                        <span className="font-semibold text-sm sm:text-base block">
+                          {Math.round(
+                            results.coeRemainingDays
+                          ).toLocaleString()}{" "}
+                          days
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          ({results.coeRemainingYears.toFixed(1)} years)
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="bg-yellow-50 p-3 sm:p-4 rounded-lg mt-4 sm:mt-6">
                   <p className="text-xs sm:text-sm text-yellow-800">
-                    <strong>Note:</strong> COE values depreciate linearly over
-                    10 years. Current calculation uses the latest COE price of
-                    S${results.currentCoePrice?.toLocaleString()}
+                    <strong>Note:</strong> All time periods are displayed in
+                    days for maximum precision. COE values depreciate linearly
+                    over 3,652.5 days (10 years). Current calculation uses the
+                    latest COE price of S$
+                    {results.currentCoePrice?.toLocaleString()}
                     for motorcycles from LTA Singapore.
                   </p>
                 </div>
@@ -630,8 +622,9 @@ export default function DepreciationCalculator() {
               </h4>
               <p className="text-gray-600 text-xs sm:text-sm">
                 COE is required to own a vehicle in Singapore and is valid for
-                10 years. The value depreciates linearly over time, reaching
-                zero at the end of its validity period.
+                3,652.5 days (10 years). The calculator displays all time
+                periods in days for maximum precision and accurate daily
+                depreciation tracking.
               </p>
             </div>
             <div>
@@ -640,8 +633,9 @@ export default function DepreciationCalculator() {
               </h4>
               <p className="text-gray-600 text-xs sm:text-sm">
                 This calculator considers both the vehicle&apos;s market
-                depreciation and the remaining COE value based on current LTA
-                prices to give you an accurate assessment.
+                depreciation and the remaining COE value based on daily
+                depreciation calculations using current LTA prices to give you a
+                precise assessment.
               </p>
             </div>
           </div>
