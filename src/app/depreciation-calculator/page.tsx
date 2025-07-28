@@ -1,7 +1,24 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo, memo, useRef } from "react";
 import Link from "next/link";
+
+// Custom hook for debouncing
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+}
 
 interface COEPrices {
   category_a: number; // Cars 1600cc & below and taxis
@@ -24,6 +41,41 @@ interface CalculationResults {
   currentCoePrice: number;
 }
 
+// Optimized Input Component
+const OptimizedInput = memo(
+  ({
+    label,
+    name,
+    value,
+    onChange,
+    placeholder,
+    type = "text",
+  }: {
+    label: string;
+    name: string;
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    placeholder?: string;
+    type?: string;
+  }) => (
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        {label}
+      </label>
+      <input
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        className="w-full border border-gray-300 rounded-md px-3 py-3 sm:py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+  )
+);
+
+OptimizedInput.displayName = "OptimizedInput";
+
 export default function DepreciationCalculator() {
   const [formData, setFormData] = useState({
     newCarPrice: "",
@@ -38,9 +90,24 @@ export default function DepreciationCalculator() {
   const [error, setError] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Debounce form data for performance
+  const debouncedFormData = useDebounce(formData, 300);
+
+  // Use ref to prevent unnecessary re-renders during rapid typing
+  const inputTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   // Fetch COE prices from LTA
   useEffect(() => {
     fetchCOEPrices();
+  }, []);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (inputTimeoutRef.current) {
+        clearTimeout(inputTimeoutRef.current);
+      }
+    };
   }, []);
 
   const fetchCOEPrices = async () => {
@@ -66,73 +133,147 @@ export default function DepreciationCalculator() {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
 
-  const calculateDepreciation = () => {
-    if (
-      !formData.newCarPrice ||
-      !formData.currentPrice ||
-      !formData.registrationDate ||
-      !coePrice
-    ) {
+      // Clear any existing timeout
+      if (inputTimeoutRef.current) {
+        clearTimeout(inputTimeoutRef.current);
+      }
+
+      // Use a small timeout to batch rapid state updates
+      inputTimeoutRef.current = setTimeout(() => {
+        setFormData((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+      }, 100);
+    },
+    []
+  );
+
+  // Memoize form validation using debounced data
+  const isFormValid = useMemo(() => {
+    return !!(
+      debouncedFormData.newCarPrice &&
+      debouncedFormData.currentPrice &&
+      debouncedFormData.registrationDate &&
+      coePrice
+    );
+  }, [
+    debouncedFormData.newCarPrice,
+    debouncedFormData.currentPrice,
+    debouncedFormData.registrationDate,
+    coePrice,
+  ]);
+
+  const calculateDepreciation = useCallback(() => {
+    if (!isFormValid) {
       alert("Please fill in all fields");
       return;
     }
 
     setCalculating(true);
 
-    const newPrice = parseFloat(formData.newCarPrice);
-    const currentPrice = parseFloat(formData.currentPrice);
-    const regDate = new Date(formData.registrationDate);
-    const currentDate = new Date();
+    // Use requestAnimationFrame for better performance
+    requestAnimationFrame(() => {
+      const newPrice = parseFloat(debouncedFormData.newCarPrice);
+      const currentPrice = parseFloat(debouncedFormData.currentPrice);
+      const regDate = new Date(debouncedFormData.registrationDate);
+      const currentDate = new Date();
 
-    // Calculate years since registration
-    const yearsSinceReg =
-      (currentDate.getTime() - regDate.getTime()) /
-      (1000 * 60 * 60 * 24 * 365.25);
+      // Calculate years since registration
+      const yearsSinceReg =
+        (currentDate.getTime() - regDate.getTime()) /
+        (1000 * 60 * 60 * 24 * 365.25);
 
-    // COE is valid for 10 years, after which it depreciates to 0
-    const coeRemainingYears = Math.max(0, 10 - yearsSinceReg);
-    const coeRemainingValue = (coeRemainingYears / 10) * coePrice;
+      // COE is valid for 10 years, after which it depreciates to 0
+      const coeRemainingYears = Math.max(0, 10 - yearsSinceReg);
+      const coeRemainingValue = (coeRemainingYears / 10) * coePrice!;
 
-    // Calculate depreciation
-    const totalDepreciation = newPrice - currentPrice;
-    const depreciationRate = (totalDepreciation / newPrice) * 100;
-    const annualDepreciationRate = depreciationRate / yearsSinceReg;
+      // Calculate depreciation
+      const totalDepreciation = newPrice - currentPrice;
+      const depreciationRate = (totalDepreciation / newPrice) * 100;
+      const annualDepreciationRate = depreciationRate / yearsSinceReg;
 
-    // Calculate value retention
-    const valueRetention = (currentPrice / newPrice) * 100;
+      // Calculate value retention
+      const valueRetention = (currentPrice / newPrice) * 100;
 
-    setResults({
-      newPrice,
-      currentPrice,
-      totalDepreciation,
-      depreciationRate,
-      annualDepreciationRate,
-      valueRetention,
-      yearsSinceReg,
-      coeRemainingValue,
-      coeRemainingYears,
-      currentCoePrice: coePrice,
+      setResults({
+        newPrice,
+        currentPrice,
+        totalDepreciation,
+        depreciationRate,
+        annualDepreciationRate,
+        valueRetention,
+        yearsSinceReg,
+        coeRemainingValue,
+        coeRemainingYears,
+        currentCoePrice: coePrice!,
+      });
+
+      setCalculating(false);
     });
+  }, [debouncedFormData, coePrice, isFormValid]);
 
-    setCalculating(false);
-  };
+  const resetCalculator = useCallback(() => {
+    // Clear any pending timeouts
+    if (inputTimeoutRef.current) {
+      clearTimeout(inputTimeoutRef.current);
+    }
 
-  const resetCalculator = () => {
     setFormData({
       newCarPrice: "",
       currentPrice: "",
       registrationDate: "",
     });
     setResults(null);
-  };
+  }, []);
+
+  // Memoize button disabled state
+  const isCalculateDisabled = useMemo(() => {
+    return calculating || loading || !isFormValid;
+  }, [calculating, loading, isFormValid]);
+
+  // Memoize input components to prevent unnecessary re-renders
+  const inputComponents = useMemo(
+    () => (
+      <>
+        <OptimizedInput
+          label="New Price (S$)"
+          name="newCarPrice"
+          value={formData.newCarPrice}
+          onChange={handleInputChange}
+          placeholder="e.g., 25000"
+          type="number"
+        />
+
+        <OptimizedInput
+          label="Current Market Price (S$)"
+          name="currentPrice"
+          value={formData.currentPrice}
+          onChange={handleInputChange}
+          placeholder="e.g., 18000"
+          type="number"
+        />
+
+        <OptimizedInput
+          label="Registration Date"
+          name="registrationDate"
+          value={formData.registrationDate}
+          onChange={handleInputChange}
+          type="date"
+        />
+      </>
+    ),
+    [
+      formData.newCarPrice,
+      formData.currentPrice,
+      formData.registrationDate,
+      handleInputChange,
+    ]
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -347,59 +488,20 @@ export default function DepreciationCalculator() {
             </h2>
 
             <div className="space-y-4 sm:space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  New Car Price (S$)
-                </label>
-                <input
-                  type="number"
-                  name="newCarPrice"
-                  value={formData.newCarPrice}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 25000"
-                  className="w-full border border-gray-300 rounded-md px-3 py-3 sm:py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Current Market Price (S$)
-                </label>
-                <input
-                  type="number"
-                  name="currentPrice"
-                  value={formData.currentPrice}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 18000"
-                  className="w-full border border-gray-300 rounded-md px-3 py-3 sm:py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Registration Date
-                </label>
-                <input
-                  type="date"
-                  name="registrationDate"
-                  value={formData.registrationDate}
-                  onChange={handleInputChange}
-                  className="w-full border border-gray-300 rounded-md px-3 py-3 sm:py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
+              {inputComponents}
 
               <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                 <button
                   onClick={calculateDepreciation}
-                  disabled={calculating || loading}
-                  className="flex-1 bg-blue-600 text-white py-4 sm:py-3 px-4 rounded-md font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-base"
+                  disabled={isCalculateDisabled}
+                  className="flex-1 bg-blue-600 text-white py-4 sm:py-3 px-4 rounded-md font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-base transition-colors"
                 >
                   {calculating ? "Calculating..." : "Calculate Depreciation"}
                 </button>
 
                 <button
                   onClick={resetCalculator}
-                  className="flex-1 bg-gray-200 text-gray-700 py-4 sm:py-3 px-4 rounded-md font-medium hover:bg-gray-300 text-base"
+                  className="flex-1 bg-gray-200 text-gray-700 py-4 sm:py-3 px-4 rounded-md font-medium hover:bg-gray-300 text-base transition-colors"
                 >
                   Reset
                 </button>
