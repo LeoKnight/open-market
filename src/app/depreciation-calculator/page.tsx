@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useMemo, memo } from "react";
 import Link from "next/link";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { calculateARF } from "@/utils/arf";
 
 interface COEPrices {
   category_a: number; // Cars 1600cc & below and taxis
