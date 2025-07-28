@@ -26,6 +26,8 @@ interface CalculationResults {
   coeRemainingYears: number;
   coeRemainingDays: number;
   currentCoePrice: number;
+  newPriceExcludeCoe: number; // 新车去除COE的价格
+  currentPriceExcludeCoe: number; // 旧车去除COE的价格
 }
 
 // Formik Field Component
@@ -194,6 +196,8 @@ export default function DepreciationCalculator() {
           coeRemainingYears,
           coeRemainingDays,
           currentCoePrice: coePrice,
+          newPriceExcludeCoe: newPrice - coePrice, // 新车去除COE的价格
+          currentPriceExcludeCoe: currentPrice - coeRemainingValue, // 旧车去除COE的价格
         });
 
         setCalculating(false);
@@ -514,7 +518,7 @@ export default function DepreciationCalculator() {
                       Total Depreciation
                     </p>
                     <p className="text-xl sm:text-2xl font-bold text-red-700">
-                      S${results.totalDepreciation.toLocaleString()}
+                      S${Math.round(results.totalDepreciation).toLocaleString()}
                     </p>
                   </div>
 
@@ -523,7 +527,7 @@ export default function DepreciationCalculator() {
                       Value Retention
                     </p>
                     <p className="text-xl sm:text-2xl font-bold text-green-700">
-                      {results.valueRetention.toFixed(1)}%
+                      {results.valueRetention.toFixed(0)}%
                     </p>
                   </div>
                 </div>
@@ -535,7 +539,7 @@ export default function DepreciationCalculator() {
                         Depreciation Rate:
                       </span>
                       <span className="font-semibold text-sm sm:text-base">
-                        {results.depreciationRate.toFixed(1)}%
+                        {results.depreciationRate.toFixed(0)}%
                       </span>
                     </div>
 
@@ -545,7 +549,7 @@ export default function DepreciationCalculator() {
                       </span>
                       <div className="text-right">
                         <span className="font-semibold text-sm sm:text-base block">
-                          {results.annualDepreciationRate.toFixed(1)}%
+                          {results.annualDepreciationRate.toFixed(0)}%
                         </span>
                         <span className="text-xs text-gray-500">
                           (per year)
@@ -562,9 +566,42 @@ export default function DepreciationCalculator() {
                           {results.daysSinceReg.toLocaleString()} days
                         </span>
                         <span className="text-xs text-gray-500">
-                          ({results.yearsSinceReg.toFixed(1)} years)
+                          {`
+                            ${Math.floor(results.yearsSinceReg)} year
+                            ${Math.floor(
+                              (results.yearsSinceReg -
+                                Math.floor(results.yearsSinceReg)) *
+                                12
+                            )}
+                            months ${Math.floor(results.daysSinceReg % 30.4375)}
+                            days
+                            `}
                         </span>
                       </div>
+                    </div>
+
+                    <div className="flex justify-between items-center border-t pt-3">
+                      <span className="text-sm sm:text-base text-gray-600">
+                        New Price Excluding COE:
+                      </span>
+                      <span className="font-semibold text-sm sm:text-base">
+                        S$
+                        {Math.round(
+                          results.newPriceExcludeCoe
+                        ).toLocaleString()}
+                      </span>
+                    </div>
+
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm sm:text-base text-gray-600">
+                        Current Price Excluding COE:
+                      </span>
+                      <span className="font-semibold text-sm sm:text-base">
+                        S$
+                        {Math.round(
+                          results.currentPriceExcludeCoe
+                        ).toLocaleString()}
+                      </span>
                     </div>
 
                     <div className="flex justify-between items-center border-t pt-3">
@@ -572,7 +609,8 @@ export default function DepreciationCalculator() {
                         COE Remaining Value:
                       </span>
                       <span className="font-semibold text-sm sm:text-base">
-                        S${results.coeRemainingValue.toLocaleString()}
+                        S$
+                        {Math.round(results.coeRemainingValue).toLocaleString()}
                       </span>
                     </div>
 
@@ -588,7 +626,20 @@ export default function DepreciationCalculator() {
                           days
                         </span>
                         <span className="text-xs text-gray-500">
-                          ({results.coeRemainingYears.toFixed(1)} years)
+                          {`
+                            ${Math.floor(results.coeRemainingYears)} years
+                            ${Math.floor(
+                              (results.coeRemainingYears -
+                                Math.floor(results.coeRemainingYears)) *
+                                12
+                            )}
+                            months ${Math.floor(
+                              (results.coeRemainingYears -
+                                Math.floor(results.coeRemainingYears)) *
+                                12
+                            )}
+                            days
+                            `}
                         </span>
                       </div>
                     </div>
