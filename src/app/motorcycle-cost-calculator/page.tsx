@@ -1,125 +1,58 @@
 "use client";
 
-import { useState, useCallback, memo } from "react";
-import Link from "next/link";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import { useState, useCallback } from "react";
 import {
   calculateMotorcycleCost,
   calculateAnnualRunningCosts,
 } from "@/utils/motorcycle-cost";
-
-interface CostResults {
-  omv: number;
-  arf: number;
-  gst: number;
-  registrationFee: number;
-  taxableAmount: number;
-  totalCost: number;
-  breakdown: {
-    omv: { label: string; amount: number; percentage: number };
-    arf: { label: string; amount: number; percentage: number };
-    gst: { label: string; amount: number; percentage: number; note: string };
-    registrationFee: { label: string; amount: number; percentage: number };
-  };
-}
-
-interface RunningCosts {
-  roadTax: number;
-  insurance: number;
-  maintenance: number;
-  total: number;
-  breakdown: {
-    roadTax: { label: string; amount: number };
-    insurance: { label: string; amount: number };
-    maintenance: { label: string; amount: number };
-  };
-}
-
-// Formik Field Component
-const FormikField = memo(
-  ({
-    label,
-    name,
-    placeholder,
-    type = "text",
-  }: {
-    label: string;
-    name: string;
-    placeholder?: string;
-    type?: string;
-  }) => (
-    <div>
-      <label
-        htmlFor={name}
-        className="block text-sm font-medium text-gray-700 mb-2"
-      >
-        {label}
-      </label>
-      <Field
-        id={name}
-        name={name}
-        type={type}
-        placeholder={placeholder}
-        className="w-full border border-gray-300 rounded-md px-3 py-3 sm:py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-      />
-      <ErrorMessage
-        name={name}
-        component="div"
-        className="mt-1 text-sm text-red-600"
-      />
-    </div>
-  )
-);
-
-FormikField.displayName = "FormikField";
-
-// Validation Schema
-const validationSchema = Yup.object({
-  omv: Yup.number()
-    .required("OMV is required")
-    .positive("OMV must be positive")
-    .min(1000, "OMV must be at least S$1,000")
-    .max(100000, "OMV must be less than S$100,000"),
-  engineSize: Yup.number()
-    .positive("Engine size must be positive")
-    .min(50, "Engine size must be at least 50cc")
-    .max(2000, "Engine size must be less than 2000cc"),
-});
+import { CostResults, RunningCosts } from "@/types/motorcycle";
+import PurchaseCostDisplay from "@/components/PurchaseCostDisplay";
+import MotorcycleForm from "@/components/MotorcycleForm";
+import COEPriceDisplay from "@/components/COEPriceDisplay";
+// import RunningCostsDisplay from "@/components/RunningCostsDisplay";
 
 export default function MotorcycleCostCalculator() {
   const [results, setResults] = useState<CostResults | null>(null);
   const [runningCosts, setRunningCosts] = useState<RunningCosts | null>(null);
   const [calculating, setCalculating] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [coePrice, setCoePrice] = useState<number | null>(null);
 
-  // Initial form values
-  const initialValues = {
-    omv: "",
-    engineSize: "150",
-  };
+  // Handle COE price updates from the component
+  const handleCOEPriceUpdate = useCallback((price: number) => {
+    setCoePrice(price);
+  }, []);
 
   // Handle form submission
-  const handleSubmit = useCallback((values: typeof initialValues) => {
-    setCalculating(true);
+  const handleSubmit = useCallback(
+    (values: { omv: string; engineSize: string }) => {
+      if (!coePrice) {
+        alert(
+          "COE price is not available. Please wait for it to load or refresh."
+        );
+        return;
+      }
 
-    try {
-      const omv = parseFloat(values.omv);
-      const engineSize = parseFloat(values.engineSize);
+      setCalculating(true);
 
-      // Calculate costs
-      const costResults = calculateMotorcycleCost(omv);
-      const annualCosts = calculateAnnualRunningCosts(engineSize);
+      try {
+        const omv = parseFloat(values.omv);
+        const engineSize = parseFloat(values.engineSize);
 
-      setResults(costResults);
-      setRunningCosts(annualCosts);
-    } catch (error) {
-      console.error("Calculation error:", error);
-      alert("Error calculating costs. Please check your inputs.");
-    } finally {
-      setCalculating(false);
-    }
-  }, []);
+        // Calculate costs (now includes COE)
+        const costResults = calculateMotorcycleCost(omv, coePrice);
+        const annualCosts = calculateAnnualRunningCosts(engineSize);
+
+        setResults(costResults);
+        setRunningCosts(annualCosts);
+      } catch (error) {
+        console.error("Calculation error:", error);
+        alert("Error calculating costs. Please check your inputs.");
+      } finally {
+        setCalculating(false);
+      }
+    },
+    [coePrice]
+  );
 
   const resetCalculator = useCallback(() => {
     setResults(null);
@@ -128,170 +61,6 @@ export default function MotorcycleCostCalculator() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header Navigation */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <Link
-                  href="/"
-                  className="text-xl sm:text-2xl font-bold text-blue-600"
-                >
-                  MotoMarket
-                </Link>
-              </div>
-              {/* Desktop Navigation */}
-              <nav className="hidden md:ml-10 md:flex space-x-8">
-                <Link
-                  href="/"
-                  className="text-gray-500 hover:text-blue-600 px-3 py-2 text-sm font-medium"
-                >
-                  Home
-                </Link>
-                <a
-                  href="#"
-                  className="text-gray-500 hover:text-blue-600 px-3 py-2 text-sm font-medium"
-                >
-                  Buy Motorcycles
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-500 hover:text-blue-600 px-3 py-2 text-sm font-medium"
-                >
-                  Sell Motorcycles
-                </a>
-                <Link
-                  href="/depreciation-calculator"
-                  className="text-gray-500 hover:text-blue-600 px-3 py-2 text-sm font-medium"
-                >
-                  Depreciation Calculator
-                </Link>
-                <a
-                  href="/motorcycle-cost-calculator"
-                  className="text-gray-900 hover:text-blue-600 px-3 py-2 text-sm font-medium"
-                >
-                  Cost Calculator
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-500 hover:text-blue-600 px-3 py-2 text-sm font-medium"
-                >
-                  Financing
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-500 hover:text-blue-600 px-3 py-2 text-sm font-medium"
-                >
-                  Help Center
-                </a>
-              </nav>
-            </div>
-
-            {/* Desktop Auth Buttons */}
-            <div className="hidden md:flex items-center space-x-4">
-              <button className="text-gray-500 hover:text-blue-600 px-3 py-2 text-sm font-medium">
-                Sign In
-              </button>
-              <button className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">
-                Sign Up
-              </button>
-            </div>
-
-            {/* Mobile menu button */}
-            <div className="md:hidden">
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
-              >
-                <svg
-                  className="h-6 w-6"
-                  stroke="currentColor"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  {mobileMenuOpen ? (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  ) : (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  )}
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          {/* Mobile Navigation */}
-          {mobileMenuOpen && (
-            <div className="md:hidden">
-              <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
-                <Link
-                  href="/"
-                  className="text-gray-500 hover:text-blue-600 block px-3 py-2 text-base font-medium"
-                >
-                  Home
-                </Link>
-                <a
-                  href="#"
-                  className="text-gray-500 hover:text-blue-600 block px-3 py-2 text-base font-medium"
-                >
-                  Buy Motorcycles
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-500 hover:text-blue-600 block px-3 py-2 text-base font-medium"
-                >
-                  Sell Motorcycles
-                </a>
-                <Link
-                  href="/depreciation-calculator"
-                  className="text-gray-500 hover:text-blue-600 block px-3 py-2 text-base font-medium"
-                >
-                  Depreciation Calculator
-                </Link>
-                <a
-                  href="/motorcycle-cost-calculator"
-                  className="text-gray-900 hover:text-blue-600 block px-3 py-2 text-base font-medium bg-blue-50"
-                >
-                  Cost Calculator
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-500 hover:text-blue-600 block px-3 py-2 text-base font-medium"
-                >
-                  Financing
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-500 hover:text-blue-600 block px-3 py-2 text-base font-medium"
-                >
-                  Help Center
-                </a>
-                <div className="border-t border-gray-200 pt-4 pb-3">
-                  <div className="flex items-center px-3 space-x-3">
-                    <button className="text-gray-500 hover:text-blue-600 text-base font-medium">
-                      Sign In
-                    </button>
-                    <button className="bg-blue-600 text-white px-4 py-2 rounded-md text-base font-medium hover:bg-blue-700">
-                      Sign Up
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </header>
-
       {/* Main Content */}
       <div className="max-w-6xl mx-auto py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 sm:mb-12">
@@ -303,188 +72,27 @@ export default function MotorcycleCostCalculator() {
           </p>
         </div>
 
+        {/* COE Price Display */}
+        <COEPriceDisplay
+          onPriceUpdate={handleCOEPriceUpdate}
+          className="mb-6 sm:mb-8"
+        />
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           {/* Input Form */}
-          <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
-              Motorcycle Information
-            </h2>
+          <MotorcycleForm
+            onSubmit={handleSubmit}
+            onReset={resetCalculator}
+            calculating={calculating}
+          />
 
-            <Formik
-              initialValues={initialValues}
-              validationSchema={validationSchema}
-              onSubmit={handleSubmit}
-              enableReinitialize
-            >
-              {({ isValid, dirty, resetForm }) => (
-                <Form className="space-y-4 sm:space-y-6">
-                  <FormikField
-                    label="Open Market Value (OMV) - S$"
-                    name="omv"
-                    placeholder="e.g., 15000"
-                    type="number"
-                  />
-
-                  <FormikField
-                    label="Engine Size (cc)"
-                    name="engineSize"
-                    placeholder="e.g., 150"
-                    type="number"
-                  />
-
-                  <div className="flex flex-col space-y-3">
-                    <button
-                      type="submit"
-                      disabled={calculating || !isValid || !dirty}
-                      className="w-full bg-blue-600 text-white py-4 sm:py-3 px-4 rounded-md font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-base transition-colors"
-                    >
-                      {calculating ? "Calculating..." : "Calculate Cost"}
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        resetForm();
-                        resetCalculator();
-                      }}
-                      className="w-full bg-gray-200 text-gray-700 py-4 sm:py-3 px-4 rounded-md font-medium hover:bg-gray-300 text-base transition-colors"
-                    >
-                      Reset
-                    </button>
-                  </div>
-                </Form>
-              )}
-            </Formik>
-          </div>
-
-          {/* Purchase Cost Results */}
-          <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
-              Purchase Cost Breakdown
-            </h2>
-
-            {!results ? (
-              <div className="text-center text-gray-500 py-8">
-                <svg
-                  className="mx-auto h-12 w-12 text-gray-400 mb-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
-                  />
-                </svg>
-                <p className="text-sm">
-                  Enter motorcycle details to see cost breakdown
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {/* Total Cost Display */}
-                <div className="bg-blue-50 p-4 rounded-lg text-center">
-                  <p className="text-sm text-blue-600 font-medium mb-1">
-                    Total Purchase Cost
-                  </p>
-                  <p className="text-3xl font-bold text-blue-700">
-                    S${results.totalCost.toLocaleString()}
-                  </p>
-                </div>
-
-                {/* Cost Breakdown */}
-                <div className="space-y-3">
-                  {Object.entries(results.breakdown).map(([key, item]) => (
-                    <div
-                      key={key}
-                      className="flex justify-between items-center p-3 bg-gray-50 rounded"
-                    >
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">
-                          {item.label}
-                        </p>
-                        {"note" in item && (
-                          <p className="text-xs text-gray-500">{item.note}</p>
-                        )}
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm font-semibold">
-                          S${item.amount.toLocaleString()}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {item.percentage.toFixed(1)}%
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+          {/* Purchase Cost Results - spans 2 columns when RunningCosts is hidden */}
+          <div className="lg:col-span-2">
+            <PurchaseCostDisplay results={results} />
           </div>
 
           {/* Running Costs */}
-          <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
-              Estimated Annual Costs
-            </h2>
-
-            {!runningCosts ? (
-              <div className="text-center text-gray-500 py-8">
-                <svg
-                  className="mx-auto h-12 w-12 text-gray-400 mb-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-                  />
-                </svg>
-                <p className="text-sm">
-                  Calculate costs to see annual expenses
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {/* Total Annual Cost */}
-                <div className="bg-green-50 p-4 rounded-lg text-center">
-                  <p className="text-sm text-green-600 font-medium mb-1">
-                    Total Annual Running Cost
-                  </p>
-                  <p className="text-2xl font-bold text-green-700">
-                    S${runningCosts.total.toLocaleString()}
-                  </p>
-                </div>
-
-                {/* Running Cost Breakdown */}
-                <div className="space-y-3">
-                  {Object.entries(runningCosts.breakdown).map(([key, item]) => (
-                    <div
-                      key={key}
-                      className="flex justify-between items-center p-3 bg-gray-50 rounded"
-                    >
-                      <p className="text-sm font-medium text-gray-900">
-                        {item.label}
-                      </p>
-                      <p className="text-sm font-semibold">
-                        S${item.amount.toLocaleString()}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="text-xs text-gray-500 mt-4 p-3 bg-yellow-50 rounded">
-                  <strong>Note:</strong> Annual costs are estimates and may vary
-                  based on usage, insurance provider, and maintenance needs.
-                </div>
-              </div>
-            )}
-          </div>
+          {/* <RunningCostsDisplay runningCosts={runningCosts} /> */}
         </div>
 
         {/* Information Section */}
@@ -499,19 +107,29 @@ export default function MotorcycleCostCalculator() {
               </h4>
               <ul className="text-gray-600 text-xs sm:text-sm space-y-1">
                 <li>
-                  • <strong>OMV:</strong> Open Market Value - the base price of
-                  the motorcycle
+                  • <strong>OMV:</strong> Open Market Value - includes purchase
+                  price, freight, insurance, handling and all other incidental
+                  charges
                 </li>
                 <li>
-                  • <strong>ARF:</strong> Additional Registration Fee based on
-                  OMV tiers
+                  • <strong>COE:</strong> Certificate of Entitlement - mandatory
+                  for vehicle registration in Singapore
                 </li>
                 <li>
-                  • <strong>GST:</strong> 9% Goods & Services Tax on OMV + ARF
+                  • <strong>ARF:</strong> Additional Registration Fee - tiered
+                  rates of 15%, 50%, and 100% based on OMV brackets
+                </li>
+                <li>
+                  • <strong>Excise Duty:</strong> 12% levy on the OMV as
+                  determined by Singapore Customs
+                </li>
+                <li>
+                  • <strong>GST:</strong> 9% Goods & Services Tax on OMV +
+                  Excise Duty (excludes ARF)
                 </li>
                 <li>
                   • <strong>Registration Fee:</strong> One-time fee to register
-                  the motorcycle
+                  the motorcycle with LTA
                 </li>
               </ul>
             </div>
@@ -536,6 +154,53 @@ export default function MotorcycleCostCalculator() {
                 </li>
               </ul>
             </div>
+          </div>
+
+          <div className="mt-6 p-4 bg-green-50 rounded-lg">
+            <h5 className="font-semibold text-green-900 mb-2 text-sm">
+              GST Calculation
+            </h5>
+            <p className="text-green-800 text-xs sm:text-sm">
+              GST is calculated at 9% on the total of OMV + Excise Duty only.
+              ARF is <strong>excluded</strong> from the GST calculation base as
+              it is a separate registration fee.
+            </p>
+          </div>
+
+          <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+            <h5 className="font-semibold text-blue-900 mb-2 text-sm">
+              ARF Rate Structure
+            </h5>
+            <div className="text-blue-800 text-xs sm:text-sm">
+              <p className="mb-2">
+                Additional Registration Fee (ARF) is calculated using tiered
+                rates:
+              </p>
+              <ul className="space-y-1">
+                <li>
+                  • First S$5,000: <strong>15%</strong>
+                </li>
+                <li>
+                  • Next S$5,000 (S$5,001 to S$10,000): <strong>50%</strong>
+                </li>
+                <li>
+                  • Above S$10,000: <strong>100%</strong>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+            <h5 className="font-semibold text-blue-900 mb-2 text-sm">
+              Important Note - Singapore Customs Assessment
+            </h5>
+            <p className="text-blue-800 text-xs sm:text-sm">
+              The Singapore Customs determines the OMV by taking into account
+              the purchase price, freight, insurance, handling and all other
+              incidental charges to the sale and delivery of the
+              motorcycle/scooter in Singapore. Additional documents may be
+              required for assessment purposes.
+            </p>
           </div>
         </div>
       </div>

@@ -1,17 +1,10 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo, memo } from "react";
+import { useState, useCallback, useMemo, memo } from "react";
 import Link from "next/link";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-
-interface COEPrices {
-  category_a: number; // Cars 1600cc & below and taxis
-  category_b: number; // Cars above 1600cc
-  category_c: number; // Goods vehicles & buses
-  category_d: number; // Motorcycles
-  category_e: number; // Open category
-}
+import COEPriceDisplay from "@/components/COEPriceDisplay";
 
 interface CalculationResults {
   newPrice: number;
@@ -103,11 +96,8 @@ const validationSchema = Yup.object()
 
 export default function DepreciationCalculator() {
   const [coePrice, setCoePrice] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
   const [calculating, setCalculating] = useState(false);
   const [results, setResults] = useState<CalculationResults | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Initial form values
   const initialValues = {
@@ -116,33 +106,10 @@ export default function DepreciationCalculator() {
     registrationDate: "",
   };
 
-  // Fetch COE prices from LTA
-  useEffect(() => {
-    fetchCOEPrices();
+  // Handle COE price updates from the component
+  const handleCOEPriceUpdate = useCallback((price: number) => {
+    setCoePrice(price);
   }, []);
-
-  const fetchCOEPrices = async () => {
-    try {
-      setLoading(true);
-
-      // Fetch COE prices from our API endpoint
-      const response = await fetch("/api/coe-prices");
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch COE prices");
-      }
-
-      const data = await response.json();
-
-      setCoePrice(data.category_d); // Motorcycle COE price
-      setError(data.error || null);
-    } catch (err) {
-      setError("Failed to fetch COE prices. Using estimated value.");
-      setCoePrice(9511); // Fallback value
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // Handle form submission
   const handleSubmit = useCallback(
@@ -212,163 +179,11 @@ export default function DepreciationCalculator() {
 
   // Memoize button disabled state
   const isCalculateDisabled = useMemo(() => {
-    return calculating || loading;
-  }, [calculating, loading]);
+    return calculating;
+  }, [calculating]);
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header Navigation */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <Link
-                  href="/"
-                  className="text-xl sm:text-2xl font-bold text-blue-600"
-                >
-                  MotoMarket
-                </Link>
-              </div>
-              {/* Desktop Navigation */}
-              <nav className="hidden md:ml-10 md:flex space-x-8">
-                <Link
-                  href="/"
-                  className="text-gray-500 hover:text-blue-600 px-3 py-2 text-sm font-medium"
-                >
-                  Home
-                </Link>
-                <a
-                  href="#"
-                  className="text-gray-500 hover:text-blue-600 px-3 py-2 text-sm font-medium"
-                >
-                  Buy Motorcycles
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-500 hover:text-blue-600 px-3 py-2 text-sm font-medium"
-                >
-                  Sell Motorcycles
-                </a>
-                <a
-                  href="/depreciation-calculator"
-                  className="text-gray-900 hover:text-blue-600 px-3 py-2 text-sm font-medium"
-                >
-                  Depreciation Calculator
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-500 hover:text-blue-600 px-3 py-2 text-sm font-medium"
-                >
-                  Financing
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-500 hover:text-blue-600 px-3 py-2 text-sm font-medium"
-                >
-                  Help Center
-                </a>
-              </nav>
-            </div>
-
-            {/* Desktop Auth Buttons */}
-            <div className="hidden md:flex items-center space-x-4">
-              <button className="text-gray-500 hover:text-blue-600 px-3 py-2 text-sm font-medium">
-                Sign In
-              </button>
-              <button className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">
-                Sign Up
-              </button>
-            </div>
-
-            {/* Mobile menu button */}
-            <div className="md:hidden">
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
-              >
-                <svg
-                  className="h-6 w-6"
-                  stroke="currentColor"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  {mobileMenuOpen ? (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  ) : (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  )}
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          {/* Mobile Navigation */}
-          {mobileMenuOpen && (
-            <div className="md:hidden">
-              <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
-                <Link
-                  href="/"
-                  className="text-gray-500 hover:text-blue-600 block px-3 py-2 text-base font-medium"
-                >
-                  Home
-                </Link>
-                <a
-                  href="#"
-                  className="text-gray-500 hover:text-blue-600 block px-3 py-2 text-base font-medium"
-                >
-                  Buy Motorcycles
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-500 hover:text-blue-600 block px-3 py-2 text-base font-medium"
-                >
-                  Sell Motorcycles
-                </a>
-                <a
-                  href="/depreciation-calculator"
-                  className="text-gray-900 hover:text-blue-600 block px-3 py-2 text-base font-medium bg-blue-50"
-                >
-                  Depreciation Calculator
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-500 hover:text-blue-600 block px-3 py-2 text-base font-medium"
-                >
-                  Financing
-                </a>
-                <a
-                  href="#"
-                  className="text-gray-500 hover:text-blue-600 block px-3 py-2 text-base font-medium"
-                >
-                  Help Center
-                </a>
-                <div className="border-t border-gray-200 pt-4 pb-3">
-                  <div className="flex items-center px-3 space-x-3">
-                    <button className="text-gray-500 hover:text-blue-600 text-base font-medium">
-                      Sign In
-                    </button>
-                    <button className="bg-blue-600 text-white px-4 py-2 rounded-md text-base font-medium hover:bg-blue-700">
-                      Sign Up
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </header>
-
       {/* Main Content */}
       <div className="max-w-4xl mx-auto py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 sm:mb-12">
@@ -382,46 +197,10 @@ export default function DepreciationCalculator() {
         </div>
 
         {/* COE Price Display */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-            <div className="mb-4 sm:mb-0">
-              <h3 className="text-base sm:text-lg font-semibold text-blue-900 mb-2">
-                Latest Motorcycle COE Price
-              </h3>
-              <p className="text-xs sm:text-sm text-blue-700">
-                Category D - Motorcycles (from LTA Singapore)
-              </p>
-              <p className="text-xs text-blue-600 mt-1">
-                Results displayed in days for precise calculation
-              </p>
-            </div>
-            <div className="text-left sm:text-right">
-              {loading ? (
-                <div className="flex items-center">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mr-2"></div>
-                  <span className="text-blue-600">Loading...</span>
-                </div>
-              ) : (
-                <div>
-                  <p className="text-2xl sm:text-3xl font-bold text-blue-600">
-                    S${coePrice?.toLocaleString()}
-                  </p>
-                  <button
-                    onClick={fetchCOEPrices}
-                    className="text-sm text-blue-600 hover:text-blue-800 underline mt-1 block"
-                  >
-                    Refresh Price
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-          {error && (
-            <div className="mt-4 p-3 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded text-sm">
-              {error}
-            </div>
-          )}
-        </div>
+        <COEPriceDisplay
+          onPriceUpdate={handleCOEPriceUpdate}
+          className="mb-6 sm:mb-8"
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           {/* Input Form */}
