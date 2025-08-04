@@ -14,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MotoMarket - Professional Used Motorcycle Trading Platform",
+  title: "Open Market - Professional Used Motorcycle Trading Platform",
   description:
-    "MotoMarket is a leading used motorcycle trading platform, providing safe and convenient buying and selling services. Massive inventory, quality assurance, helping you find your perfect motorcycle easily.",
+    "Open Market is a leading used motorcycle trading platform, providing safe and convenient buying and selling services. Massive inventory, quality assurance, helping you find your perfect motorcycle easily.",
 };
 
 export default function RootLayout({

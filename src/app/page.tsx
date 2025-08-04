@@ -170,7 +170,7 @@ export default function Home() {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h3 className="text-3xl font-bold text-center text-gray-900 mb-12">
-            Why Choose MotoMarket
+            Why Choose Open Market
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
@@ -253,7 +253,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h5 className="text-lg font-bold mb-4">MotoMarket</h5>
+              <h5 className="text-lg font-bold mb-4">Open Market</h5>
               <p className="text-gray-300 text-sm">
                 Professional used motorcycle trading platform, committed to
                 providing safe and convenient buying and selling services for
@@ -337,7 +337,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-300">
-            <p>&copy; 2024 MotoMarket. All rights reserved.</p>
+            <p>&copy; 2024 Open Market. All rights reserved.</p>
           </div>
         </div>
       </footer>
