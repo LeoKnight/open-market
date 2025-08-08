@@ -134,21 +134,27 @@ export default function DepreciationCalculator() {
         );
 
         // Calculate years for display purposes
-        const yearsSinceReg = daysSinceReg / 365.25;
+        const yearsSinceReg = daysSinceReg / 365;
 
         // COE is valid for 10 years (3652.5 days), after which it depreciates to 0
-        const totalCoeDays = 10 * 365.25; // 3652.5 days
-        const coeRemainingDays = Math.max(0, totalCoeDays - daysSinceReg);
-        const coeRemainingYears = coeRemainingDays / 365.25;
+        const totalCoeDays = 10 * 365; // 3652.5 days
+        const coeRemainingDays = Math.max(
+          0,
+          totalCoeDays - (daysSinceReg % (365 * 10))
+        );
+        const coeRemainingYears = coeRemainingDays / 365;
         const coeRemainingValue = (coeRemainingDays / totalCoeDays) * coePrice;
 
-        // Calculate depreciation
-        const totalDepreciation = newPrice - currentPrice;
-        const depreciationRate = (totalDepreciation / newPrice) * 100;
-        const annualDepreciationRate = depreciationRate / yearsSinceReg;
+        // Calculate value retention (新车价格刨除COE价值 - 旧车刨除COE价值)
+        const newPriceExcludeCoe = newPrice - coePrice;
+        const currentPriceExcludeCoe = currentPrice - coeRemainingValue;
+        const valueRetention =
+          (currentPriceExcludeCoe / newPriceExcludeCoe) * 100;
 
-        // Calculate value retention
-        const valueRetention = (currentPrice / newPrice) * 100;
+        // Calculate depreciation
+        const totalDepreciation = newPriceExcludeCoe - currentPriceExcludeCoe;
+        const depreciationRate = (totalDepreciation / newPriceExcludeCoe) * 100;
+        const annualDepreciationRate = depreciationRate / yearsSinceReg;
 
         setResults({
           newPrice,
@@ -163,8 +169,8 @@ export default function DepreciationCalculator() {
           coeRemainingYears,
           coeRemainingDays,
           currentCoePrice: coePrice,
-          newPriceExcludeCoe: newPrice - coePrice, // 新车去除COE的价格
-          currentPriceExcludeCoe: currentPrice - coeRemainingValue, // 旧车去除COE的价格
+          newPriceExcludeCoe, // 新车去除COE的价格
+          currentPriceExcludeCoe, // 旧车去除COE的价格
         });
 
         setCalculating(false);
@@ -185,7 +191,7 @@ export default function DepreciationCalculator() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 sm:mb-12">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Motorcycle Depreciation Calculator
@@ -303,7 +309,7 @@ export default function DepreciationCalculator() {
 
                   <div className="bg-green-50 p-3 sm:p-4 rounded-lg">
                     <p className="text-xs sm:text-sm text-green-600 font-medium">
-                      Value Retention
+                      Machine Value Retention
                     </p>
                     <p className="text-xl sm:text-2xl font-bold text-green-700">
                       {results.valueRetention.toFixed(0)}%

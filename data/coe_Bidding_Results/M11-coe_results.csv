@@ -1839,3 +1839,8 @@ month,bidding_no,vehicle_class,quota,bids_success,bids_received,premium
 2025-07,2,Category C,271,271,405,68600
 2025-07,2,Category D,540,534,622,9511
 2025-07,2,Category E,211,210,431,120000
+2025-08,1,Category A,1268,"1,257","1,755",102009
+2025-08,1,Category B,789,789,"1,271",123498
+2025-08,1,Category C,290,281,422,70001
+2025-08,1,Category D,533,526,633,9189
+2025-08,1,Category E,261,261,511,122334
