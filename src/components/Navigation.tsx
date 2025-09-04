@@ -33,6 +33,12 @@ export default function Navigation() {
                 Cost Calculator
               </Link>
               <Link
+                href="/power-to-weight"
+                className="text-gray-500 hover:text-blue-600 px-3 py-2 text-sm font-medium"
+              >
+                Power-to-Weight Calculator
+              </Link>
+              <Link
                 href="/coe-trends"
                 className="text-gray-500 hover:text-blue-600 px-3 py-2 text-sm font-medium"
               >
@@ -98,6 +104,12 @@ export default function Navigation() {
                 className="text-gray-500 hover:text-blue-600 block px-3 py-2 text-base font-medium"
               >
                 Cost Calculator
+              </Link>
+              <Link
+                href="/power-to-weight"
+                className="text-gray-500 hover:text-blue-600 block px-3 py-2 text-base font-medium"
+              >
+                Power-to-Weight Calculator
               </Link>
               <Link
                 href="/coe-trends"
