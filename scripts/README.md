@@ -4,6 +4,8 @@
 
 ## 功能特点
 
+- ✅ 从 LTA DataMall 自动下载最新数据
+- ✅ 自动解压 ZIP 文件
 - ✅ 过滤Category D（摩托车）数据
 - ✅ 数据类型转换和清理
 - ✅ 添加派生字段（成功率、超额认购率）
@@ -13,15 +15,35 @@
 ## 安装依赖
 
 ```bash
-npm install csv-parser
+npm install csv-parser unzipper
 ```
+
+依赖说明：
+- `csv-parser`: 用于解析 CSV 文件
+- `unzipper`: 用于解压从 LTA 下载的 ZIP 文件
 
 ## 使用方法
 
-### 基本用法
+### 下载最新数据（推荐）
 
 ```bash
-# 使用默认路径
+# 从 LTA 官网下载最新数据并处理
+npm run update-coe
+
+# 或直接运行脚本
+node scripts/process-coe-data.js --download
+```
+
+这个命令会：
+1. 从 LTA DataMall 下载最新的 COE 数据 ZIP 文件
+2. 自动解压 ZIP 文件
+3. 处理 CSV 数据并生成 JavaScript 文件
+4. 清理临时 ZIP 文件
+
+### 处理本地文件
+
+```bash
+# 使用默认路径处理已有的 CSV 文件
 npm run process-coe
 
 # 或直接运行脚本
@@ -98,24 +120,61 @@ getCOEStatistics()
 
 ## 示例输出
 
+### 使用 --download 选项
+
 ```
+🌐 Downloading latest COE data from LTA...
+   Progress: 100% (26KB / 26KB)
+   Downloaded: 26KB
+✅ Download completed
+📦 Extracting ZIP file...
+   Extracting: Coe Bidding Results/
+   Extracting: Coe Bidding Results/M11-coe_results.csv
+   Extracting: Coe Bidding Results/M11-coe_results_pqp.csv
+✅ Extraction completed
+🗑️  Cleaned up ZIP file
+
 🚀 Processing COE data from: data/coe_Bidding_Results/M11-coe_results.csv
 📊 Filtering for Category D (Motorcycles) only
-✅ Processed 24 motorcycle COE records
+✅ Processed 372 motorcycle COE records
 💾 Output written to: src/data/motorcycle-coe-data.js
 
 📈 Summary Statistics:
-   Total records: 24
-   Date range: 2010-01 to 2010-12
-   Price range: S$801 - S$1,389
-   Average price: S$1,089
-   Latest price: S$1,234
+   Total records: 372
+   Date range: 2010-01 to 2025-09
+   Price range: S$852 - S$13,189
+   Average price: S$5,825
+   Latest price: S$9,209
 
 📋 Latest 5 records:
-   2010-11-1: S$1,189 (367/523 bids)
-   2010-11-2: S$1,234 (378/542 bids)
-   2010-12-1: S$1,156 (361/498 bids)
-   2010-12-2: S$1,289 (374/567 bids)
+   2025-07-2: S$9,511 (534/622 bids)
+   2025-08-1: S$9,189 (526/633 bids)
+   2025-08-2: S$8,809 (535/654 bids)
+   2025-09-1: S$9,101 (540/633 bids)
+   2025-09-2: S$9,209 (539/617 bids)
+```
+
+### 处理本地文件
+
+```
+🚀 Processing COE data from: data/coe_Bidding_Results/M11-coe_results.csv
+📊 Filtering for Category D (Motorcycles) only
+✅ Processed 372 motorcycle COE records
+💾 Output written to: src/data/motorcycle-coe-data.js
+
+📈 Summary Statistics:
+   Total records: 372
+   Date range: 2010-01 to 2025-09
+   Price range: S$852 - S$13,189
+   Average price: S$5,825
+   Latest price: S$9,209
+
+📋 Latest 5 records:
+   2025-07-2: S$9,511 (534/622 bids)
+   2025-08-1: S$9,189 (526/633 bids)
+   2025-08-2: S$8,809 (535/654 bids)
+   2025-09-1: S$9,101 (540/633 bids)
+   2025-09-2: S$9,209 (539/617 bids)
 ```
 
 ## 文件结构
