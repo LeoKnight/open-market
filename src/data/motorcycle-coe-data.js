@@ -2,7 +2,7 @@
  * Motorcycle COE (Certificate of Entitlement) Historical Data
  * Category D - Motorcycles
  * 
- * Generated on: 2025-10-28T06:58:19.866Z
+ * Generated on: 2025-11-04T02:36:44.302Z
  * Total records: 374
  * 
  * Data fields:
