@@ -44,6 +44,12 @@ export default function Navigation() {
               >
                 COE Trends
               </Link>
+              <Link
+                href="/fuel-consumption"
+                className="text-gray-500 hover:text-blue-600 px-3 py-2 text-sm font-medium"
+              >
+                Fuel Converter
+              </Link>
             </nav>
           </div>
 
@@ -116,6 +122,12 @@ export default function Navigation() {
                 className="text-gray-500 hover:text-blue-600 block px-3 py-2 text-base font-medium"
               >
                 COE Trends
+              </Link>
+              <Link
+                href="/fuel-consumption"
+                className="text-gray-500 hover:text-blue-600 block px-3 py-2 text-base font-medium"
+              >
+                Fuel Converter
               </Link>
 
               {/* <div className="border-t border-gray-200 pt-4 pb-3">
