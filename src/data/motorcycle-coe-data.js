@@ -2,8 +2,8 @@
  * Motorcycle COE (Certificate of Entitlement) Historical Data
  * Category D - Motorcycles
  * 
- * Generated on: 2026-01-08T06:21:07.276Z
- * Total records: 378
+ * Generated on: 2026-02-02T01:47:15.711Z
+ * Total records: 380
  * 
  * Data fields:
  * - month: Bidding month (YYYY-MM format)
@@ -4175,6 +4175,28 @@ export const motorcycleCOEHistory = [
     "premium": 8081,
     "successRate": "84.18",
     "oversubscriptionRate": "117.91"
+  },
+  {
+    "month": "2026-01",
+    "biddingNo": 1,
+    "vehicleClass": "Category D",
+    "quota": 544,
+    "bidsSuccess": 527,
+    "bidsReceived": 639,
+    "premium": 8689,
+    "successRate": "82.47",
+    "oversubscriptionRate": "117.46"
+  },
+  {
+    "month": "2026-01",
+    "biddingNo": 2,
+    "vehicleClass": "Category D",
+    "quota": 538,
+    "bidsSuccess": 523,
+    "bidsReceived": 609,
+    "premium": 8860,
+    "successRate": "85.88",
+    "oversubscriptionRate": "113.20"
   }
 ];
 
