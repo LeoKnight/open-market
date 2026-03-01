@@ -24,7 +24,7 @@ export async function GET(
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-    return new NextResponse(body, {
+    return new NextResponse(Buffer.from(body), {
       headers: {
         "Content-Type": response.ContentType || "application/octet-stream",
         "Cache-Control": "public, max-age=31536000, immutable",
