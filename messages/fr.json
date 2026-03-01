@@ -482,6 +482,24 @@
     "title": "Open Market - Plateforme professionnelle de vente de motos d'occasion",
     "description": "Open Market est une plateforme leader de vente de motos d'occasion, offrant des services d'achat et de vente sûrs et pratiques."
   },
+  "SEO": {
+    "compareTitle": "Comparer les motos côte à côte",
+    "compareDescription": "Comparez jusqu'à 3 motos côte à côte - spécifications, prix, performances et analyse de valeur sur Open Market Singapour.",
+    "coeTrendsTitle": "Tendances des prix COE - Catégorie D Motos",
+    "coeTrendsDescription": "Suivez les prix historiques du COE pour les motos à Singapour. Consultez les tendances, les données PQP, les quotas et l'analyse des enchères.",
+    "depreciationTitle": "Calculateur de dépréciation moto",
+    "depreciationDescription": "Calculez le taux de dépréciation de votre moto avec les prix COE en temps réel de LTA Singapour. Suivi précis de la dépréciation quotidienne.",
+    "fuelConsumptionTitle": "Convertisseur de consommation de carburant",
+    "fuelConsumptionDescription": "Convertissez facilement entre MPG, km/L et L/100km. Comparez l'efficacité énergétique des motos et véhicules.",
+    "costCalculatorTitle": "Calculateur de coûts moto Singapour",
+    "costCalculatorDescription": "Calculez le coût total d'achat d'une moto à Singapour, incluant COE, ARF, droits d'accise, GST, taxe routière et assurance.",
+    "powerToWeightTitle": "Calculateur rapport puissance-poids",
+    "powerToWeightDescription": "Calculez et comparez les rapports puissance-poids des motos. Consultez les classements de performance et les références par catégorie.",
+    "recommendTitle": "Recommandation moto IA",
+    "recommendDescription": "Obtenez des recommandations de motos personnalisées selon votre budget, utilisation, classe de permis et niveau d'expérience à Singapour.",
+    "regulationsTitle": "Guide des réglementations moto à Singapour",
+    "regulationsDescription": "Guide complet des réglementations moto à Singapour - COE, taxe routière, permis, assurance, code de la route et plus."
+  },
   "AI": {
     "assistant": "Assistant",
     "thinking": "Réflexion...",

@@ -351,6 +351,24 @@
     "title": "Open Market - Professional Used Motorcycle Trading Platform",
     "description": "Open Market is a leading used motorcycle trading platform, providing safe and convenient buying and selling services."
   },
+  "SEO": {
+    "compareTitle": "Compare Motorcycles Side by Side",
+    "compareDescription": "Compare up to 3 motorcycles side by side - specs, pricing, performance and value analysis on Open Market Singapore.",
+    "coeTrendsTitle": "COE Price Trends - Category D Motorcycles",
+    "coeTrendsDescription": "Track historical COE prices for motorcycles in Singapore. View trends, PQP data, quota information and bidding analysis.",
+    "depreciationTitle": "Motorcycle Depreciation Calculator",
+    "depreciationDescription": "Calculate your motorcycle's depreciation rate with real-time COE prices from LTA Singapore. Accurate daily depreciation tracking.",
+    "fuelConsumptionTitle": "Fuel Consumption Converter",
+    "fuelConsumptionDescription": "Convert between MPG, km/L and L/100km. Compare fuel efficiency across motorcycles and vehicles easily.",
+    "costCalculatorTitle": "Motorcycle Cost Calculator Singapore",
+    "costCalculatorDescription": "Calculate total motorcycle purchase cost in Singapore including COE, ARF, excise duty, GST, road tax and insurance.",
+    "powerToWeightTitle": "Power-to-Weight Ratio Calculator",
+    "powerToWeightDescription": "Calculate and compare motorcycle power-to-weight ratios. View performance rankings and category benchmarks.",
+    "recommendTitle": "AI Motorcycle Recommender",
+    "recommendDescription": "Get personalized motorcycle recommendations based on your budget, usage, license class and experience level in Singapore.",
+    "regulationsTitle": "Singapore Motorcycle Regulations Guide",
+    "regulationsDescription": "Comprehensive guide to Singapore motorcycle regulations - COE, road tax, licensing, insurance, traffic rules and more."
+  },
   "ListingForm": {
     "basicInfo": "Basic Information",
     "title": "Title",

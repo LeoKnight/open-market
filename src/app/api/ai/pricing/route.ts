@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLatestCOEPrice, getLatestPQP } from "@/data/motorcycle-coe-data";
+import { rateLimit, rateLimitResponse, RATE_LIMITS } from "@/lib/rate-limit";
 
 const AI_CONFIG = {
   apiKey: process.env.QWEN_API_KEY!,
@@ -12,6 +13,9 @@ const AI_CONFIG = {
 
 export async function POST(request: NextRequest) {
   try {
+    const rl = rateLimit(request, RATE_LIMITS.ai, "ai-pricing");
+    if (!rl.success) return rateLimitResponse();
+
     const body = await request.json();
     const { brand, model, year, engineSize, mileage, condition, coeExpiryDate, omv, locale } =
       body as {

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import ListingCard from "@/components/ListingCard";
@@ -6,6 +7,29 @@ import { getTranslations } from "next-intl/server";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const seller = await prisma.user.findUnique({
+    where: { id },
+    select: { name: true, isDealer: true, shopName: true },
+  });
+  if (!seller) return { title: "Seller Not Found" };
+
+  const name = seller.shopName || seller.name || "Seller";
+  const title = seller.isDealer ? `${name} - Verified Dealer` : name;
+  const description = `View ${name}'s motorcycle listings on Open Market Singapore.`;
+
+  return {
+    title,
+    description,
+    openGraph: { title, description, type: "profile" },
+  };
+}
 
 export default async function SellerProfilePage({
   params,

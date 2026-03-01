@@ -93,16 +93,46 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
+    const parsedYear = parseInt(year);
+    const parsedEngine = parseInt(engineSize);
+    const parsedMileage = parseInt(mileage);
+    const parsedPrice = parseFloat(price);
+
+    if (isNaN(parsedYear) || parsedYear < 1900 || parsedYear > new Date().getFullYear() + 1) {
+      return NextResponse.json({ error: "Invalid year" }, { status: 400 });
+    }
+    if (isNaN(parsedEngine) || parsedEngine < 1 || parsedEngine > 3000) {
+      return NextResponse.json({ error: "Invalid engine size" }, { status: 400 });
+    }
+    if (isNaN(parsedMileage) || parsedMileage < 0 || parsedMileage > 999999) {
+      return NextResponse.json({ error: "Invalid mileage" }, { status: 400 });
+    }
+    if (isNaN(parsedPrice) || parsedPrice < 0 || parsedPrice > 9999999) {
+      return NextResponse.json({ error: "Invalid price" }, { status: 400 });
+    }
+    if (typeof title !== "string" || title.length > 200) {
+      return NextResponse.json({ error: "Invalid title" }, { status: 400 });
+    }
+    if (typeof brand !== "string" || brand.length > 50) {
+      return NextResponse.json({ error: "Invalid brand" }, { status: 400 });
+    }
+    if (typeof model !== "string" || model.length > 100) {
+      return NextResponse.json({ error: "Invalid model" }, { status: 400 });
+    }
+    if (images && (!Array.isArray(images) || images.length > 20)) {
+      return NextResponse.json({ error: "Too many images" }, { status: 400 });
+    }
+
     const listing = await prisma.listing.create({
       data: {
-        title,
-        brand,
-        model,
-        year: parseInt(year),
-        engineSize: parseInt(engineSize),
-        mileage: parseInt(mileage),
+        title: title.trim(),
+        brand: brand.trim(),
+        model: model.trim(),
+        year: parsedYear,
+        engineSize: parsedEngine,
+        mileage: parsedMileage,
         type: type || "OTHER",
-        price: parseFloat(price),
+        price: parsedPrice,
         condition: condition || "GOOD",
         description,
         location,

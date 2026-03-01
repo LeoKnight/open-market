@@ -482,6 +482,24 @@
     "title": "Open Market - 专业二手摩托车交易平台",
     "description": "Open Market 是领先的二手摩托车交易平台，提供安全便捷的买卖服务。"
   },
+  "SEO": {
+    "compareTitle": "摩托车对比",
+    "compareDescription": "在 Open Market 新加坡上并排对比最多3辆摩托车的规格、价格、性能和价值分析。",
+    "coeTrendsTitle": "COE价格趋势 - D类摩托车",
+    "coeTrendsDescription": "追踪新加坡摩托车COE历史价格走势，查看PQP数据、配额信息和竞标分析。",
+    "depreciationTitle": "摩托车折旧计算器",
+    "depreciationDescription": "使用LTA新加坡的实时COE价格计算摩托车折旧率，精确的日折旧跟踪。",
+    "fuelConsumptionTitle": "油耗转换器",
+    "fuelConsumptionDescription": "在MPG、km/L和L/100km之间轻松转换，方便比较摩托车和车辆的燃油效率。",
+    "costCalculatorTitle": "新加坡摩托车成本计算器",
+    "costCalculatorDescription": "计算新加坡摩托车购买总成本，包括COE、ARF、关税、GST、路税和保险。",
+    "powerToWeightTitle": "功率重量比计算器",
+    "powerToWeightDescription": "计算和比较摩托车功率重量比，查看性能排名和类别基准。",
+    "recommendTitle": "AI摩托车推荐",
+    "recommendDescription": "根据您的预算、用途、驾照等级和经验水平，获取个性化的新加坡摩托车推荐。",
+    "regulationsTitle": "新加坡摩托车法规指南",
+    "regulationsDescription": "全面的新加坡摩托车法规指南 - COE、路税、驾照、保险、交通规则等。"
+  },
   "AI": {
     "assistant": "助手",
     "thinking": "思考中...",

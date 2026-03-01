@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import type { ChatMessage, AIContext } from "@/lib/ai";
 import { ragChat } from "@/lib/rag";
+import { rateLimit, rateLimitResponse, RATE_LIMITS } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
   try {
+    const rl = rateLimit(request, RATE_LIMITS.ai, "ai-chat");
+    if (!rl.success) return rateLimitResponse();
     const body = await request.json();
     const { messages, context } = body as {
       messages: ChatMessage[];

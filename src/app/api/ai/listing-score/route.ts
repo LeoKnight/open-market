@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { rateLimit, rateLimitResponse, RATE_LIMITS } from "@/lib/rate-limit";
 
 const AI_CONFIG = {
   apiKey: process.env.QWEN_API_KEY!,
@@ -10,6 +11,9 @@ const AI_CONFIG = {
 
 export async function POST(request: NextRequest) {
   try {
+    const rl = rateLimit(request, RATE_LIMITS.ai, "ai-listing-score");
+    if (!rl.success) return rateLimitResponse();
+
     const body = await request.json();
     const { title, description, brand, model, year, engineSize, price, mileage, condition, images, coeExpiryDate, omv, power, weight, locale } = body;
 

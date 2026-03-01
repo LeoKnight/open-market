@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { callVision, callTextExtraction } from "@/lib/ai";
 import { PDFParse } from "pdf-parse";
+import { rateLimit, rateLimitResponse, RATE_LIMITS } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
   try {
+    const rl = rateLimit(request, RATE_LIMITS.ai, "ai-vision");
+    if (!rl.success) return rateLimitResponse();
     const body = await request.json();
     const { image, mimeType } = body as {
       image: string;

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { auth } from "@/lib/auth";
@@ -29,6 +30,51 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+const SITE_URL = "https://open-market-sg.vercel.app";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const listing = await prisma.listing.findUnique({
+    where: { id },
+    select: {
+      title: true, brand: true, model: true, year: true,
+      price: true, engineSize: true, mileage: true, images: true,
+      description: true, location: true,
+    },
+  });
+
+  if (!listing) return { title: "Listing Not Found" };
+
+  const title = `${listing.year} ${listing.brand} ${listing.model} - S$${listing.price.toLocaleString()}`;
+  const description = `${listing.year} ${listing.brand} ${listing.model}, ${listing.engineSize}cc, ${listing.mileage.toLocaleString()}km - S$${listing.price.toLocaleString()} in ${listing.location}. ${listing.description?.slice(0, 120) ?? ""}`;
+  const ogImage = listing.images[0] ? normalizeImageUrl(listing.images[0]) : undefined;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `${SITE_URL}/listings/${id}`,
+      type: "website",
+      ...(ogImage && { images: [{ url: ogImage, alt: title }] }),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      ...(ogImage && { images: [ogImage] }),
+    },
+    alternates: {
+      canonical: `${SITE_URL}/listings/${id}`,
+    },
+  };
+}
 
 const conditionKeyMap: Record<string, string> = {
   EXCELLENT: "conditionExcellent", GOOD: "conditionGood", FAIR: "conditionFair", POOR: "conditionPoor",
@@ -87,8 +133,33 @@ export default async function ListingDetailPage({
 
   const marketAvgPrice = marketAvg._count >= 1 ? Math.round(marketAvg._avg.price || 0) : null;
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: listing.title,
+    description: listing.description ?? `${listing.year} ${listing.brand} ${listing.model}`,
+    image: listing.images.map(normalizeImageUrl),
+    brand: { "@type": "Brand", name: listing.brand },
+    model: listing.model,
+    vehicleModelDate: String(listing.year),
+    offers: {
+      "@type": "Offer",
+      price: listing.price,
+      priceCurrency: "SGD",
+      availability: listing.status === "ACTIVE"
+        ? "https://schema.org/InStock"
+        : "https://schema.org/SoldOut",
+      itemCondition: "https://schema.org/UsedCondition",
+      url: `${SITE_URL}/listings/${id}`,
+    },
+  };
+
   return (
     <div className="min-h-screen bg-muted/50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Breadcrumb */}
         <div className="mb-6 flex items-center justify-between">

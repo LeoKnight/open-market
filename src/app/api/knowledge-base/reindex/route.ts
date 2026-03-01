@@ -2,9 +2,14 @@ import { NextResponse } from "next/server";
 import { loadAllDocuments } from "@/knowledge-base";
 import { chunkAllDocuments } from "@/lib/chunker";
 import { VectorStore } from "@/lib/vector-store";
+import { auth } from "@/lib/auth";
 
 export async function POST() {
   try {
+    const session = await auth();
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
     const docs = loadAllDocuments();
     const chunks = chunkAllDocuments(docs);
 

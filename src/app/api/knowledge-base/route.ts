@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { loadAllDocuments } from "@/knowledge-base";
 import { chunkDocument } from "@/lib/chunker";
 import { VectorStore } from "@/lib/vector-store";
+import { auth } from "@/lib/auth";
 
 export async function GET() {
   try {
@@ -38,6 +39,11 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const session = await auth();
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await request.json();
     const { filename, content, category, tags } = body as {
       filename: string;

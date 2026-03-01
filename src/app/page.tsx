@@ -83,8 +83,28 @@ async function HomeContent({ searchParams }: { searchParams: Promise<SearchParam
   const totalPages = Math.ceil(total / limit);
   const hasFilters = params.brand || params.type || params.minPrice || params.maxPrice || params.search || params.licenseClass;
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Open Market",
+    url: "https://open-market-sg.vercel.app",
+    description: "Professional used motorcycle trading platform in Singapore",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: "https://open-market-sg.vercel.app?search={search_term_string}",
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+
   return (
     <div className="min-h-screen bg-muted/50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Hero */}
       <section className="bg-gradient-to-br from-blue-700 via-blue-800 to-indigo-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { loadDocument, getKBBasePath } from "@/knowledge-base";
+import { auth } from "@/lib/auth";
 
 export async function GET(
   _request: NextRequest,
@@ -29,6 +30,11 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await auth();
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { id } = await params;
     const body = await request.json();
     const { content } = body as { content: string };
@@ -69,6 +75,11 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await auth();
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { id } = await params;
     const fs = await import("fs");
     const path = await import("path");
