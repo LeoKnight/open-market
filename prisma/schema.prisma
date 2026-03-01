@@ -153,3 +153,14 @@ model Favorite {
   @@index([userId])
   @@index([listingId])
 }
+
+model AiCache {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  endpoint  String
+  response  String   @db.Text
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([expiresAt])
+}

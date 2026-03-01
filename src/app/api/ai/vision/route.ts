@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { callVision, callTextExtraction } from "@/lib/ai";
 import { PDFParse } from "pdf-parse";
 import { rateLimit, rateLimitResponse, RATE_LIMITS } from "@/lib/rate-limit";
+import { generateCacheKey, getCache, setCache, CACHE_TTL } from "@/lib/ai-cache";
+import { createHash } from "crypto";
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,6 +17,14 @@ export async function POST(request: NextRequest) {
 
     if (!image) {
       return NextResponse.json({ error: "Image required" }, { status: 400 });
+    }
+
+    const imageHash = createHash("sha256").update(image.slice(0, 10000)).digest("hex");
+    const cacheKey = generateCacheKey("vision", { imageHash, mimeType: mimeType || "image/jpeg" });
+
+    const cached = await getCache(cacheKey);
+    if (cached) {
+      return NextResponse.json({ data: JSON.parse(cached), cached: true });
     }
 
     let rawResult: string;
@@ -38,6 +48,8 @@ export async function POST(request: NextRequest) {
     }
 
     const parsed = JSON.parse(jsonMatch[0]);
+    await setCache(cacheKey, "vision", JSON.stringify(parsed), CACHE_TTL.vision);
+
     return NextResponse.json({ data: parsed });
   } catch (error) {
     console.error("Vision API error:", error);

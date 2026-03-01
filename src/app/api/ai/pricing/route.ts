@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getLatestCOEPrice, getLatestPQP } from "@/data/motorcycle-coe-data";
 import { rateLimit, rateLimitResponse, RATE_LIMITS } from "@/lib/rate-limit";
+import { generateCacheKey, getCache, setCache, CACHE_TTL } from "@/lib/ai-cache";
 
 const AI_CONFIG = {
   apiKey: process.env.QWEN_API_KEY!,
@@ -61,6 +62,22 @@ export async function POST(request: NextRequest) {
 
     const coePrice = getLatestCOEPrice() as number | null;
     const pqpPrice = getLatestPQP() as number | null;
+
+    const cacheParams = {
+      brand, model, year, engineSize, mileage, condition, coeExpiryDate, omv, locale,
+      similarCount: similarListings.length, coePrice, pqpPrice,
+    };
+    const cacheKey = generateCacheKey("pricing", cacheParams);
+
+    const cached = await getCache(cacheKey);
+    if (cached) {
+      const { analysis: cachedAnalysis } = JSON.parse(cached);
+      return NextResponse.json({
+        analysis: cachedAnalysis,
+        marketData: { similarListings: similarListings.length, currentCOE: coePrice, currentPQP: pqpPrice },
+        cached: true,
+      });
+    }
 
     const LOCALE_NAMES: Record<string, string> = {
       en: "English", zh: "Chinese (Simplified)", fr: "French",
@@ -130,6 +147,8 @@ Return ONLY the JSON object, no other text.`;
     }
 
     const analysis = JSON.parse(jsonMatch[0]);
+
+    await setCache(cacheKey, "pricing", JSON.stringify({ analysis }), CACHE_TTL.pricing);
 
     return NextResponse.json({
       analysis,
