@@ -32,6 +32,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     metadataBase: new URL(SITE_URL),
+    verification: {
+      google: "BEbcLlFwSmVjO8mM0seitQe7gUyz8KWWj9NVMVJ9FEc",
+    },
     title: {
       default: title,
       template: `%s | Open Market`,
