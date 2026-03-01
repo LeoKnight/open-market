@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import Image from "next/image";
 import { Upload, X, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface ImageUploadProps {
   images: string[];
@@ -36,26 +37,16 @@ export default function ImageUpload({
       const formData = new FormData();
       Array.from(files).forEach((file) => formData.append("files", file));
 
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
       const data = await res.json();
 
-      if (!res.ok) {
-        setError(data.error || "Upload failed");
-        return;
-      }
-
+      if (!res.ok) { setError(data.error || "Upload failed"); return; }
       onChange([...images, ...data.urls]);
     } catch {
       setError("Upload failed. Please try again.");
     } finally {
       setUploading(false);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
 
@@ -67,35 +58,28 @@ export default function ImageUpload({
     <div>
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
         {images.map((url, idx) => (
-          <div
-            key={idx}
-            className="relative aspect-square rounded-lg overflow-hidden border border-gray-200 group"
-          >
-            <Image
-              src={url}
-              alt={`Upload ${idx + 1}`}
-              fill
-              className="object-cover"
-              sizes="120px"
-            />
-            <button
+          <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border group">
+            <Image src={url} alt={`Upload ${idx + 1}`} fill className="object-cover" sizes="120px" />
+            <Button
               type="button"
+              variant="destructive"
+              size="icon"
               onClick={() => removeImage(idx)}
-              className="absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+              className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
             >
-              <X className="w-3.5 h-3.5" />
-            </button>
+              <X className="h-3.5 w-3.5" />
+            </Button>
           </div>
         ))}
 
         {images.length < maxImages && (
-          <label className="relative aspect-square rounded-lg border-2 border-dashed border-gray-300 hover:border-blue-400 flex flex-col items-center justify-center cursor-pointer transition-colors">
+          <label className="relative aspect-square rounded-lg border-2 border-dashed border-muted-foreground/30 hover:border-primary/50 flex flex-col items-center justify-center cursor-pointer transition-colors">
             {uploading ? (
-              <Loader2 className="w-6 h-6 text-gray-400 animate-spin" />
+              <Loader2 className="h-6 w-6 text-muted-foreground animate-spin" />
             ) : (
               <>
-                <Upload className="w-6 h-6 text-gray-400 mb-1" />
-                <span className="text-xs text-gray-400">Upload</span>
+                <Upload className="h-6 w-6 text-muted-foreground mb-1" />
+                <span className="text-xs text-muted-foreground">Upload</span>
               </>
             )}
             <input
@@ -111,8 +95,8 @@ export default function ImageUpload({
         )}
       </div>
 
-      {error && <p className="text-sm text-red-500 mt-2">{error}</p>}
-      <p className="text-xs text-gray-400 mt-2">
+      {error && <p className="text-sm text-destructive mt-2">{error}</p>}
+      <p className="text-xs text-muted-foreground mt-2">
         {images.length}/{maxImages} images uploaded. Max 5MB each.
       </p>
     </div>

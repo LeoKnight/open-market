@@ -1,13 +1,16 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect, notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import ListingForm from "@/components/ListingForm";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default async function EditListingPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const t = await getTranslations("Listings");
   const session = await auth();
 
   if (!session?.user) {
@@ -29,17 +32,18 @@ export default async function EditListingPage({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted/50">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Edit Listing</h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Update the details of your listing
+          <h1 className="text-2xl font-bold text-foreground">{t("editListing")}</h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            {t("updateDetails")}
           </p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8">
-          <ListingForm
+        <Card>
+          <CardContent className="p-6 sm:p-8">
+            <ListingForm
             initialData={{
               id: listing.id,
               title: listing.title,
@@ -54,10 +58,21 @@ export default async function EditListingPage({
               description: listing.description || "",
               location: listing.location,
               images: listing.images,
+              power: listing.power,
+              weight: listing.weight,
+              torque: listing.torque,
+              fuelConsumption: listing.fuelConsumption,
+              registrationDate: listing.registrationDate?.toISOString() || null,
+              omv: listing.omv,
+              coeExpiryDate: listing.coeExpiryDate?.toISOString() || null,
+              licenseClass: listing.licenseClass,
+              contactWhatsapp: listing.contactWhatsapp,
+              contactPhone: listing.contactPhone,
             }}
             isEdit
           />
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

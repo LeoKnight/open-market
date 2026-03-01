@@ -14,12 +14,18 @@ model User {
   hashedPassword String?
   image          String?
   phone          String?
+  bio            String?   @db.Text
+  isDealer       Boolean   @default(false)
+  shopName       String?
+  shopAddress    String?
+  whatsapp       String?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  accounts Account[]
-  sessions Session[]
-  listings Listing[]
+  accounts  Account[]
+  sessions  Session[]
+  listings  Listing[]
+  favorites Favorite[]
 }
 
 model Account {
@@ -82,24 +88,47 @@ enum MotorcycleCondition {
   POOR
 }
 
+enum LicenseClass {
+  CLASS_2B
+  CLASS_2A
+  CLASS_2
+}
+
 model Listing {
-  id          String              @id @default(cuid())
-  title       String
-  brand       String
-  model       String
-  year        Int
-  engineSize  Int
-  mileage     Int
-  type        MotorcycleType      @default(OTHER)
-  price       Float
-  condition   MotorcycleCondition @default(GOOD)
-  description String?             @db.Text
-  location    String
-  images      String[]
-  status      ListingStatus       @default(ACTIVE)
+  id               String              @id @default(cuid())
+  title            String
+  brand            String
+  model            String
+  year             Int
+  engineSize       Int
+  mileage          Int
+  type             MotorcycleType      @default(OTHER)
+  price            Float
+  condition        MotorcycleCondition @default(GOOD)
+  description      String?             @db.Text
+  location         String
+  images           String[]
+  status           ListingStatus       @default(ACTIVE)
+
+  power            Int?
+  weight           Int?
+  torque           Float?
+  fuelConsumption  Float?
+  registrationDate DateTime?
+  omv              Float?
+  coeExpiryDate    DateTime?
+  licenseClass     LicenseClass?
+  contactWhatsapp  String?
+  contactPhone     String?
+  views            Int                 @default(0)
+  isFeatured       Boolean             @default(false)
+  isVerified       Boolean             @default(false)
+  verificationSource String?
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  favorites Favorite[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -108,4 +137,19 @@ model Listing {
   @@index([status])
   @@index([price])
   @@index([userId])
+  @@index([licenseClass])
+  @@index([views])
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  listingId String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, listingId])
+  @@index([userId])
+  @@index([listingId])
 }

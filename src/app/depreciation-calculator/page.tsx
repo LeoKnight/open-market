@@ -1,10 +1,21 @@
 "use client";
 
 import { useState, useCallback, useMemo, memo } from "react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import COEPriceDisplay from "@/components/COEPriceDisplay";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 
 interface CalculationResults {
   newPrice: number;
@@ -36,24 +47,17 @@ const FormikField = memo(
     placeholder?: string;
     type?: string;
   }) => (
-    <div>
-      <label
-        htmlFor={name}
-        className="block text-sm font-medium text-gray-700 mb-2"
-      >
-        {label}
-      </label>
-      <Field
-        id={name}
-        name={name}
-        type={type}
-        placeholder={placeholder}
-        className="w-full border border-gray-300 rounded-md px-3 py-3 sm:py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-      />
+    <div className="space-y-2">
+      <Label htmlFor={name}>{label}</Label>
+      <Field name={name}>
+        {({ field }: { field: { name: string; value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; onBlur: (e: React.FocusEvent<HTMLInputElement>) => void } }) => (
+          <Input {...field} id={name} type={type} placeholder={placeholder} className="h-10" />
+        )}
+      </Field>
       <ErrorMessage
         name={name}
         component="div"
-        className="mt-1 text-sm text-red-600"
+        className="text-sm text-destructive"
       />
     </div>
   )
@@ -95,6 +99,8 @@ const validationSchema = Yup.object()
   );
 
 export default function DepreciationCalculator() {
+  const t = useTranslations("Depreciation");
+  const tc = useTranslations("Common");
   const [coePrice, setCoePrice] = useState<number | null>(null);
   const [calculating, setCalculating] = useState(false);
   const [results, setResults] = useState<CalculationResults | null>(null);
@@ -115,7 +121,7 @@ export default function DepreciationCalculator() {
   const handleSubmit = useCallback(
     (values: typeof initialValues) => {
       if (!coePrice) {
-        alert("COE price is not available. Please try again.");
+        alert(t("coeNotAvailable"));
         return;
       }
 
@@ -176,7 +182,7 @@ export default function DepreciationCalculator() {
         setCalculating(false);
       });
     },
-    [coePrice]
+    [coePrice, t]
   );
 
   const resetCalculator = useCallback(() => {
@@ -189,16 +195,15 @@ export default function DepreciationCalculator() {
   }, [calculating]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted/50">
       {/* Main Content */}
       <div className="max-w-6xl mx-auto py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 sm:mb-12">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Motorcycle Depreciation Calculator
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-4">
+            {t("title")}
           </h1>
-          <p className="text-lg sm:text-xl text-gray-600 px-4">
-            Calculate your motorcycle&apos;s depreciation rate with real-time
-            COE prices from LTA Singapore
+          <p className="text-lg sm:text-xl text-muted-foreground px-4">
+            {t("subtitle")}
           </p>
         </div>
 
@@ -210,11 +215,13 @@ export default function DepreciationCalculator() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           {/* Input Form */}
-          <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
-              Vehicle Information
-            </h2>
-
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl sm:text-2xl">
+                Vehicle Information
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
             <Formik
               initialValues={initialValues}
               validationSchema={validationSchema}
@@ -231,55 +238,59 @@ export default function DepreciationCalculator() {
                   />
 
                   <FormikField
-                    label="Current Market Price (S$)"
+                    label={t("currentMarketPrice")}
                     name="currentPrice"
                     placeholder="e.g., 18000"
                     type="number"
                   />
 
                   <FormikField
-                    label="Registration Date"
+                    label={t("registrationDate")}
                     name="registrationDate"
                     type="date"
                   />
 
                   <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
-                    <button
+                    <Button
                       type="submit"
                       disabled={isCalculateDisabled || !isValid || !dirty}
-                      className="flex-1 bg-blue-600 text-white py-4 sm:py-3 px-4 rounded-md font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-base transition-colors"
+                      className="flex-1 h-11"
                     >
                       {calculating
-                        ? "Calculating..."
-                        : "Calculate Depreciation"}
-                    </button>
+                        ? t("calculating")
+                        : t("calculateDepreciation")}
+                    </Button>
 
-                    <button
+                    <Button
                       type="button"
+                      variant="secondary"
                       onClick={() => {
                         resetForm();
                         resetCalculator();
                       }}
-                      className="flex-1 bg-gray-200 text-gray-700 py-4 sm:py-3 px-4 rounded-md font-medium hover:bg-gray-300 text-base transition-colors"
+                      className="flex-1 h-11"
                     >
-                      Reset
-                    </button>
+                      {tc("reset")}
+                    </Button>
                   </div>
                 </Form>
               )}
             </Formik>
-          </div>
+            </CardContent>
+          </Card>
 
           {/* Results */}
-          <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
-              Calculation Results
-            </h2>
-
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl sm:text-2xl">
+                {t("calculationResults")}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
             {!results ? (
-              <div className="text-center text-gray-500 py-8 sm:py-12">
+              <div className="text-center text-muted-foreground py-8 sm:py-12">
                 <svg
-                  className="mx-auto h-10 w-10 sm:h-12 sm:w-12 text-gray-400 mb-4"
+                  className="mx-auto h-10 w-10 sm:h-12 sm:w-12 text-muted-foreground mb-4"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -292,7 +303,7 @@ export default function DepreciationCalculator() {
                   />
                 </svg>
                 <p className="text-sm sm:text-base px-4">
-                  Enter vehicle information to see depreciation calculations
+                  {t("enterVehicleInfo")}
                 </p>
               </div>
             ) : (
@@ -300,7 +311,7 @@ export default function DepreciationCalculator() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="bg-red-50 p-3 sm:p-4 rounded-lg">
                     <p className="text-xs sm:text-sm text-red-600 font-medium">
-                      Total Depreciation
+                      {t("totalDepreciation")}
                     </p>
                     <p className="text-xl sm:text-2xl font-bold text-red-700">
                       S${Math.round(results.totalDepreciation).toLocaleString()}
@@ -309,7 +320,7 @@ export default function DepreciationCalculator() {
 
                   <div className="bg-green-50 p-3 sm:p-4 rounded-lg">
                     <p className="text-xs sm:text-sm text-green-600 font-medium">
-                      Machine Value Retention
+                      {t("machineValueRetention")}
                     </p>
                     <p className="text-xl sm:text-2xl font-bold text-green-700">
                       {results.valueRetention.toFixed(0)}%
@@ -317,11 +328,11 @@ export default function DepreciationCalculator() {
                   </div>
                 </div>
 
-                <div className="border-t pt-4">
-                  <div className="space-y-3">
+                <Separator className="my-4" />
+                <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm sm:text-base text-gray-600">
-                        Depreciation Rate:
+                      <span className="text-sm sm:text-base text-muted-foreground">
+                        {t("depreciationRate")}
                       </span>
                       <span className="font-semibold text-sm sm:text-base">
                         {results.depreciationRate.toFixed(2)}%
@@ -329,26 +340,26 @@ export default function DepreciationCalculator() {
                     </div>
 
                     <div className="flex justify-between items-center">
-                      <span className="text-sm sm:text-base text-gray-600">
-                        Annual Depreciation Rate:
+                      <span className="text-sm sm:text-base text-muted-foreground">
+                        {t("annualDepreciationRate")}
                       </span>
                       <div className="text-right">
                         <span className="font-semibold text-sm sm:text-base block">
                           {results.annualDepreciationRate.toFixed(2)}%
                         </span>
-                        <span className="text-xs text-gray-500">
-                          (per year)
+                        <span className="text-xs text-muted-foreground">
+                          ({tc("perYear")})
                         </span>
                       </div>
                     </div>
 
                     <div className="flex justify-between items-center">
-                      <span className="text-sm sm:text-base text-gray-600">
-                        Days Since Registration:
+                      <span className="text-sm sm:text-base text-muted-foreground">
+                        {t("daysSinceRegistration")}
                       </span>
                       <div className="text-right">
                         <span className="font-semibold text-sm sm:text-base block">
-                          {results.daysSinceReg.toLocaleString()} days
+                          {results.daysSinceReg.toLocaleString()} {tc("days")}
                         </span>
                         <span className="text-xs text-gray-500">
                           {`
@@ -365,9 +376,10 @@ export default function DepreciationCalculator() {
                       </div>
                     </div>
 
-                    <div className="flex justify-between items-center border-t pt-3">
-                      <span className="text-sm sm:text-base text-gray-600">
-                        New Price Excluding COE:
+                    <Separator className="my-3" />
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm sm:text-base text-muted-foreground">
+                        {t("newPriceExcludingCoe")}
                       </span>
                       <span className="font-semibold text-sm sm:text-base">
                         S$
@@ -378,8 +390,8 @@ export default function DepreciationCalculator() {
                     </div>
 
                     <div className="flex justify-between items-center">
-                      <span className="text-sm sm:text-base text-gray-600">
-                        Current Price Excluding COE:
+                      <span className="text-sm sm:text-base text-muted-foreground">
+                        {t("currentPriceExcludingCoe")}
                       </span>
                       <span className="font-semibold text-sm sm:text-base">
                         S$
@@ -389,9 +401,10 @@ export default function DepreciationCalculator() {
                       </span>
                     </div>
 
-                    <div className="flex justify-between items-center border-t pt-3">
-                      <span className="text-sm sm:text-base text-gray-600">
-                        COE Remaining Value:
+                    <Separator className="my-3" />
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm sm:text-base text-muted-foreground">
+                        {t("coeRemainingValue")}
                       </span>
                       <span className="font-semibold text-sm sm:text-base">
                         S$
@@ -400,17 +413,17 @@ export default function DepreciationCalculator() {
                     </div>
 
                     <div className="flex justify-between items-center">
-                      <span className="text-sm sm:text-base text-gray-600">
-                        COE Remaining Days:
+                      <span className="text-sm sm:text-base text-muted-foreground">
+                        {t("coeRemainingDays")}
                       </span>
                       <div className="text-right">
                         <span className="font-semibold text-sm sm:text-base block">
                           {Math.round(
                             results.coeRemainingDays
                           ).toLocaleString()}{" "}
-                          days
+                          {tc("days")}
                         </span>
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-muted-foreground">
                           {`
                             ${Math.floor(results.coeRemainingYears)} years
                             ${Math.floor(
@@ -429,53 +442,46 @@ export default function DepreciationCalculator() {
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="bg-yellow-50 p-3 sm:p-4 rounded-lg mt-4 sm:mt-6">
+                <div className="bg-yellow-50 dark:bg-yellow-950/30 p-3 sm:p-4 rounded-lg mt-4 sm:mt-6">
                   <p className="text-xs sm:text-sm text-yellow-800">
-                    <strong>Note:</strong> All time periods are displayed in
-                    days for maximum precision. COE values depreciate linearly
-                    over 3,652.5 days (10 years). Current calculation uses the
-                    latest COE price of S$
-                    {results.currentCoePrice?.toLocaleString()}
-                    for motorcycles from LTA Singapore.
+                    <strong>{t("note")}</strong> {t("noteText", { price: results.currentCoePrice?.toLocaleString() ?? "" })}
                   </p>
                 </div>
               </div>
             )}
-          </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Information Section */}
-        <div className="mt-8 sm:mt-12 bg-white rounded-lg shadow-md p-4 sm:p-6">
-          <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">
-            How Motorcycle Depreciation Works in Singapore
-          </h3>
+        <Card className="mt-8 sm:mt-12">
+          <CardHeader>
+            <CardTitle className="text-lg sm:text-xl">
+              {t("howItWorks")}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">
-                COE (Certificate of Entitlement)
+              <h4 className="font-semibold text-foreground mb-2 text-sm sm:text-base">
+                {t("coeCertificate")}
               </h4>
-              <p className="text-gray-600 text-xs sm:text-sm">
-                COE is required to own a vehicle in Singapore and is valid for
-                3,652.5 days (10 years). The calculator displays all time
-                periods in days for maximum precision and accurate daily
-                depreciation tracking.
+              <p className="text-muted-foreground text-xs sm:text-sm">
+                {t("coeCertificateDesc")}
               </p>
             </div>
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">
-                Depreciation Calculation
+              <h4 className="font-semibold text-foreground mb-2 text-sm sm:text-base">
+                {t("depreciationCalc")}
               </h4>
-              <p className="text-gray-600 text-xs sm:text-sm">
-                This calculator considers both the vehicle&apos;s market
-                depreciation and the remaining COE value based on daily
-                depreciation calculations using current LTA prices to give you a
-                precise assessment.
+              <p className="text-muted-foreground text-xs sm:text-sm">
+                {t("depreciationCalcDesc")}
               </p>
             </div>
           </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

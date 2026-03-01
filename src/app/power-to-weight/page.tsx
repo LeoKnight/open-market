@@ -1,9 +1,16 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import PowerToWeightForm from "@/components/PowerToWeightForm";
 import PowerToWeightDisplay from "@/components/PowerToWeightDisplay";
 import PowerToWeightRanking from "@/components/PowerToWeightRanking";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface PowerToWeightData {
   id: string;
@@ -15,6 +22,7 @@ interface PowerToWeightData {
 }
 
 export default function PowerToWeightCalculator() {
+  const t = useTranslations("PowerToWeight");
   const [currentResult, setCurrentResult] = useState<PowerToWeightData | null>(
     null
   );
@@ -79,7 +87,7 @@ export default function PowerToWeightCalculator() {
         });
       } catch (error) {
         console.error("Calculation error:", error);
-        alert("Calculation error. Please check your input data.");
+        alert(t("calcError"));
       } finally {
         setCalculating(false);
       }
@@ -97,14 +105,14 @@ export default function PowerToWeightCalculator() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted/50">
       {/* Main Content */}
       <div className="max-w-6xl mx-auto py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 sm:mb-12">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-4">
             Motorcycle Power-to-Weight Ratio Calculator
           </h1>
-          <p className="text-lg sm:text-xl text-gray-600 px-4">
+          <p className="text-lg sm:text-xl text-muted-foreground px-4">
             Calculate motorcycle power-to-weight ratio and view rankings
           </p>
         </div>
@@ -132,82 +140,62 @@ export default function PowerToWeightCalculator() {
         </div>
 
         {/* Information Section */}
-        <div className="mt-8 sm:mt-12 bg-white rounded-lg shadow-md p-4 sm:p-6">
-          <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">
-            About Motorcycle Power-to-Weight Ratio
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">
-                What is Power-to-Weight Ratio?
-              </h4>
-              <ul className="text-gray-600 text-xs sm:text-sm space-y-1">
-                <li>
-                  • <strong>Power-to-Weight Ratio</strong> is the ratio of
-                  engine power to vehicle weight
-                </li>
-                <li>• Usually measured in horsepower per kilogram (HP/kg)</li>
-                <li>
-                  • Higher power-to-weight ratio typically means better
-                  acceleration performance
-                </li>
-                <li>
-                  • One of the important indicators for measuring motorcycle
-                  performance
-                </li>
+        <Card className="mt-8 sm:mt-12">
+          <CardHeader>
+            <CardTitle className="text-lg sm:text-xl">
+              {t("aboutTitle")}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+              <div>
+                <h4 className="font-semibold text-foreground mb-2 text-sm sm:text-base">
+                  {t("whatIs")}
+                </h4>
+                <ul className="text-muted-foreground text-xs sm:text-sm space-y-1">
+                  <li>• {t("whatIsDesc1")}</li>
+                  <li>• {t("whatIsDesc2")}</li>
+                  <li>• {t("whatIsDesc3")}</li>
+                  <li>• {t("whatIsDesc4")}</li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold text-foreground mb-2 text-sm sm:text-base">
+                  {t("referenceStandards")}
+                </h4>
+                <ul className="text-muted-foreground text-xs sm:text-sm space-y-1">
+                  <li>• {t("entryLevel")}</li>
+                  <li>• {t("midPerformance")}</li>
+                  <li>• {t("highPerformance")}</li>
+                  <li>• {t("superbikeLevel")}</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg">
+              <h5 className="font-semibold text-blue-900 dark:text-blue-100 mb-2 text-sm">
+                {t("formulaTitle")}
+              </h5>
+              <p className="text-blue-800 dark:text-blue-200 text-xs sm:text-sm">
+                {t("formula")}
+              </p>
+              <p className="text-blue-800 dark:text-blue-200 text-xs sm:text-sm mt-1">
+                {t("formulaExample")}
+              </p>
+            </div>
+
+            <div className="p-4 bg-green-50 dark:bg-green-950/30 rounded-lg">
+              <h5 className="font-semibold text-green-900 dark:text-green-100 mb-2 text-sm">
+                {t("importantNotes")}
+              </h5>
+              <ul className="text-green-800 dark:text-green-200 text-xs sm:text-sm space-y-1">
+                <li>• {t("note1")}</li>
+                <li>• {t("note2")}</li>
+                <li>• {t("note3")}</li>
               </ul>
             </div>
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">
-                Power-to-Weight Ratio Reference Standards
-              </h4>
-              <ul className="text-gray-600 text-xs sm:text-sm space-y-1">
-                <li>
-                  • <strong>0.3-0.5 HP/kg:</strong> Entry-level motorcycles
-                </li>
-                <li>
-                  • <strong>0.5-0.8 HP/kg:</strong> Mid-performance motorcycles
-                </li>
-                <li>
-                  • <strong>0.8-1.2 HP/kg:</strong> High-performance motorcycles
-                </li>
-                <li>
-                  • <strong>1.2+ HP/kg:</strong> Superbike level
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-            <h5 className="font-semibold text-blue-900 mb-2 text-sm">
-              Calculation Formula
-            </h5>
-            <p className="text-blue-800 text-xs sm:text-sm">
-              Power-to-Weight Ratio = Engine Power (HP) ÷ Vehicle Weight (kg)
-            </p>
-            <p className="text-blue-800 text-xs sm:text-sm mt-1">
-              Example: A 150HP motorcycle weighing 200kg has a ratio = 150 ÷ 200
-              = 0.75 HP/kg
-            </p>
-          </div>
-
-          <div className="mt-6 p-4 bg-green-50 rounded-lg">
-            <h5 className="font-semibold text-green-900 mb-2 text-sm">
-              Important Notes
-            </h5>
-            <ul className="text-green-800 text-xs sm:text-sm space-y-1">
-              <li>• Vehicle weight should include fuel and necessary fluids</li>
-              <li>
-                • Please refer to manufacturer&apos;s official specifications
-                for power data
-              </li>
-              <li>
-                • Power-to-weight ratio is just one performance indicator;
-                actual riding experience is affected by other factors
-              </li>
-            </ul>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

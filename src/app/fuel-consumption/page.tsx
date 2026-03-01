@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import FuelConsumptionForm, {
   FuelConsumptionValues,
 } from "@/components/FuelConsumptionForm";
@@ -11,10 +12,17 @@ import {
   convertFromLitersPer100Km,
   FuelConsumptionResults,
 } from "@/utils/fuel-conversion";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 type ConversionSource = "mpg" | "kmPerLiter" | "litersPer100Km" | null;
 
 export default function FuelConsumptionConverter() {
+  const t = useTranslations("FuelConsumption");
   const [values, setValues] = useState<FuelConsumptionValues>({
     mpg: "",
     kmPerLiter: "",
@@ -109,15 +117,15 @@ export default function FuelConsumptionConverter() {
   }, [values, lastChangedField]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted/50">
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Fuel Consumption Converter
+          <h1 className="text-4xl font-bold text-foreground mb-4">
+            {t("title")}
           </h1>
-          <p className="text-xl text-gray-600">
-            Easily convert between MPG, km/L, and L/100km
+          <p className="text-xl text-muted-foreground">
+            {t("subtitle")}
           </p>
         </div>
 
@@ -136,50 +144,50 @@ export default function FuelConsumptionConverter() {
         {/* Information Section */}
         <div className="mt-12 bg-white rounded-lg shadow-md p-6">
           <h3 className="text-2xl font-bold text-gray-900 mb-6">
-            About Fuel Consumption Units
+            {t("aboutTitle")}
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="p-4 bg-blue-50 rounded-lg">
               <h4 className="font-semibold text-blue-900 mb-3 text-lg">
-                MPG (Miles Per Gallon)
+                {t("mpgTitle")}
               </h4>
               <ul className="text-blue-800 text-sm space-y-2">
-                <li>• Primarily used in the United States</li>
-                <li>• Measures miles traveled per gallon of fuel</li>
-                <li>• Higher values indicate better fuel efficiency</li>
-                <li>• Typical range: 20-60 MPG</li>
+                <li>• {t("mpgDesc1")}</li>
+                <li>• {t("mpgDesc2")}</li>
+                <li>• {t("mpgDesc3")}</li>
+                <li>• {t("mpgDesc4")}</li>
               </ul>
             </div>
 
             <div className="p-4 bg-green-50 rounded-lg">
               <h4 className="font-semibold text-green-900 mb-3 text-lg">
-                km/L (Kilometers Per Liter)
+                {t("kmlTitle")}
               </h4>
               <ul className="text-green-800 text-sm space-y-2">
-                <li>• Widely used in Asian regions</li>
-                <li>• Measures kilometers traveled per liter of fuel</li>
-                <li>• Higher values indicate better fuel efficiency</li>
-                <li>• Typical range: 8-25 km/L</li>
+                <li>• {t("kmlDesc1")}</li>
+                <li>• {t("kmlDesc2")}</li>
+                <li>• {t("kmlDesc3")}</li>
+                <li>• {t("kmlDesc4")}</li>
               </ul>
             </div>
 
             <div className="p-4 bg-purple-50 rounded-lg">
               <h4 className="font-semibold text-purple-900 mb-3 text-lg">
-                L/100km (Liters Per 100 Kilometers)
+                {t("l100Title")}
               </h4>
               <ul className="text-purple-800 text-sm space-y-2">
-                <li>• Used in Europe and Canada</li>
-                <li>• Measures liters consumed per 100 kilometers</li>
-                <li>• Lower values indicate better fuel efficiency</li>
-                <li>• Typical range: 4-12 L/100km</li>
+                <li>• {t("l100Desc1")}</li>
+                <li>• {t("l100Desc2")}</li>
+                <li>• {t("l100Desc3")}</li>
+                <li>• {t("l100Desc4")}</li>
               </ul>
             </div>
           </div>
 
           <div className="mt-6 p-4 bg-gray-50 rounded-lg">
             <h4 className="font-semibold text-gray-900 mb-2">
-              Conversion Formulas
+              {t("formulasTitle")}
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
               <div>
@@ -197,36 +205,24 @@ export default function FuelConsumptionConverter() {
         {/* Usage Tips */}
         <div className="mt-8 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg shadow-md p-6">
           <h3 className="text-xl font-bold text-gray-900 mb-4">
-            💡 Usage Tips
+            💡 {t("usageTips")}
           </h3>
           <ul className="space-y-2 text-gray-700">
             <li className="flex items-start gap-2">
               <span className="text-blue-600 font-bold">1.</span>
-              <span>
-                Enter a value in any input field, and the other two units will
-                be automatically calculated and displayed
-              </span>
+              <span>{t("tip1")}</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-blue-600 font-bold">2.</span>
-              <span>
-                All calculation results are rounded to two decimal places for
-                precision
-              </span>
+              <span>{t("tip2")}</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-blue-600 font-bold">3.</span>
-              <span>
-                Click the &quot;Reset All Values&quot; button to clear all
-                inputs and results
-              </span>
+              <span>{t("tip3")}</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-blue-600 font-bold">4.</span>
-              <span>
-                Suitable for comparing fuel efficiency across cars, motorcycles,
-                and other vehicles
-              </span>
+              <span>{t("tip4")}</span>
             </li>
           </ul>
         </div>

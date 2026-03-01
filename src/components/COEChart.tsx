@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import {
   LineChart,
   Line,
@@ -32,6 +33,7 @@ interface COEDataPoint {
   bidsSuccess: number;
   bidsReceived: number;
   premium: number;
+  pqp: number | null;
   successRate: string;
   oversubscriptionRate: string;
 }
@@ -39,6 +41,7 @@ interface COEDataPoint {
 interface ChartDataPoint {
   date: string;
   premium: number;
+  pqp: number | null;
   quota: number;
   bidsReceived: number;
   successRate: number;
@@ -58,6 +61,7 @@ export default function COEChart({
   data = motorcycleCOEHistory,
   className = "",
 }: COEChartProps) {
+  const t = useTranslations("CoeChart");
   const [timeRange, setTimeRange] = useState<TimeRange>("2Y");
   const [chartType, setChartType] = useState<ChartType>("composed");
   const [isLoading, setIsLoading] = useState(false);
@@ -95,13 +99,14 @@ export default function COEChart({
       .map((item) => ({
         date: `${item.month}-${item.biddingNo}`,
         premium: item.premium,
+        pqp: item.pqp,
         quota: item.quota,
         bidsReceived: item.bidsReceived,
         successRate: parseFloat(item.successRate),
         oversubscriptionRate: parseFloat(item.oversubscriptionRate),
         period: `${item.month} (${
-          item.biddingNo === 1 ? "First" : "Second"
-        } Bidding)`,
+          item.biddingNo === 1 ? t("firstBidding") : t("secondBidding")
+        })`,
       }))
       .sort((a, b) => a.date.localeCompare(b.date));
 
@@ -112,7 +117,7 @@ export default function COEChart({
     setTimeout(() => setIsLoading(false), 50);
 
     return result;
-  }, [data, timeRange]);
+  }, [data, timeRange, t]);
 
   // 计算Y轴范围 - 根据当前数据动态调整
   const yAxisDomains = useMemo(() => {
@@ -153,6 +158,11 @@ export default function COEChart({
 
     const prices = processedData.map((d) => d.premium);
     const quotas = processedData.map((d) => d.quota);
+    const pqpValues = processedData
+      .filter((d) => d.pqp !== null)
+      .map((d) => d.pqp as number);
+
+    const latestPqp = pqpValues.length > 0 ? pqpValues[pqpValues.length - 1] : null;
 
     return {
       minPrice: Math.min(...prices),
@@ -161,6 +171,7 @@ export default function COEChart({
         prices.reduce((sum, price) => sum + price, 0) / prices.length
       ),
       currentPrice: prices[prices.length - 1],
+      currentPqp: latestPqp,
       totalQuota: quotas.reduce((sum, quota) => sum + quota, 0),
       avgQuota: Math.round(
         quotas.reduce((sum, quota) => sum + quota, 0) / quotas.length
@@ -236,23 +247,29 @@ export default function COEChart({
             </p>
             <div className="space-y-1 text-xs">
               <p className="text-blue-600">
-                <span className="font-medium">COE Price:</span> S$
+                <span className="font-medium">{t("tooltipCoePrice")}:</span> S$
                 {data.premium.toLocaleString()}
               </p>
+              {data.pqp !== null && (
+                <p className="text-amber-600">
+                  <span className="font-medium">{t("tooltipPqpRenewal")}:</span> S$
+                  {data.pqp.toLocaleString()}
+                </p>
+              )}
               <p className="text-green-600">
-                <span className="font-medium">Quota:</span>{" "}
+                <span className="font-medium">{t("tooltipQuota")}:</span>{" "}
                 {data.quota.toLocaleString()}
               </p>
               <p className="text-purple-600">
-                <span className="font-medium">Bids Received:</span>{" "}
+                <span className="font-medium">{t("tooltipBidsReceived")}:</span>{" "}
                 {data.bidsReceived.toLocaleString()}
               </p>
               <p className="text-orange-600">
-                <span className="font-medium">Success Rate:</span>{" "}
+                <span className="font-medium">{t("tooltipSuccessRate")}:</span>{" "}
                 {data.successRate.toFixed(1)}%
               </p>
               <p className="text-red-600">
-                <span className="font-medium">Oversubscription:</span>{" "}
+                <span className="font-medium">{t("tooltipOversubscription")}:</span>{" "}
                 {data.oversubscriptionRate.toFixed(1)}%
               </p>
             </div>
@@ -261,7 +278,7 @@ export default function COEChart({
       }
       return null;
     },
-    []
+    [t]
   );
 
   // 优化按钮点击处理
@@ -333,40 +350,41 @@ export default function COEChart({
 
           <Card>
             <CardHeader className="pb-2">
-              <CardDescription>Price Range</CardDescription>
-              <CardTitle className="text-lg">
-                S${statistics.minPrice.toLocaleString()} - S$
-                {statistics.maxPrice.toLocaleString()}
+              <CardDescription>{t("pqpRenewalPrice")}</CardDescription>
+              <CardTitle className="text-2xl">
+                {statistics.currentPqp !== null
+                  ? `S$${statistics.currentPqp.toLocaleString()}`
+                  : "N/A"}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-gray-600">
-                Average: S${statistics.avgPrice.toLocaleString()}
+                {t("threeMonthAverage")}
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="pb-2">
-              <CardDescription>Total Quota</CardDescription>
+              <CardDescription>{t("totalQuota")}</CardDescription>
               <CardTitle className="text-2xl">
                 {statistics.totalQuota.toLocaleString()}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-gray-600">
-                Avg per bidding: {statistics.avgQuota.toLocaleString()}
+                {t("avgPerBidding", { count: statistics.avgQuota.toLocaleString() })}
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="pb-2">
-              <CardDescription>Data Points</CardDescription>
+              <CardDescription>{t("dataPoints")}</CardDescription>
               <CardTitle className="text-2xl">{processedData.length}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-600">Bidding sessions</p>
+              <p className="text-sm text-gray-600">{t("biddingSessions")}</p>
             </CardContent>
           </Card>
         </div>
@@ -376,7 +394,7 @@ export default function COEChart({
       <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
         <div className="flex flex-wrap gap-2">
           <span className="text-sm font-medium text-gray-700 flex items-center">
-            Time Range:
+            {t("timeRange")}:
           </span>
           {(["1Y", "2Y", "5Y", "10Y", "ALL"] as TimeRange[]).map((range) => (
             <Button
@@ -386,14 +404,14 @@ export default function COEChart({
               onClick={() => handleTimeRangeChange(range)}
               disabled={isLoading}
             >
-              {range === "ALL" ? "All" : range}
+              {range === "ALL" ? t("allTime") : range}
             </Button>
           ))}
         </div>
 
         <div className="flex flex-wrap gap-2">
           <span className="text-sm font-medium text-gray-700 flex items-center">
-            Chart Type:
+            {t("chartType")}:
           </span>
           <Button
             variant={chartType === "line" ? "default" : "outline"}
@@ -401,7 +419,7 @@ export default function COEChart({
             onClick={() => handleChartTypeChange("line")}
             disabled={isLoading}
           >
-            Line Chart
+            {t("lineChart")}
           </Button>
           <Button
             variant={chartType === "composed" ? "default" : "outline"}
@@ -409,7 +427,7 @@ export default function COEChart({
             onClick={() => handleChartTypeChange("composed")}
             disabled={isLoading}
           >
-            Combined Chart
+            {t("combinedChart")}
           </Button>
         </div>
       </div>
@@ -420,7 +438,7 @@ export default function COEChart({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <CardTitle className="flex items-center gap-2">
-                COE Price Trend - Category D (Motorcycles)
+                {t("chartTitle")}
                 {isLoading && (
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
                 )}
@@ -432,7 +450,7 @@ export default function COEChart({
               onClick={toggleFullscreen}
               className="flex items-center gap-2"
               title={
-                isFullscreen ? "Exit Fullscreen (ESC)" : "Enter Fullscreen"
+                isFullscreen ? t("exitFullscreen") : t("enterFullscreen")
               }
             >
               {isFullscreen ? (
@@ -450,7 +468,7 @@ export default function COEChart({
                       d="M6 18L18 6M6 6l12 12"
                     />
                   </svg>
-                  Exit
+                  {t("exit")}
                 </>
               ) : (
                 <>
@@ -467,17 +485,20 @@ export default function COEChart({
                       d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
                     />
                   </svg>
-                  Fullscreen
+                  {t("fullscreen")}
                 </>
               )}
             </Button>
           </div>
           <CardDescription>
-            Historical COE prices with quota information (
-            {timeRange === "ALL" ? "All time" : `Last ${timeRange}`})
+            {t("chartDesc", {
+              range: timeRange === "ALL" ? t("allTime") : t("last", { range: timeRange }),
+            })}
             <span className="text-blue-600 ml-2">
-              • Showing all {processedData.length} bidding sessions (
-              {Math.round(processedData.length / 2)} months)
+              • {t("showingAll", {
+                count: processedData.length,
+                months: Math.round(processedData.length / 2),
+              })}
             </span>
             {process.env.NODE_ENV === "development" &&
               processedData.length > 0 && (
@@ -529,9 +550,21 @@ export default function COEChart({
                       dataKey="premium"
                       stroke="#2563eb"
                       strokeWidth={2}
-                      dot={false} // 禁用点以提高性能
+                      dot={false}
                       activeDot={{ r: 4, stroke: "#2563eb", strokeWidth: 2 }}
-                      name="COE Price (S$)"
+                      name={t("coePriceSeries")}
+                    />
+                    <Line
+                      yAxisId="price"
+                      type="monotone"
+                      dataKey="pqp"
+                      stroke="#d97706"
+                      strokeWidth={2}
+                      strokeDasharray="6 3"
+                      dot={false}
+                      activeDot={{ r: 4, stroke: "#d97706", strokeWidth: 2 }}
+                      name={t("pqpRenewalSeries")}
+                      connectNulls
                     />
                     <Line
                       yAxisId="quota"
@@ -539,9 +572,9 @@ export default function COEChart({
                       dataKey="quota"
                       stroke="#16a34a"
                       strokeWidth={2}
-                      dot={false} // 禁用点以提高性能
+                      dot={false}
                       activeDot={{ r: 4, stroke: "#16a34a", strokeWidth: 2 }}
-                      name="Quota"
+                      name={t("quotaSeries")}
                     />
                   </LineChart>
                 ) : (
@@ -576,7 +609,7 @@ export default function COEChart({
                       dataKey="quota"
                       fill="#22c55e"
                       fillOpacity={0.3}
-                      name="Quota"
+                      name={t("quotaSeries")}
                     />
                     <Line
                       yAxisId="price"
@@ -584,9 +617,21 @@ export default function COEChart({
                       dataKey="premium"
                       stroke="#2563eb"
                       strokeWidth={3}
-                      dot={false} // 禁用点以提高性能
+                      dot={false}
                       activeDot={{ r: 4, stroke: "#2563eb", strokeWidth: 2 }}
-                      name="COE Price (S$)"
+                      name={t("coePriceSeries")}
+                    />
+                    <Line
+                      yAxisId="price"
+                      type="monotone"
+                      dataKey="pqp"
+                      stroke="#d97706"
+                      strokeWidth={2}
+                      strokeDasharray="6 3"
+                      dot={false}
+                      activeDot={{ r: 4, stroke: "#d97706", strokeWidth: 2 }}
+                      name={t("pqpRenewalSeries")}
+                      connectNulls
                     />
                   </ComposedChart>
                 )}
@@ -596,16 +641,14 @@ export default function COEChart({
           {/* Mobile scroll hint */}
           <div className="mt-2 md:hidden">
             <p className="text-xs text-gray-500 text-center">
-              💡 Swipe left/right to see more data points
+              💡 {t("swipeHint")}
             </p>
           </div>
           {/* Fullscreen hint */}
           {isFullscreen && (
             <div className="mt-2">
               <p className="text-sm text-gray-600 text-center">
-                Press{" "}
-                <kbd className="px-2 py-1 bg-gray-100 rounded text-xs">ESC</kbd>{" "}
-                to exit fullscreen
+                {t("pressEscToExit")}
               </p>
             </div>
           )}

@@ -3,6 +3,9 @@
 import { useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Fuel } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface ImageGalleryProps {
   images: string[];
@@ -14,11 +17,11 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
 
   if (images.length === 0) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="aspect-[16/10] bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-          <Fuel className="w-24 h-24 text-gray-400" />
+      <Card className="overflow-hidden">
+        <div className="aspect-[16/10] bg-muted flex items-center justify-center">
+          <Fuel className="h-24 w-24 text-muted-foreground" />
         </div>
-      </div>
+      </Card>
     );
   }
 
@@ -26,7 +29,7 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
   const next = () => setCurrent((c) => (c === images.length - 1 ? 0 : c + 1));
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <Card className="overflow-hidden">
       <div className="relative aspect-[16/10]">
         <Image
           src={images[current]}
@@ -39,27 +42,30 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
 
         {images.length > 1 && (
           <>
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={prev}
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/40 hover:bg-black/60 rounded-full flex items-center justify-center text-white transition-colors"
+              className="absolute left-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-black/40 hover:bg-black/60 text-white"
             >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button
+              <ChevronLeft className="h-5 w-5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={next}
-              className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/40 hover:bg-black/60 rounded-full flex items-center justify-center text-white transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-black/40 hover:bg-black/60 text-white"
             >
-              <ChevronRight className="w-5 h-5" />
-            </button>
+              <ChevronRight className="h-5 w-5" />
+            </Button>
 
-            <div className="absolute bottom-3 right-3 bg-black/50 text-white text-xs px-2.5 py-1 rounded-full">
+            <Badge variant="secondary" className="absolute bottom-3 right-3 bg-black/50 text-white border-0">
               {current + 1} / {images.length}
-            </div>
+            </Badge>
           </>
         )}
       </div>
 
-      {/* Thumbnails */}
       {images.length > 1 && (
         <div className="flex gap-2 p-3 overflow-x-auto">
           {images.map((img, idx) => (
@@ -67,22 +73,14 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
               key={idx}
               onClick={() => setCurrent(idx)}
               className={`relative w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-colors ${
-                idx === current
-                  ? "border-blue-500"
-                  : "border-transparent hover:border-gray-300"
+                idx === current ? "border-primary" : "border-transparent hover:border-muted-foreground/30"
               }`}
             >
-              <Image
-                src={img}
-                alt={`Thumbnail ${idx + 1}`}
-                fill
-                className="object-cover"
-                sizes="64px"
-              />
+              <Image src={img} alt={`Thumbnail ${idx + 1}`} fill className="object-cover" sizes="64px" />
             </button>
           ))}
         </div>
       )}
-    </div>
+    </Card>
   );
 }

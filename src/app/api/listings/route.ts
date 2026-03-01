@@ -12,35 +12,27 @@ export async function GET(request: NextRequest) {
     const minEngine = searchParams.get("minEngine");
     const maxEngine = searchParams.get("maxEngine");
     const search = searchParams.get("search");
+    const licenseClass = searchParams.get("licenseClass");
+    const sort = searchParams.get("sort");
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "12");
 
-    const where: Record<string, unknown> = {
-      status: "ACTIVE",
-    };
+    const where: Record<string, unknown> = { status: "ACTIVE" };
 
-    if (brand && brand !== "all") {
-      where.brand = brand;
-    }
-
-    if (type && type !== "all") {
-      where.type = type;
-    }
+    if (brand && brand !== "all") where.brand = brand;
+    if (type && type !== "all") where.type = type;
+    if (licenseClass && licenseClass !== "all") where.licenseClass = licenseClass;
 
     if (minPrice || maxPrice) {
       where.price = {};
-      if (minPrice)
-        (where.price as Record<string, number>).gte = parseFloat(minPrice);
-      if (maxPrice)
-        (where.price as Record<string, number>).lte = parseFloat(maxPrice);
+      if (minPrice) (where.price as Record<string, number>).gte = parseFloat(minPrice);
+      if (maxPrice) (where.price as Record<string, number>).lte = parseFloat(maxPrice);
     }
 
     if (minEngine || maxEngine) {
       where.engineSize = {};
-      if (minEngine)
-        (where.engineSize as Record<string, number>).gte = parseInt(minEngine);
-      if (maxEngine)
-        (where.engineSize as Record<string, number>).lte = parseInt(maxEngine);
+      if (minEngine) (where.engineSize as Record<string, number>).gte = parseInt(minEngine);
+      if (maxEngine) (where.engineSize as Record<string, number>).lte = parseInt(maxEngine);
     }
 
     if (search) {
@@ -52,15 +44,20 @@ export async function GET(request: NextRequest) {
       ];
     }
 
+    let orderBy: Record<string, string> = { createdAt: "desc" };
+    if (sort === "price_asc") orderBy = { price: "asc" };
+    else if (sort === "price_desc") orderBy = { price: "desc" };
+    else if (sort === "mileage_asc") orderBy = { mileage: "asc" };
+    else if (sort === "views_desc") orderBy = { views: "desc" };
+    else if (sort === "oldest") orderBy = { createdAt: "asc" };
+
     const [listings, total] = await Promise.all([
       prisma.listing.findMany({
         where,
         include: {
-          user: {
-            select: { id: true, name: true, image: true },
-          },
+          user: { select: { id: true, name: true, image: true } },
         },
-        orderBy: { createdAt: "desc" },
+        orderBy,
         skip: (page - 1) * limit,
         take: limit,
       }),
@@ -69,25 +66,16 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       listings,
-      pagination: {
-        page,
-        limit,
-        total,
-        totalPages: Math.ceil(total / limit),
-      },
+      pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
     });
   } catch (error) {
     console.error("GET /api/listings error:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch listings" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch listings" }, { status: 500 });
   }
 }
 
 export async function POST(request: Request) {
   const session = await auth();
-
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -95,34 +83,14 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const {
-      title,
-      brand,
-      model,
-      year,
-      engineSize,
-      mileage,
-      type,
-      price,
-      condition,
-      description,
-      location,
-      images,
+      title, brand, model, year, engineSize, mileage, type, price, condition,
+      description, location, images, power, weight, torque, fuelConsumption,
+      registrationDate, omv, coeExpiryDate, licenseClass, contactWhatsapp, contactPhone,
+      isVerified,
     } = body;
 
-    if (
-      !title ||
-      !brand ||
-      !model ||
-      !year ||
-      !engineSize ||
-      mileage == null ||
-      !price ||
-      !location
-    ) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
+    if (!title || !brand || !model || !year || !engineSize || mileage == null || !price || !location) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
     const listing = await prisma.listing.create({
@@ -139,21 +107,28 @@ export async function POST(request: Request) {
         description,
         location,
         images: images || [],
+        power: power ? parseInt(power) : null,
+        weight: weight ? parseInt(weight) : null,
+        torque: torque ? parseFloat(torque) : null,
+        fuelConsumption: fuelConsumption ? parseFloat(fuelConsumption) : null,
+        registrationDate: registrationDate ? new Date(registrationDate) : null,
+        omv: omv ? parseFloat(omv) : null,
+        coeExpiryDate: coeExpiryDate ? new Date(coeExpiryDate) : null,
+        licenseClass: licenseClass || null,
+        contactWhatsapp: contactWhatsapp || null,
+        contactPhone: contactPhone || null,
+        isVerified: isVerified === true,
+        verificationSource: isVerified ? "ai-vision" : null,
         userId: session.user.id,
       },
       include: {
-        user: {
-          select: { id: true, name: true, image: true },
-        },
+        user: { select: { id: true, name: true, image: true } },
       },
     });
 
     return NextResponse.json(listing, { status: 201 });
   } catch (error) {
     console.error("POST /api/listings error:", error);
-    return NextResponse.json(
-      { error: "Failed to create listing" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to create listing" }, { status: 500 });
   }
 }

@@ -27,6 +27,8 @@ const coeDataUrl =
 // Configuration
 const DEFAULT_INPUT_FILE =
   "data/coe_Bidding_Results/Coe Bidding Results/M11-coe_results.csv";
+const DEFAULT_PQP_FILE =
+  "data/coe_Bidding_Results/Coe Bidding Results/M11-coe_results_pqp.csv";
 const DEFAULT_OUTPUT_FILE = "src/data/motorcycle-coe-data.js";
 const DOWNLOAD_DIR = "data/coe_Bidding_Results";
 const ZIP_FILE = path.join(DOWNLOAD_DIR, "COE_Bidding_Results.zip");
@@ -65,8 +67,11 @@ if (args[0] === "--download") {
       }
     }
 
-    // Process the CSV file
-    await processCSV(inputFile, outputFile);
+    // Load PQP data first
+    const pqpData = await loadPQPData(DEFAULT_PQP_FILE);
+
+    // Process the CSV file with PQP data
+    await processCSV(inputFile, outputFile, pqpData);
   } catch (error) {
     console.error("❌ Error:", error.message);
     process.exit(1);
@@ -183,9 +188,43 @@ function extractZip(zipPath, outputDir) {
 }
 
 /**
+ * Load PQP (Prevailing Quota Premium) data from CSV
+ * PQP is the moving average of COE prices from the last 3 months,
+ * used for COE renewal pricing. Published monthly by LTA.
+ */
+function loadPQPData(pqpFile) {
+  return new Promise((resolve, reject) => {
+    const pqpMap = {};
+
+    if (!fs.existsSync(pqpFile)) {
+      console.log(`⚠️  PQP file not found: ${pqpFile}, skipping PQP data`);
+      return resolve(pqpMap);
+    }
+
+    console.log(`📊 Loading PQP data from: ${pqpFile}`);
+
+    fs.createReadStream(pqpFile)
+      .pipe(csv())
+      .on("data", (row) => {
+        if (row.vehicle_class === "Category D") {
+          pqpMap[row.month.trim()] = parseInt(row.pqp);
+        }
+      })
+      .on("end", () => {
+        const count = Object.keys(pqpMap).length;
+        console.log(`✅ Loaded ${count} PQP records for Category D`);
+        resolve(pqpMap);
+      })
+      .on("error", (error) => {
+        reject(new Error(`Error loading PQP CSV: ${error.message}`));
+      });
+  });
+}
+
+/**
  * Process CSV file
  */
-function processCSV(inputFile, outputFile) {
+function processCSV(inputFile, outputFile, pqpData) {
   return new Promise((resolve, reject) => {
     const motorcycleCOEData = [];
 
@@ -210,15 +249,18 @@ function processCSV(inputFile, outputFile) {
       .on("data", (row) => {
         // Filter for Category D (Motorcycles) only
         if (row.vehicle_class === "Category D") {
+          const month = row.month.trim();
+
           // Clean and convert data types
           const processedRow = {
-            month: row.month.trim(),
+            month,
             biddingNo: parseInt(row.bidding_no),
             vehicleClass: row.vehicle_class.trim(),
             quota: parseInt(row.quota),
             bidsSuccess: parseInt(row.bids_success),
             bidsReceived: parseInt(row.bids_received),
             premium: parseInt(row.premium),
+            pqp: pqpData[month] || null,
           };
 
           // Add derived fields
@@ -238,6 +280,9 @@ function processCSV(inputFile, outputFile) {
         console.log(
           `✅ Processed ${motorcycleCOEData.length} motorcycle COE records`
         );
+
+        const withPqp = motorcycleCOEData.filter((r) => r.pqp !== null).length;
+        console.log(`   ${withPqp} records have PQP data`);
 
         // Sort by month and bidding number
         motorcycleCOEData.sort((a, b) => {
@@ -286,6 +331,9 @@ function generateJavaScriptFile(data) {
  * - bidsSuccess: Number of successful bids
  * - bidsReceived: Total number of bids received
  * - premium: COE price in SGD
+ * - pqp: Prevailing Quota Premium in SGD (monthly, used for COE renewal)
+ *        Calculated by LTA as the moving average of COE prices from the last 3 months.
+ *        null for the first month (2010-01) as there is no prior data.
  * - successRate: Percentage of successful bids
  * - oversubscriptionRate: Percentage of oversubscription
  */
@@ -299,6 +347,18 @@ export const motorcycleCOEHistory = ${JSON.stringify(data, null, 2)};
 export function getLatestCOEPrice() {
   if (motorcycleCOEHistory.length === 0) return 9511; // Fallback
   return motorcycleCOEHistory[motorcycleCOEHistory.length - 1].premium;
+}
+
+/**
+ * Get the latest PQP for motorcycles
+ * @returns {number|null} Latest PQP in SGD
+ */
+export function getLatestPQP() {
+  if (motorcycleCOEHistory.length === 0) return null;
+  for (let i = motorcycleCOEHistory.length - 1; i >= 0; i--) {
+    if (motorcycleCOEHistory[i].pqp !== null) return motorcycleCOEHistory[i].pqp;
+  }
+  return null;
 }
 
 /**
@@ -325,19 +385,25 @@ export function getAverageCOEPrice(year) {
 
 /**
  * Get COE price statistics
- * @returns {Object} Statistics including min, max, average prices
+ * @returns {Object} Statistics including min, max, average prices and PQP info
  */
 export function getCOEStatistics() {
   if (motorcycleCOEHistory.length === 0) return null;
   
   const prices = motorcycleCOEHistory.map(record => record.premium);
+  const pqpValues = motorcycleCOEHistory
+    .filter(record => record.pqp !== null)
+    .map(record => record.pqp);
   
   return {
     count: prices.length,
     min: Math.min(...prices),
     max: Math.max(...prices),
     average: Math.round(prices.reduce((sum, price) => sum + price, 0) / prices.length),
-    latest: prices[prices.length - 1]
+    latest: prices[prices.length - 1],
+    latestPqp: pqpValues.length > 0 ? pqpValues[pqpValues.length - 1] : null,
+    pqpMin: pqpValues.length > 0 ? Math.min(...pqpValues) : null,
+    pqpMax: pqpValues.length > 0 ? Math.max(...pqpValues) : null,
   };
 }
 

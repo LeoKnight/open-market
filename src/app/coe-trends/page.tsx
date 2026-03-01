@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import COEChart from "@/components/COEChart";
 import {
   Card,
@@ -21,23 +21,26 @@ interface COEStatistics {
   max: number;
   average: number;
   latest: number;
+  latestPqp: number | null;
+  pqpMin: number | null;
+  pqpMax: number | null;
 }
 
 export default function COETrendsPage() {
+  const t = useTranslations("CoeTrends");
   const statistics = getCOEStatistics() as COEStatistics | null;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted/50">
       {/* Main Content */}
       <div className="max-w-7xl mx-auto py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8 sm:mb-12">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            COE Price Trends
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-4">
+            {t("title")}
           </h1>
-          <p className="text-lg sm:text-xl text-gray-600 px-4 mb-6">
-            Historical Certificate of Entitlement prices for motorcycles in
-            Singapore
+          <p className="text-lg sm:text-xl text-muted-foreground px-4 mb-6">
+            {t("subtitle")}
           </p>
 
           {/* Quick Stats */}
@@ -80,38 +83,42 @@ export default function COETrendsPage() {
         <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
           <Card>
             <CardHeader>
-              <CardTitle>About COE</CardTitle>
+              <CardTitle>{t("aboutCoeTitle")}</CardTitle>
               <CardDescription>
-                Understanding Certificate of Entitlement for motorcycles
+                {t("aboutCoeDesc")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">
-                  What is COE?
+                <h4 className="font-semibold text-foreground mb-2">
+                  {t("whatIsCoe")}
                 </h4>
-                <p className="text-gray-600 text-sm">
-                  Certificate of Entitlement (COE) is a quota license that
-                  allows vehicle ownership in Singapore for 10 years. For
-                  motorcycles, this falls under Category D.
+                <p className="text-muted-foreground text-sm">
+                  {t("whatIsCoeDesc")}
                 </p>
               </div>
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">
-                  Bidding Process
+                <h4 className="font-semibold text-foreground mb-2">
+                  {t("whatIsPqp")}
                 </h4>
-                <p className="text-gray-600 text-sm">
-                  COE bidding occurs twice monthly. The premium is determined by
-                  the lowest successful bid when demand meets supply quota.
+                <p className="text-muted-foreground text-sm">
+                  {t("whatIsPqpDesc")}
                 </p>
               </div>
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">
-                  Price Factors
+                <h4 className="font-semibold text-foreground mb-2">
+                  {t("coeVsPqp")}
                 </h4>
-                <p className="text-gray-600 text-sm">
-                  COE prices fluctuate based on quota availability, economic
-                  conditions, and market demand for motorcycles.
+                <p className="text-muted-foreground text-sm">
+                  {t("coeVsPqpDesc")}
+                </p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-foreground mb-2">
+                  {t("biddingProcess")}
+                </h4>
+                <p className="text-muted-foreground text-sm">
+                  {t("biddingProcessDesc")}
                 </p>
               </div>
             </CardContent>
@@ -119,43 +126,47 @@ export default function COETrendsPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Chart Features</CardTitle>
+              <CardTitle>{t("chartFeaturesTitle")}</CardTitle>
               <CardDescription>
-                How to interpret the COE price trends
+                {t("chartFeaturesDesc")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">
-                  Time Ranges
+                <h4 className="font-semibold text-foreground mb-2">
+                  {t("timeRanges")}
                 </h4>
-                <p className="text-gray-600 text-sm">
-                  Filter data by different time periods (1Y, 2Y, 5Y, or All) to
-                  analyze short-term and long-term trends.
+                <p className="text-muted-foreground text-sm">
+                  {t("timeRangesDesc")}
                 </p>
               </div>
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">
-                  Chart Types
+                <h4 className="font-semibold text-foreground mb-2">
+                  {t("chartTypes")}
                 </h4>
-                <ul className="text-gray-600 text-sm space-y-1">
+                <ul className="text-muted-foreground text-sm space-y-1">
                   <li>
-                    • <strong>Line Chart:</strong> Shows price and quota trends
-                    separately
+                    • {t("lineChartDesc")}
                   </li>
                   <li>
-                    • <strong>Combined Chart:</strong> Overlays price line on
-                    quota bars
+                    • {t("combinedChartDesc")}
                   </li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">
-                  Tooltip Data
+                <h4 className="font-semibold text-foreground mb-2">
+                  {t("pqpTrendLine")}
                 </h4>
-                <p className="text-gray-600 text-sm">
-                  Hover over data points to see detailed information including
-                  success rates and oversubscription levels.
+                <p className="text-muted-foreground text-sm">
+                  {t("pqpTrendLineDesc")}
+                </p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-foreground mb-2">
+                  {t("tooltipData")}
+                </h4>
+                <p className="text-muted-foreground text-sm">
+                  {t("tooltipDataDesc")}
                 </p>
               </div>
             </CardContent>
@@ -165,39 +176,35 @@ export default function COETrendsPage() {
         {/* Market Insights */}
         <Card className="mt-8">
           <CardHeader>
-            <CardTitle>Market Insights</CardTitle>
+            <CardTitle>{t("marketInsightsTitle")}</CardTitle>
             <CardDescription>
-              Key observations from COE price trends
+              {t("marketInsightsDesc")}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-center p-4 bg-blue-50 rounded-lg">
-                <h4 className="font-semibold text-blue-900 mb-2">
-                  Cyclical Patterns
+              <div className="text-center p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg">
+                <h4 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                  {t("cyclicalPatterns")}
                 </h4>
-                <p className="text-blue-800 text-sm">
-                  COE prices often show cyclical patterns influenced by economic
-                  cycles and government policies affecting vehicle ownership.
+                <p className="text-blue-800 dark:text-blue-200 text-sm">
+                  {t("cyclicalPatternsDesc")}
                 </p>
               </div>
-              <div className="text-center p-4 bg-green-50 rounded-lg">
-                <h4 className="font-semibold text-green-900 mb-2">
-                  Quota Impact
+              <div className="text-center p-4 bg-green-50 dark:bg-green-950/30 rounded-lg">
+                <h4 className="font-semibold text-green-900 dark:text-green-100 mb-2">
+                  {t("quotaImpact")}
                 </h4>
-                <p className="text-green-800 text-sm">
-                  Higher quotas generally lead to lower prices, while restricted
-                  supply during certain periods can drive prices significantly
-                  higher.
+                <p className="text-green-800 dark:text-green-200 text-sm">
+                  {t("quotaImpactDesc")}
                 </p>
               </div>
-              <div className="text-center p-4 bg-purple-50 rounded-lg">
-                <h4 className="font-semibold text-purple-900 mb-2">
-                  Seasonal Trends
+              <div className="text-center p-4 bg-purple-50 dark:bg-purple-950/30 rounded-lg">
+                <h4 className="font-semibold text-purple-900 dark:text-purple-100 mb-2">
+                  {t("seasonalTrends")}
                 </h4>
-                <p className="text-purple-800 text-sm">
-                  End-of-year periods often see increased bidding activity as
-                  people look to purchase vehicles before year-end.
+                <p className="text-purple-800 dark:text-purple-200 text-sm">
+                  {t("seasonalTrendsDesc")}
                 </p>
               </div>
             </div>

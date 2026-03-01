@@ -1,228 +1,222 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import {
   Menu,
-  X,
   Plus,
   LayoutDashboard,
   LogOut,
   User,
   ChevronDown,
 } from "lucide-react";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetClose,
+} from "@/components/ui/sheet";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Navigation() {
   const { data: session, status } = useSession();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const userMenuRef = useRef<HTMLDivElement>(null);
+  const t = useTranslations("Navigation");
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        userMenuRef.current &&
-        !userMenuRef.current.contains(e.target as Node)
-      ) {
-        setUserMenuOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const navLinks = [
-    { href: "/depreciation-calculator", label: "Depreciation" },
-    { href: "/motorcycle-cost-calculator", label: "Cost Calculator" },
-    { href: "/power-to-weight", label: "Power-to-Weight" },
-    { href: "/coe-trends", label: "COE Trends" },
-    { href: "/fuel-consumption", label: "Fuel Converter" },
+  const primaryLinks = [
+    { href: "/compare", label: t("compare") },
+    { href: "/coe-trends", label: t("coeTrends") },
+    { href: "/depreciation-calculator", label: t("depreciation") },
   ];
 
+  const moreLinks = [
+    { href: "/motorcycle-cost-calculator", label: t("costCalculator") },
+    { href: "/power-to-weight", label: t("powerToWeight") },
+    { href: "/fuel-consumption", label: t("fuelConverter") },
+    { href: "/regulations", label: t("regulations") },
+  ];
+
+  const allLinks = [...primaryLinks, ...moreLinks];
+
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+    <header className="bg-background border-b sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo + Desktop Nav */}
-          <div className="flex items-center">
+          <div className="flex items-center min-w-0">
             <Link href="/" className="flex-shrink-0">
-              <h1 className="text-xl sm:text-2xl font-bold text-blue-600">
+              <h1 className="text-xl sm:text-2xl font-bold text-primary">
                 Open-Market
               </h1>
             </Link>
 
-            <nav className="hidden lg:ml-10 lg:flex space-x-6">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-gray-500 hover:text-blue-600 px-2 py-2 text-sm font-medium transition-colors"
-                >
-                  {link.label}
-                </Link>
+            <nav className="hidden lg:ml-8 lg:flex items-center space-x-1">
+              {primaryLinks.map((link) => (
+                <Button key={link.href} variant="ghost" size="sm" asChild>
+                  <Link href={link.href}>{link.label}</Link>
+                </Button>
               ))}
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="gap-1">
+                    {t("more")}
+                    <ChevronDown className="h-3.5 w-3.5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-48">
+                  {moreLinks.map((link) => (
+                    <DropdownMenuItem key={link.href} asChild>
+                      <Link href={link.href}>{link.label}</Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </nav>
           </div>
 
-          {/* Desktop Right Side */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-2">
+            <LanguageSwitcher />
+
             {status === "loading" ? (
-              <div className="w-20 h-8 bg-gray-100 rounded-md animate-pulse" />
+              <Skeleton className="h-9 w-20" />
             ) : session?.user ? (
               <>
-                <Link
-                  href="/listings/new"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
-                >
-                  <Plus className="w-4 h-4" />
-                  Sell
-                </Link>
+                <Button asChild size="sm">
+                  <Link href="/listings/new">
+                    <Plus className="h-4 w-4" />
+                    {t("sell")}
+                  </Link>
+                </Button>
 
-                <div className="relative" ref={userMenuRef}>
-                  <button
-                    onClick={() => setUserMenuOpen(!userMenuOpen)}
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors"
-                  >
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                      {session.user.image ? (
-                        <img
-                          src={session.user.image}
-                          alt=""
-                          className="w-8 h-8 rounded-full object-cover"
-                        />
-                      ) : (
-                        <User className="w-4 h-4 text-blue-600" />
-                      )}
-                    </div>
-                    <span className="text-sm font-medium text-gray-700 max-w-[100px] truncate">
-                      {session.user.name || session.user.email}
-                    </span>
-                    <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
-                  </button>
-
-                  {userMenuOpen && (
-                    <div className="absolute right-0 mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-1 z-50">
-                      <Link
-                        href="/dashboard"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                      >
-                        <LayoutDashboard className="w-4 h-4" />
-                        My Listings
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="gap-2">
+                      <Avatar className="h-7 w-7">
+                        <AvatarImage src={session.user.image || undefined} alt="" />
+                        <AvatarFallback>
+                          <User className="h-4 w-4" />
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="max-w-[100px] truncate">
+                        {session.user.name || session.user.email}
+                      </span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem asChild>
+                      <Link href="/dashboard" className="gap-2">
+                        <LayoutDashboard className="h-4 w-4" />
+                        {t("myListings")}
                       </Link>
-                      <hr className="my-1 border-gray-100" />
-                      <button
-                        onClick={() => {
-                          setUserMenuOpen(false);
-                          signOut({ callbackUrl: "/" });
-                        }}
-                        className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        Sign Out
-                      </button>
-                    </div>
-                  )}
-                </div>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={() => signOut({ callbackUrl: "/" })}
+                      className="gap-2 text-destructive focus:text-destructive"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      {t("signOut")}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </>
             ) : (
               <>
-                <Link
-                  href="/auth/signin"
-                  className="text-gray-500 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/auth/signup"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
-                >
-                  Sign Up
-                </Link>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href="/auth/signin">{t("signIn")}</Link>
+                </Button>
+                <Button size="sm" asChild>
+                  <Link href="/auth/signup">{t("signUp")}</Link>
+                </Button>
               </>
             )}
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
-            >
-              {mobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
+          <div className="flex items-center gap-2 md:hidden">
+            <LanguageSwitcher />
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-72">
+                <SheetHeader>
+                  <SheetTitle className="text-primary">Open-Market</SheetTitle>
+                </SheetHeader>
+                <div className="flex flex-col gap-1 mt-6">
+                  {allLinks.map((link) => (
+                    <SheetClose key={link.href} asChild>
+                      <Button variant="ghost" className="justify-start" asChild>
+                        <Link href={link.href}>{link.label}</Link>
+                      </Button>
+                    </SheetClose>
+                  ))}
+
+                  <Separator className="my-2" />
+
+                  {session?.user ? (
+                    <>
+                      <SheetClose asChild>
+                        <Button variant="ghost" className="justify-start" asChild>
+                          <Link href="/listings/new">
+                            <Plus className="h-4 w-4" />
+                            {t("sellMotorcycle")}
+                          </Link>
+                        </Button>
+                      </SheetClose>
+                      <SheetClose asChild>
+                        <Button variant="ghost" className="justify-start" asChild>
+                          <Link href="/dashboard">
+                            <LayoutDashboard className="h-4 w-4" />
+                            {t("myListings")}
+                          </Link>
+                        </Button>
+                      </SheetClose>
+                      <SheetClose asChild>
+                        <Button
+                          variant="ghost"
+                          className="justify-start text-destructive hover:text-destructive"
+                          onClick={() => signOut({ callbackUrl: "/" })}
+                        >
+                          <LogOut className="h-4 w-4" />
+                          {t("signOut")}
+                        </Button>
+                      </SheetClose>
+                    </>
+                  ) : (
+                    <div className="flex items-center gap-2 pt-2">
+                      <SheetClose asChild>
+                        <Button variant="outline" className="flex-1" asChild>
+                          <Link href="/auth/signin">{t("signIn")}</Link>
+                        </Button>
+                      </SheetClose>
+                      <SheetClose asChild>
+                        <Button className="flex-1" asChild>
+                          <Link href="/auth/signup">{t("signUp")}</Link>
+                        </Button>
+                      </SheetClose>
+                    </div>
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
-
-        {/* Mobile Navigation */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-200">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-gray-500 hover:text-blue-600 block px-3 py-2 text-base font-medium"
-                >
-                  {link.label}
-                </Link>
-              ))}
-
-              <hr className="my-2 border-gray-200" />
-
-              {session?.user ? (
-                <>
-                  <Link
-                    href="/listings/new"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-blue-600 hover:text-blue-700 block px-3 py-2 text-base font-medium"
-                  >
-                    Sell Motorcycle
-                  </Link>
-                  <Link
-                    href="/dashboard"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-gray-500 hover:text-blue-600 block px-3 py-2 text-base font-medium"
-                  >
-                    My Listings
-                  </Link>
-                  <button
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      signOut({ callbackUrl: "/" });
-                    }}
-                    className="text-red-600 hover:text-red-700 block w-full text-left px-3 py-2 text-base font-medium"
-                  >
-                    Sign Out
-                  </button>
-                </>
-              ) : (
-                <div className="flex items-center gap-3 px-3 pt-2">
-                  <Link
-                    href="/auth/signin"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-gray-500 hover:text-blue-600 text-base font-medium"
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    href="/auth/signup"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg text-base font-medium hover:bg-blue-700"
-                  >
-                    Sign Up
-                  </Link>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
       </div>
     </header>
   );

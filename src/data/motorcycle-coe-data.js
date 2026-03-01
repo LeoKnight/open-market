@@ -2,7 +2,7 @@
  * Motorcycle COE (Certificate of Entitlement) Historical Data
  * Category D - Motorcycles
  * 
- * Generated on: 2026-02-25T12:53:07.079Z
+ * Generated on: 2026-03-01T06:53:32.562Z
  * Total records: 382
  * 
  * Data fields:
@@ -13,6 +13,9 @@
  * - bidsSuccess: Number of successful bids
  * - bidsReceived: Total number of bids received
  * - premium: COE price in SGD
+ * - pqp: Prevailing Quota Premium in SGD (monthly, used for COE renewal)
+ *        Calculated by LTA as the moving average of COE prices from the last 3 months.
+ *        null for the first month (2010-01) as there is no prior data.
  * - successRate: Percentage of successful bids
  * - oversubscriptionRate: Percentage of oversubscription
  */
@@ -26,6 +29,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 365,
     "bidsReceived": 509,
     "premium": 889,
+    "pqp": null,
     "successRate": "71.71",
     "oversubscriptionRate": "136.46"
   },
@@ -37,6 +41,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 378,
     "bidsReceived": 551,
     "premium": 852,
+    "pqp": null,
     "successRate": "68.60",
     "oversubscriptionRate": "145.77"
   },
@@ -48,6 +53,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 349,
     "bidsReceived": 525,
     "premium": 852,
+    "pqp": 867,
     "successRate": "66.48",
     "oversubscriptionRate": "141.51"
   },
@@ -59,6 +65,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 355,
     "bidsReceived": 472,
     "premium": 1001,
+    "pqp": 867,
     "successRate": "75.21",
     "oversubscriptionRate": "130.03"
   },
@@ -70,6 +77,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 383,
     "bidsReceived": 467,
     "premium": 1159,
+    "pqp": 884,
     "successRate": "82.01",
     "oversubscriptionRate": "121.30"
   },
@@ -81,6 +89,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 368,
     "bidsReceived": 495,
     "premium": 1200,
+    "pqp": 884,
     "successRate": "74.34",
     "oversubscriptionRate": "133.42"
   },
@@ -92,6 +101,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 334,
     "bidsReceived": 409,
     "premium": 1221,
+    "pqp": 993,
     "successRate": "81.66",
     "oversubscriptionRate": "121.01"
   },
@@ -103,6 +113,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 311,
     "bidsReceived": 383,
     "premium": 1253,
+    "pqp": 993,
     "successRate": "81.20",
     "oversubscriptionRate": "112.98"
   },
@@ -114,6 +125,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 317,
     "bidsReceived": 415,
     "premium": 1252,
+    "pqp": 1115,
     "successRate": "76.39",
     "oversubscriptionRate": "122.06"
   },
@@ -125,6 +137,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 360,
     "bidsReceived": 468,
     "premium": 1312,
+    "pqp": 1115,
     "successRate": "76.92",
     "oversubscriptionRate": "128.57"
   },
@@ -136,6 +149,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 344,
     "bidsReceived": 504,
     "premium": 1452,
+    "pqp": 1233,
     "successRate": "68.25",
     "oversubscriptionRate": "140.39"
   },
@@ -147,6 +161,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 339,
     "bidsReceived": 376,
     "premium": 1454,
+    "pqp": 1233,
     "successRate": "90.16",
     "oversubscriptionRate": "110.59"
   },
@@ -158,6 +173,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 347,
     "bidsReceived": 476,
     "premium": 1320,
+    "pqp": 1324,
     "successRate": "72.90",
     "oversubscriptionRate": "135.61"
   },
@@ -169,6 +185,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 334,
     "bidsReceived": 372,
     "premium": 1290,
+    "pqp": 1324,
     "successRate": "89.78",
     "oversubscriptionRate": "110.39"
   },
@@ -180,6 +197,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 326,
     "bidsReceived": 384,
     "premium": 1301,
+    "pqp": 1347,
     "successRate": "84.90",
     "oversubscriptionRate": "114.29"
   },
@@ -191,6 +209,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 330,
     "bidsReceived": 369,
     "premium": 1251,
+    "pqp": 1347,
     "successRate": "89.43",
     "oversubscriptionRate": "110.15"
   },
@@ -202,6 +221,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 329,
     "bidsReceived": 453,
     "premium": 1502,
+    "pqp": 1345,
     "successRate": "72.63",
     "oversubscriptionRate": "132.46"
   },
@@ -213,6 +233,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 337,
     "bidsReceived": 364,
     "premium": 1452,
+    "pqp": 1345,
     "successRate": "92.58",
     "oversubscriptionRate": "107.69"
   },
@@ -224,6 +245,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 320,
     "bidsReceived": 422,
     "premium": 1502,
+    "pqp": 1353,
     "successRate": "75.83",
     "oversubscriptionRate": "122.32"
   },
@@ -235,6 +257,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 304,
     "bidsReceived": 430,
     "premium": 1689,
+    "pqp": 1353,
     "successRate": "70.70",
     "oversubscriptionRate": "129.13"
   },
@@ -246,6 +269,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 352,
     "bidsReceived": 414,
     "premium": 1452,
+    "pqp": 1450,
     "successRate": "85.02",
     "oversubscriptionRate": "115.97"
   },
@@ -257,6 +281,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 324,
     "bidsReceived": 424,
     "premium": 1502,
+    "pqp": 1450,
     "successRate": "76.42",
     "oversubscriptionRate": "117.45"
   },
@@ -268,6 +293,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 329,
     "bidsReceived": 410,
     "premium": 1701,
+    "pqp": 1517,
     "successRate": "80.24",
     "oversubscriptionRate": "121.66"
   },
@@ -279,6 +305,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 362,
     "bidsReceived": 406,
     "premium": 1551,
+    "pqp": 1517,
     "successRate": "89.16",
     "oversubscriptionRate": "110.03"
   },
@@ -290,6 +317,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 337,
     "bidsReceived": 398,
     "premium": 1503,
+    "pqp": 1567,
     "successRate": "84.67",
     "oversubscriptionRate": "117.06"
   },
@@ -301,6 +329,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 335,
     "bidsReceived": 458,
     "premium": 1690,
+    "pqp": 1567,
     "successRate": "73.14",
     "oversubscriptionRate": "135.10"
   },
@@ -312,6 +341,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 328,
     "bidsReceived": 417,
     "premium": 1819,
+    "pqp": 1567,
     "successRate": "78.66",
     "oversubscriptionRate": "127.13"
   },
@@ -323,6 +353,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 294,
     "bidsReceived": 461,
     "premium": 2001,
+    "pqp": 1567,
     "successRate": "63.77",
     "oversubscriptionRate": "139.70"
   },
@@ -334,6 +365,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 310,
     "bidsReceived": 490,
     "premium": 2604,
+    "pqp": 1711,
     "successRate": "63.27",
     "oversubscriptionRate": "150.77"
   },
@@ -345,6 +377,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 362,
     "bidsReceived": 429,
     "premium": 2534,
+    "pqp": 1711,
     "successRate": "84.38",
     "oversubscriptionRate": "118.51"
   },
@@ -356,6 +389,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 335,
     "bidsReceived": 500,
     "premium": 2490,
+    "pqp": 2026,
     "successRate": "67.00",
     "oversubscriptionRate": "147.06"
   },
@@ -367,6 +401,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 326,
     "bidsReceived": 478,
     "premium": 2502,
+    "pqp": 2026,
     "successRate": "68.20",
     "oversubscriptionRate": "146.63"
   },
@@ -378,6 +413,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 328,
     "bidsReceived": 481,
     "premium": 2253,
+    "pqp": 2325,
     "successRate": "68.19",
     "oversubscriptionRate": "145.76"
   },
@@ -389,6 +425,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 324,
     "bidsReceived": 486,
     "premium": 2013,
+    "pqp": 2325,
     "successRate": "66.67",
     "oversubscriptionRate": "149.08"
   },
@@ -400,6 +437,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 327,
     "bidsReceived": 507,
     "premium": 2491,
+    "pqp": 2400,
     "successRate": "64.50",
     "oversubscriptionRate": "155.05"
   },
@@ -411,6 +449,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 322,
     "bidsReceived": 367,
     "premium": 2290,
+    "pqp": 2400,
     "successRate": "87.74",
     "oversubscriptionRate": "111.89"
   },
@@ -422,6 +461,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 323,
     "bidsReceived": 369,
     "premium": 2360,
+    "pqp": 2340,
     "successRate": "87.53",
     "oversubscriptionRate": "113.54"
   },
@@ -433,6 +473,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 332,
     "bidsReceived": 496,
     "premium": 2012,
+    "pqp": 2340,
     "successRate": "66.94",
     "oversubscriptionRate": "149.40"
   },
@@ -444,6 +485,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 390,
     "bidsReceived": 470,
     "premium": 1890,
+    "pqp": 2237,
     "successRate": "82.98",
     "oversubscriptionRate": "120.51"
   },
@@ -455,6 +497,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 382,
     "bidsReceived": 471,
     "premium": 1999,
+    "pqp": 2237,
     "successRate": "81.10",
     "oversubscriptionRate": "121.71"
   },
@@ -466,6 +509,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 382,
     "bidsReceived": 532,
     "premium": 2339,
+    "pqp": 2174,
     "successRate": "71.80",
     "oversubscriptionRate": "137.11"
   },
@@ -477,6 +521,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 392,
     "bidsReceived": 492,
     "premium": 2109,
+    "pqp": 2174,
     "successRate": "79.67",
     "oversubscriptionRate": "125.51"
   },
@@ -488,6 +533,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 394,
     "bidsReceived": 486,
     "premium": 2078,
+    "pqp": 2119,
     "successRate": "81.07",
     "oversubscriptionRate": "123.35"
   },
@@ -499,6 +545,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 380,
     "bidsReceived": 486,
     "premium": 2091,
+    "pqp": 2119,
     "successRate": "78.19",
     "oversubscriptionRate": "125.58"
   },
@@ -510,6 +557,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 359,
     "bidsReceived": 429,
     "premium": 2012,
+    "pqp": 2085,
     "successRate": "83.68",
     "oversubscriptionRate": "110.57"
   },
@@ -521,6 +569,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 389,
     "bidsReceived": 469,
     "premium": 1889,
+    "pqp": 2085,
     "successRate": "82.94",
     "oversubscriptionRate": "119.04"
   },
@@ -532,6 +581,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 415,
     "bidsReceived": 451,
     "premium": 1902,
+    "pqp": 2087,
     "successRate": "92.02",
     "oversubscriptionRate": "108.41"
   },
@@ -543,6 +593,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 386,
     "bidsReceived": 456,
     "premium": 1481,
+    "pqp": 2087,
     "successRate": "84.65",
     "oversubscriptionRate": "116.33"
   },
@@ -554,6 +605,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 386,
     "bidsReceived": 434,
     "premium": 1682,
+    "pqp": 1909,
     "successRate": "88.94",
     "oversubscriptionRate": "111.86"
   },
@@ -565,6 +617,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 390,
     "bidsReceived": 517,
     "premium": 1552,
+    "pqp": 1909,
     "successRate": "75.44",
     "oversubscriptionRate": "131.55"
   },
@@ -576,6 +629,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 409,
     "bidsReceived": 512,
     "premium": 1802,
+    "pqp": 1753,
     "successRate": "79.88",
     "oversubscriptionRate": "124.27"
   },
@@ -587,6 +641,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 389,
     "bidsReceived": 509,
     "premium": 2012,
+    "pqp": 1753,
     "successRate": "76.42",
     "oversubscriptionRate": "123.24"
   },
@@ -598,6 +653,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 407,
     "bidsReceived": 474,
     "premium": 1490,
+    "pqp": 1739,
     "successRate": "85.86",
     "oversubscriptionRate": "114.77"
   },
@@ -609,6 +665,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 433,
     "bidsReceived": 584,
     "premium": 2000,
+    "pqp": 1739,
     "successRate": "74.14",
     "oversubscriptionRate": "134.56"
   },
@@ -620,6 +677,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 416,
     "bidsReceived": 542,
     "premium": 1896,
+    "pqp": 1757,
     "successRate": "76.75",
     "oversubscriptionRate": "130.29"
   },
@@ -631,6 +689,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 411,
     "bidsReceived": 526,
     "premium": 1924,
+    "pqp": 1757,
     "successRate": "78.14",
     "oversubscriptionRate": "127.98"
   },
@@ -642,6 +701,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 410,
     "bidsReceived": 514,
     "premium": 2021,
+    "pqp": 1854,
     "successRate": "79.77",
     "oversubscriptionRate": "125.37"
   },
@@ -653,6 +713,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 410,
     "bidsReceived": 520,
     "premium": 1890,
+    "pqp": 1854,
     "successRate": "78.85",
     "oversubscriptionRate": "126.83"
   },
@@ -664,6 +725,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 368,
     "bidsReceived": 569,
     "premium": 1912,
+    "pqp": 1871,
     "successRate": "64.67",
     "oversubscriptionRate": "138.78"
   },
@@ -675,6 +737,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 393,
     "bidsReceived": 517,
     "premium": 1712,
+    "pqp": 1871,
     "successRate": "76.02",
     "oversubscriptionRate": "126.10"
   },
@@ -686,6 +749,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 442,
     "bidsReceived": 592,
     "premium": 1760,
+    "pqp": 1893,
     "successRate": "74.66",
     "oversubscriptionRate": "131.26"
   },
@@ -697,6 +761,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 425,
     "bidsReceived": 531,
     "premium": 1859,
+    "pqp": 1893,
     "successRate": "80.04",
     "oversubscriptionRate": "124.65"
   },
@@ -708,6 +773,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 453,
     "bidsReceived": 659,
     "premium": 2081,
+    "pqp": 1859,
     "successRate": "68.74",
     "oversubscriptionRate": "144.52"
   },
@@ -719,6 +785,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 444,
     "bidsReceived": 535,
     "premium": 2013,
+    "pqp": 1859,
     "successRate": "82.99",
     "oversubscriptionRate": "119.42"
   },
@@ -730,6 +797,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 450,
     "bidsReceived": 575,
     "premium": 1801,
+    "pqp": 1890,
     "successRate": "78.26",
     "oversubscriptionRate": "127.78"
   },
@@ -741,6 +809,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 434,
     "bidsReceived": 566,
     "premium": 1852,
+    "pqp": 1890,
     "successRate": "76.68",
     "oversubscriptionRate": "125.78"
   },
@@ -752,6 +821,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 413,
     "bidsReceived": 631,
     "premium": 1912,
+    "pqp": 1895,
     "successRate": "65.45",
     "oversubscriptionRate": "141.16"
   },
@@ -763,6 +833,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 462,
     "bidsReceived": 605,
     "premium": 1920,
+    "pqp": 1895,
     "successRate": "76.36",
     "oversubscriptionRate": "130.67"
   },
@@ -774,6 +845,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 478,
     "bidsReceived": 580,
     "premium": 1959,
+    "pqp": 1930,
     "successRate": "82.41",
     "oversubscriptionRate": "120.58"
   },
@@ -785,6 +857,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 441,
     "bidsReceived": 523,
     "premium": 1689,
+    "pqp": 1930,
     "successRate": "84.32",
     "oversubscriptionRate": "116.74"
   },
@@ -796,6 +869,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 435,
     "bidsReceived": 602,
     "premium": 1612,
+    "pqp": 1856,
     "successRate": "72.26",
     "oversubscriptionRate": "133.78"
   },
@@ -807,6 +881,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 440,
     "bidsReceived": 522,
     "premium": 1701,
+    "pqp": 1856,
     "successRate": "84.29",
     "oversubscriptionRate": "114.98"
   },
@@ -818,6 +893,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 462,
     "bidsReceived": 523,
     "premium": 1933,
+    "pqp": 1799,
     "successRate": "88.34",
     "oversubscriptionRate": "113.20"
   },
@@ -829,6 +905,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 461,
     "bidsReceived": 530,
     "premium": 1781,
+    "pqp": 1799,
     "successRate": "86.98",
     "oversubscriptionRate": "114.97"
   },
@@ -840,6 +917,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 502,
     "bidsReceived": 637,
     "premium": 1782,
+    "pqp": 1780,
     "successRate": "78.81",
     "oversubscriptionRate": "125.89"
   },
@@ -851,6 +929,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 469,
     "bidsReceived": 589,
     "premium": 1512,
+    "pqp": 1780,
     "successRate": "79.63",
     "oversubscriptionRate": "116.40"
   },
@@ -862,6 +941,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 510,
     "bidsReceived": 669,
     "premium": 1895,
+    "pqp": 1721,
     "successRate": "76.23",
     "oversubscriptionRate": "131.18"
   },
@@ -873,6 +953,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 543,
     "bidsReceived": 634,
     "premium": 1909,
+    "pqp": 1721,
     "successRate": "85.65",
     "oversubscriptionRate": "116.76"
   },
@@ -884,6 +965,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 412,
     "bidsReceived": 680,
     "premium": 1812,
+    "pqp": 1802,
     "successRate": "60.59",
     "oversubscriptionRate": "134.39"
   },
@@ -895,6 +977,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 505,
     "bidsReceived": 545,
     "premium": 1791,
+    "pqp": 1802,
     "successRate": "92.66",
     "oversubscriptionRate": "107.71"
   },
@@ -906,6 +989,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 595,
     "bidsReceived": 719,
     "premium": 1700,
+    "pqp": 1784,
     "successRate": "82.75",
     "oversubscriptionRate": "119.83"
   },
@@ -917,6 +1001,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 459,
     "bidsReceived": 642,
     "premium": 1663,
+    "pqp": 1784,
     "successRate": "71.50",
     "oversubscriptionRate": "126.63"
   },
@@ -928,6 +1013,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 479,
     "bidsReceived": 616,
     "premium": 1701,
+    "pqp": 1795,
     "successRate": "77.76",
     "oversubscriptionRate": "120.55"
   },
@@ -939,6 +1025,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 534,
     "bidsReceived": 647,
     "premium": 1712,
+    "pqp": 1795,
     "successRate": "82.53",
     "oversubscriptionRate": "116.79"
   },
@@ -950,6 +1037,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 536,
     "bidsReceived": 679,
     "premium": 1610,
+    "pqp": 1730,
     "successRate": "78.94",
     "oversubscriptionRate": "126.21"
   },
@@ -961,6 +1049,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 516,
     "bidsReceived": 652,
     "premium": 1712,
+    "pqp": 1730,
     "successRate": "79.14",
     "oversubscriptionRate": "123.95"
   },
@@ -972,6 +1061,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 481,
     "bidsReceived": 568,
     "premium": 1792,
+    "pqp": 1683,
     "successRate": "84.68",
     "oversubscriptionRate": "117.84"
   },
@@ -983,6 +1073,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 449,
     "bidsReceived": 615,
     "premium": 1722,
+    "pqp": 1683,
     "successRate": "73.01",
     "oversubscriptionRate": "125.25"
   },
@@ -994,6 +1085,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 481,
     "bidsReceived": 569,
     "premium": 1660,
+    "pqp": 1709,
     "successRate": "84.53",
     "oversubscriptionRate": "118.30"
   },
@@ -1005,6 +1097,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 521,
     "bidsReceived": 579,
     "premium": 1703,
+    "pqp": 1709,
     "successRate": "89.98",
     "oversubscriptionRate": "110.71"
   },
@@ -1016,6 +1109,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 475,
     "bidsReceived": 567,
     "premium": 1961,
+    "pqp": 1700,
     "successRate": "83.77",
     "oversubscriptionRate": "117.88"
   },
@@ -1027,6 +1121,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 481,
     "bidsReceived": 586,
     "premium": 1804,
+    "pqp": 1700,
     "successRate": "82.08",
     "oversubscriptionRate": "121.58"
   },
@@ -1038,6 +1133,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 487,
     "bidsReceived": 569,
     "premium": 1710,
+    "pqp": 1774,
     "successRate": "85.59",
     "oversubscriptionRate": "116.84"
   },
@@ -1049,6 +1145,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 437,
     "bidsReceived": 543,
     "premium": 1712,
+    "pqp": 1774,
     "successRate": "80.48",
     "oversubscriptionRate": "112.89"
   },
@@ -1060,6 +1157,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 473,
     "bidsReceived": 647,
     "premium": 1782,
+    "pqp": 1759,
     "successRate": "73.11",
     "oversubscriptionRate": "134.51"
   },
@@ -1071,6 +1169,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 501,
     "bidsReceived": 680,
     "premium": 1812,
+    "pqp": 1759,
     "successRate": "73.68",
     "oversubscriptionRate": "129.77"
   },
@@ -1082,6 +1181,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 487,
     "bidsReceived": 542,
     "premium": 1989,
+    "pqp": 1797,
     "successRate": "89.85",
     "oversubscriptionRate": "110.84"
   },
@@ -1093,6 +1193,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 503,
     "bidsReceived": 796,
     "premium": 2704,
+    "pqp": 1797,
     "successRate": "63.19",
     "oversubscriptionRate": "158.25"
   },
@@ -1104,6 +1205,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 353,
     "bidsReceived": 550,
     "premium": 3051,
+    "pqp": 1952,
     "successRate": "64.18",
     "oversubscriptionRate": "152.35"
   },
@@ -1115,6 +1217,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 359,
     "bidsReceived": 478,
     "premium": 3501,
+    "pqp": 1952,
     "successRate": "75.10",
     "oversubscriptionRate": "132.78"
   },
@@ -1126,6 +1229,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 340,
     "bidsReceived": 483,
     "premium": 4001,
+    "pqp": 2474,
     "successRate": "70.39",
     "oversubscriptionRate": "131.25"
   },
@@ -1137,6 +1241,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 355,
     "bidsReceived": 449,
     "premium": 4289,
+    "pqp": 2474,
     "successRate": "79.06",
     "oversubscriptionRate": "124.72"
   },
@@ -1148,6 +1253,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 388,
     "bidsReceived": 520,
     "premium": 4489,
+    "pqp": 3256,
     "successRate": "74.62",
     "oversubscriptionRate": "134.02"
   },
@@ -1159,6 +1265,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 350,
     "bidsReceived": 492,
     "premium": 4502,
+    "pqp": 3256,
     "successRate": "71.14",
     "oversubscriptionRate": "134.79"
   },
@@ -1170,6 +1277,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 340,
     "bidsReceived": 445,
     "premium": 4001,
+    "pqp": 3973,
     "successRate": "76.40",
     "oversubscriptionRate": "129.74"
   },
@@ -1181,6 +1289,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 316,
     "bidsReceived": 492,
     "premium": 4003,
+    "pqp": 3973,
     "successRate": "64.23",
     "oversubscriptionRate": "137.43"
   },
@@ -1192,6 +1301,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 346,
     "bidsReceived": 449,
     "premium": 4089,
+    "pqp": 4215,
     "successRate": "77.06",
     "oversubscriptionRate": "129.77"
   },
@@ -1203,6 +1313,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 381,
     "bidsReceived": 503,
     "premium": 3890,
+    "pqp": 4215,
     "successRate": "75.75",
     "oversubscriptionRate": "130.65"
   },
@@ -1214,6 +1325,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 343,
     "bidsReceived": 415,
     "premium": 4001,
+    "pqp": 4163,
     "successRate": "82.65",
     "oversubscriptionRate": "120.64"
   },
@@ -1225,6 +1337,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 341,
     "bidsReceived": 410,
     "premium": 4252,
+    "pqp": 4163,
     "successRate": "83.17",
     "oversubscriptionRate": "118.16"
   },
@@ -1236,6 +1349,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 315,
     "bidsReceived": 360,
     "premium": 4353,
+    "pqp": 4040,
     "successRate": "87.50",
     "oversubscriptionRate": "113.92"
   },
@@ -1247,6 +1361,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 317,
     "bidsReceived": 361,
     "premium": 4354,
+    "pqp": 4040,
     "successRate": "87.81",
     "oversubscriptionRate": "112.11"
   },
@@ -1258,6 +1373,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 316,
     "bidsReceived": 382,
     "premium": 4453,
+    "pqp": 4157,
     "successRate": "82.72",
     "oversubscriptionRate": "120.89"
   },
@@ -1269,6 +1385,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 318,
     "bidsReceived": 394,
     "premium": 4504,
+    "pqp": 4157,
     "successRate": "80.71",
     "oversubscriptionRate": "123.13"
   },
@@ -1280,6 +1397,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 316,
     "bidsReceived": 502,
     "premium": 4800,
+    "pqp": 4320,
     "successRate": "62.95",
     "oversubscriptionRate": "158.86"
   },
@@ -1291,6 +1409,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 310,
     "bidsReceived": 431,
     "premium": 4412,
+    "pqp": 4320,
     "successRate": "71.93",
     "oversubscriptionRate": "135.96"
   },
@@ -1302,6 +1421,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 315,
     "bidsReceived": 380,
     "premium": 4290,
+    "pqp": 4480,
     "successRate": "82.89",
     "oversubscriptionRate": "120.25"
   },
@@ -1313,6 +1433,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 322,
     "bidsReceived": 389,
     "premium": 4189,
+    "pqp": 4480,
     "successRate": "82.78",
     "oversubscriptionRate": "120.06"
   },
@@ -1324,6 +1445,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 314,
     "bidsReceived": 392,
     "premium": 4210,
+    "pqp": 4442,
     "successRate": "80.10",
     "oversubscriptionRate": "123.27"
   },
@@ -1335,6 +1457,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 270,
     "bidsReceived": 367,
     "premium": 4312,
+    "pqp": 4442,
     "successRate": "73.57",
     "oversubscriptionRate": "115.05"
   },
@@ -1346,6 +1469,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 319,
     "bidsReceived": 374,
     "premium": 4403,
+    "pqp": 4369,
     "successRate": "85.29",
     "oversubscriptionRate": "116.51"
   },
@@ -1357,6 +1481,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 360,
     "bidsReceived": 509,
     "premium": 4889,
+    "pqp": 4369,
     "successRate": "70.73",
     "oversubscriptionRate": "139.07"
   },
@@ -1368,6 +1493,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 283,
     "bidsReceived": 384,
     "premium": 5504,
+    "pqp": 4383,
     "successRate": "73.70",
     "oversubscriptionRate": "133.80"
   },
@@ -1379,6 +1505,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 290,
     "bidsReceived": 396,
     "premium": 5800,
+    "pqp": 4383,
     "successRate": "73.23",
     "oversubscriptionRate": "136.08"
   },
@@ -1390,6 +1517,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 288,
     "bidsReceived": 343,
     "premium": 5501,
+    "pqp": 4853,
     "successRate": "83.97",
     "oversubscriptionRate": "118.69"
   },
@@ -1401,6 +1529,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 286,
     "bidsReceived": 385,
     "premium": 5610,
+    "pqp": 4853,
     "successRate": "74.29",
     "oversubscriptionRate": "134.62"
   },
@@ -1412,6 +1541,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 278,
     "bidsReceived": 442,
     "premium": 6312,
+    "pqp": 5285,
     "successRate": "62.90",
     "oversubscriptionRate": "154.55"
   },
@@ -1423,6 +1553,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 277,
     "bidsReceived": 376,
     "premium": 6801,
+    "pqp": 5285,
     "successRate": "73.67",
     "oversubscriptionRate": "131.93"
   },
@@ -1434,6 +1565,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 321,
     "bidsReceived": 462,
     "premium": 6512,
+    "pqp": 5922,
     "successRate": "69.48",
     "oversubscriptionRate": "138.32"
   },
@@ -1445,6 +1577,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 298,
     "bidsReceived": 433,
     "premium": 6501,
+    "pqp": 5922,
     "successRate": "68.82",
     "oversubscriptionRate": "129.64"
   },
@@ -1456,6 +1589,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 336,
     "bidsReceived": 430,
     "premium": 6509,
+    "pqp": 6207,
     "successRate": "78.14",
     "oversubscriptionRate": "126.84"
   },
@@ -1467,6 +1601,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 359,
     "bidsReceived": 448,
     "premium": 6401,
+    "pqp": 6207,
     "successRate": "80.13",
     "oversubscriptionRate": "123.42"
   },
@@ -1478,6 +1613,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 328,
     "bidsReceived": 425,
     "premium": 6508,
+    "pqp": 6506,
     "successRate": "77.18",
     "oversubscriptionRate": "128.79"
   },
@@ -1489,6 +1625,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 320,
     "bidsReceived": 486,
     "premium": 6312,
+    "pqp": 6506,
     "successRate": "65.84",
     "oversubscriptionRate": "146.83"
   },
@@ -1500,6 +1637,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 356,
     "bidsReceived": 418,
     "premium": 6201,
+    "pqp": 6458,
     "successRate": "85.17",
     "oversubscriptionRate": "117.42"
   },
@@ -1511,6 +1649,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 319,
     "bidsReceived": 527,
     "premium": 6112,
+    "pqp": 6458,
     "successRate": "60.53",
     "oversubscriptionRate": "143.99"
   },
@@ -1522,6 +1661,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 310,
     "bidsReceived": 473,
     "premium": 6512,
+    "pqp": 6341,
     "successRate": "65.54",
     "oversubscriptionRate": "133.24"
   },
@@ -1533,6 +1673,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 402,
     "bidsReceived": 509,
     "premium": 6158,
+    "pqp": 6341,
     "successRate": "78.98",
     "oversubscriptionRate": "126.62"
   },
@@ -1544,6 +1685,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 398,
     "bidsReceived": 438,
     "premium": 6201,
+    "pqp": 6301,
     "successRate": "90.87",
     "oversubscriptionRate": "109.50"
   },
@@ -1555,6 +1697,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 353,
     "bidsReceived": 430,
     "premium": 6302,
+    "pqp": 6301,
     "successRate": "82.09",
     "oversubscriptionRate": "121.13"
   },
@@ -1566,6 +1709,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 301,
     "bidsReceived": 402,
     "premium": 5912,
+    "pqp": 6248,
     "successRate": "74.88",
     "oversubscriptionRate": "122.19"
   },
@@ -1577,6 +1721,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 324,
     "bidsReceived": 436,
     "premium": 6502,
+    "pqp": 6248,
     "successRate": "74.31",
     "oversubscriptionRate": "132.52"
   },
@@ -1588,6 +1733,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 354,
     "bidsReceived": 414,
     "premium": 6501,
+    "pqp": 6265,
     "successRate": "85.51",
     "oversubscriptionRate": "116.62"
   },
@@ -1599,6 +1745,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 332,
     "bidsReceived": 394,
     "premium": 6600,
+    "pqp": 6265,
     "successRate": "84.26",
     "oversubscriptionRate": "118.67"
   },
@@ -1610,6 +1757,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 317,
     "bidsReceived": 409,
     "premium": 6889,
+    "pqp": 6337,
     "successRate": "77.51",
     "oversubscriptionRate": "124.70"
   },
@@ -1621,6 +1769,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 322,
     "bidsReceived": 415,
     "premium": 6512,
+    "pqp": 6337,
     "successRate": "77.59",
     "oversubscriptionRate": "126.91"
   },
@@ -1632,6 +1781,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 368,
     "bidsReceived": 495,
     "premium": 6503,
+    "pqp": 6486,
     "successRate": "74.34",
     "oversubscriptionRate": "134.51"
   },
@@ -1643,6 +1793,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 361,
     "bidsReceived": 454,
     "premium": 6353,
+    "pqp": 6486,
     "successRate": "79.52",
     "oversubscriptionRate": "125.41"
   },
@@ -1654,6 +1805,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 356,
     "bidsReceived": 430,
     "premium": 6503,
+    "pqp": 6560,
     "successRate": "82.79",
     "oversubscriptionRate": "120.45"
   },
@@ -1665,6 +1817,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 356,
     "bidsReceived": 429,
     "premium": 6589,
+    "pqp": 6560,
     "successRate": "82.98",
     "oversubscriptionRate": "120.17"
   },
@@ -1676,6 +1829,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 356,
     "bidsReceived": 455,
     "premium": 6503,
+    "pqp": 6559,
     "successRate": "78.24",
     "oversubscriptionRate": "127.45"
   },
@@ -1687,6 +1841,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 341,
     "bidsReceived": 437,
     "premium": 6501,
+    "pqp": 6559,
     "successRate": "78.03",
     "oversubscriptionRate": "122.41"
   },
@@ -1698,6 +1853,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 389,
     "bidsReceived": 519,
     "premium": 6302,
+    "pqp": 6492,
     "successRate": "74.95",
     "oversubscriptionRate": "130.08"
   },
@@ -1709,6 +1865,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 389,
     "bidsReceived": 500,
     "premium": 6303,
+    "pqp": 6492,
     "successRate": "77.80",
     "oversubscriptionRate": "120.77"
   },
@@ -1720,6 +1877,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 395,
     "bidsReceived": 529,
     "premium": 6302,
+    "pqp": 6451,
     "successRate": "74.67",
     "oversubscriptionRate": "129.98"
   },
@@ -1731,6 +1889,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 389,
     "bidsReceived": 495,
     "premium": 6303,
+    "pqp": 6451,
     "successRate": "78.59",
     "oversubscriptionRate": "117.30"
   },
@@ -1742,6 +1901,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 365,
     "bidsReceived": 525,
     "premium": 6012,
+    "pqp": 6369,
     "successRate": "69.52",
     "oversubscriptionRate": "128.36"
   },
@@ -1753,6 +1913,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 424,
     "bidsReceived": 586,
     "premium": 6302,
+    "pqp": 6369,
     "successRate": "72.35",
     "oversubscriptionRate": "136.28"
   },
@@ -1764,6 +1925,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 400,
     "bidsReceived": 558,
     "premium": 6206,
+    "pqp": 6254,
     "successRate": "71.68",
     "oversubscriptionRate": "138.46"
   },
@@ -1775,6 +1937,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 321,
     "bidsReceived": 541,
     "premium": 6352,
+    "pqp": 6254,
     "successRate": "59.33",
     "oversubscriptionRate": "148.22"
   },
@@ -1786,6 +1949,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 334,
     "bidsReceived": 521,
     "premium": 6452,
+    "pqp": 6247,
     "successRate": "64.11",
     "oversubscriptionRate": "143.92"
   },
@@ -1797,6 +1961,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 402,
     "bidsReceived": 478,
     "premium": 6501,
+    "pqp": 6247,
     "successRate": "84.10",
     "oversubscriptionRate": "118.61"
   },
@@ -1808,6 +1973,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 359,
     "bidsReceived": 498,
     "premium": 6353,
+    "pqp": 6305,
     "successRate": "72.09",
     "oversubscriptionRate": "128.68"
   },
@@ -1819,6 +1985,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 356,
     "bidsReceived": 430,
     "premium": 6354,
+    "pqp": 6305,
     "successRate": "82.79",
     "oversubscriptionRate": "119.44"
   },
@@ -1830,6 +1997,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 396,
     "bidsReceived": 457,
     "premium": 6311,
+    "pqp": 6370,
     "successRate": "86.65",
     "oversubscriptionRate": "114.54"
   },
@@ -1841,6 +2009,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 331,
     "bidsReceived": 520,
     "premium": 6212,
+    "pqp": 6370,
     "successRate": "63.65",
     "oversubscriptionRate": "138.67"
   },
@@ -1852,6 +2021,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 368,
     "bidsReceived": 436,
     "premium": 6113,
+    "pqp": 6364,
     "successRate": "84.40",
     "oversubscriptionRate": "116.58"
   },
@@ -1863,6 +2033,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 408,
     "bidsReceived": 484,
     "premium": 6101,
+    "pqp": 6364,
     "successRate": "84.30",
     "oversubscriptionRate": "116.63"
   },
@@ -1874,6 +2045,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 374,
     "bidsReceived": 438,
     "premium": 6053,
+    "pqp": 6241,
     "successRate": "85.39",
     "oversubscriptionRate": "116.49"
   },
@@ -1885,6 +2057,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 331,
     "bidsReceived": 412,
     "premium": 6052,
+    "pqp": 6241,
     "successRate": "80.34",
     "oversubscriptionRate": "109.28"
   },
@@ -1896,6 +2069,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 326,
     "bidsReceived": 534,
     "premium": 6412,
+    "pqp": 6141,
     "successRate": "61.05",
     "oversubscriptionRate": "153.45"
   },
@@ -1907,6 +2081,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 384,
     "bidsReceived": 753,
     "premium": 6801,
+    "pqp": 6141,
     "successRate": "51.00",
     "oversubscriptionRate": "192.09"
   },
@@ -1918,6 +2093,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 359,
     "bidsReceived": 546,
     "premium": 7483,
+    "pqp": 6256,
     "successRate": "65.75",
     "oversubscriptionRate": "148.37"
   },
@@ -1929,6 +2105,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 354,
     "bidsReceived": 453,
     "premium": 8081,
+    "pqp": 6256,
     "successRate": "78.15",
     "oversubscriptionRate": "127.61"
   },
@@ -1940,6 +2117,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 354,
     "bidsReceived": 482,
     "premium": 7589,
+    "pqp": 6814,
     "successRate": "73.44",
     "oversubscriptionRate": "135.77"
   },
@@ -1951,6 +2129,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 325,
     "bidsReceived": 512,
     "premium": 6712,
+    "pqp": 6814,
     "successRate": "63.48",
     "oversubscriptionRate": "147.55"
   },
@@ -1962,6 +2141,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 433,
     "bidsReceived": 567,
     "premium": 6301,
+    "pqp": 7180,
     "successRate": "76.37",
     "oversubscriptionRate": "124.62"
   },
@@ -1973,6 +2153,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 470,
     "bidsReceived": 602,
     "premium": 6101,
+    "pqp": 7180,
     "successRate": "78.07",
     "oversubscriptionRate": "126.47"
   },
@@ -1984,6 +2165,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 455,
     "bidsReceived": 743,
     "premium": 6101,
+    "pqp": 7045,
     "successRate": "61.24",
     "oversubscriptionRate": "156.09"
   },
@@ -1995,6 +2177,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 360,
     "bidsReceived": 931,
     "premium": 6001,
+    "pqp": 7045,
     "successRate": "38.67",
     "oversubscriptionRate": "202.83"
   },
@@ -2006,6 +2189,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 377,
     "bidsReceived": 819,
     "premium": 6001,
+    "pqp": 6468,
     "successRate": "46.03",
     "oversubscriptionRate": "172.78"
   },
@@ -2017,6 +2201,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 424,
     "bidsReceived": 1044,
     "premium": 5851,
+    "pqp": 6468,
     "successRate": "40.61",
     "oversubscriptionRate": "189.13"
   },
@@ -2028,6 +2213,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 508,
     "bidsReceived": 879,
     "premium": 5701,
+    "pqp": 6060,
     "successRate": "57.79",
     "oversubscriptionRate": "153.14"
   },
@@ -2039,6 +2225,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 588,
     "bidsReceived": 1069,
     "premium": 3512,
+    "pqp": 6060,
     "successRate": "55.00",
     "oversubscriptionRate": "176.69"
   },
@@ -2050,6 +2237,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 535,
     "bidsReceived": 871,
     "premium": 5402,
+    "pqp": 5528,
     "successRate": "61.42",
     "oversubscriptionRate": "160.41"
   },
@@ -2061,6 +2249,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 493,
     "bidsReceived": 727,
     "premium": 5501,
+    "pqp": 5528,
     "successRate": "67.81",
     "oversubscriptionRate": "147.17"
   },
@@ -2072,6 +2261,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 484,
     "bidsReceived": 721,
     "premium": 5010,
+    "pqp": 5328,
     "successRate": "67.13",
     "oversubscriptionRate": "148.66"
   },
@@ -2083,6 +2273,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 449,
     "bidsReceived": 687,
     "premium": 4903,
+    "pqp": 5328,
     "successRate": "65.36",
     "oversubscriptionRate": "143.72"
   },
@@ -2094,6 +2285,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 502,
     "bidsReceived": 683,
     "premium": 5502,
+    "pqp": 5005,
     "successRate": "73.50",
     "oversubscriptionRate": "134.18"
   },
@@ -2105,6 +2297,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 533,
     "bidsReceived": 708,
     "premium": 5992,
+    "pqp": 5005,
     "successRate": "75.28",
     "oversubscriptionRate": "131.60"
   },
@@ -2116,6 +2309,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 500,
     "bidsReceived": 791,
     "premium": 6552,
+    "pqp": 5385,
     "successRate": "63.21",
     "oversubscriptionRate": "153.29"
   },
@@ -2127,6 +2321,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 458,
     "bidsReceived": 743,
     "premium": 7501,
+    "pqp": 5385,
     "successRate": "61.64",
     "oversubscriptionRate": "144.55"
   },
@@ -2138,6 +2333,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 413,
     "bidsReceived": 919,
     "premium": 7701,
+    "pqp": 5910,
     "successRate": "44.94",
     "oversubscriptionRate": "175.05"
   },
@@ -2149,6 +2345,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 500,
     "bidsReceived": 786,
     "premium": 8001,
+    "pqp": 5910,
     "successRate": "63.61",
     "oversubscriptionRate": "139.12"
   },
@@ -2160,6 +2357,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 608,
     "bidsReceived": 933,
     "premium": 8451,
+    "pqp": 6875,
     "successRate": "65.17",
     "oversubscriptionRate": "149.52"
   },
@@ -2171,6 +2369,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 568,
     "bidsReceived": 1073,
     "premium": 7667,
+    "pqp": 6875,
     "successRate": "52.94",
     "oversubscriptionRate": "185.96"
   },
@@ -2182,6 +2381,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 525,
     "bidsReceived": 885,
     "premium": 8009,
+    "pqp": 7646,
     "successRate": "59.32",
     "oversubscriptionRate": "167.61"
   },
@@ -2193,6 +2393,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 517,
     "bidsReceived": 803,
     "premium": 7602,
+    "pqp": 7646,
     "successRate": "64.38",
     "oversubscriptionRate": "153.83"
   },
@@ -2204,6 +2405,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 483,
     "bidsReceived": 953,
     "premium": 7114,
+    "pqp": 7906,
     "successRate": "50.68",
     "oversubscriptionRate": "184.69"
   },
@@ -2215,6 +2417,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 515,
     "bidsReceived": 727,
     "premium": 7115,
+    "pqp": 7906,
     "successRate": "70.84",
     "oversubscriptionRate": "140.35"
   },
@@ -2226,6 +2429,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 515,
     "bidsReceived": 1171,
     "premium": 7204,
+    "pqp": 7660,
     "successRate": "43.98",
     "oversubscriptionRate": "209.11"
   },
@@ -2237,6 +2441,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 529,
     "bidsReceived": 898,
     "premium": 7115,
+    "pqp": 7660,
     "successRate": "58.91",
     "oversubscriptionRate": "169.75"
   },
@@ -2248,6 +2453,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 487,
     "bidsReceived": 828,
     "premium": 7001,
+    "pqp": 7360,
     "successRate": "58.82",
     "oversubscriptionRate": "144.76"
   },
@@ -2259,6 +2465,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 517,
     "bidsReceived": 771,
     "premium": 6889,
+    "pqp": 7360,
     "successRate": "67.06",
     "oversubscriptionRate": "146.30"
   },
@@ -2270,6 +2477,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 587,
     "bidsReceived": 807,
     "premium": 6514,
+    "pqp": 7073,
     "successRate": "72.74",
     "oversubscriptionRate": "131.86"
   },
@@ -2281,6 +2489,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 533,
     "bidsReceived": 772,
     "premium": 6189,
+    "pqp": 7073,
     "successRate": "69.04",
     "oversubscriptionRate": "143.76"
   },
@@ -2292,6 +2501,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 791,
     "bidsReceived": 1208,
     "premium": 5514,
+    "pqp": 6819,
     "successRate": "65.48",
     "oversubscriptionRate": "142.96"
   },
@@ -2303,6 +2513,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 823,
     "bidsReceived": 1176,
     "premium": 4889,
+    "pqp": 6819,
     "successRate": "69.98",
     "oversubscriptionRate": "142.72"
   },
@@ -2314,6 +2525,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 867,
     "bidsReceived": 1213,
     "premium": 4390,
+    "pqp": 6166,
     "successRate": "71.48",
     "oversubscriptionRate": "138.79"
   },
@@ -2325,6 +2537,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 821,
     "bidsReceived": 1098,
     "premium": 4214,
+    "pqp": 6166,
     "successRate": "74.77",
     "oversubscriptionRate": "133.74"
   },
@@ -2336,6 +2549,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 809,
     "bidsReceived": 1140,
     "premium": 4109,
+    "pqp": 5285,
     "successRate": "70.96",
     "oversubscriptionRate": "137.85"
   },
@@ -2347,6 +2561,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 819,
     "bidsReceived": 1201,
     "premium": 3951,
+    "pqp": 5285,
     "successRate": "68.19",
     "oversubscriptionRate": "146.64"
   },
@@ -2358,6 +2573,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 1104,
     "bidsReceived": 1543,
     "premium": 2509,
+    "pqp": 4512,
     "successRate": "71.55",
     "oversubscriptionRate": "137.64"
   },
@@ -2369,6 +2585,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 1093,
     "bidsReceived": 1423,
     "premium": 2989,
+    "pqp": 4512,
     "successRate": "76.81",
     "oversubscriptionRate": "129.01"
   },
@@ -2380,6 +2597,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 1113,
     "bidsReceived": 1483,
     "premium": 3399,
+    "pqp": 3694,
     "successRate": "75.05",
     "oversubscriptionRate": "132.29"
   },
@@ -2391,6 +2609,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 1114,
     "bidsReceived": 1375,
     "premium": 3789,
+    "pqp": 3694,
     "successRate": "81.02",
     "oversubscriptionRate": "123.43"
   },
@@ -2402,6 +2621,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 1103,
     "bidsReceived": 1396,
     "premium": 3610,
+    "pqp": 3458,
     "successRate": "79.01",
     "oversubscriptionRate": "125.54"
   },
@@ -2413,6 +2633,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 1104,
     "bidsReceived": 1473,
     "premium": 2889,
+    "pqp": 3458,
     "successRate": "74.95",
     "oversubscriptionRate": "133.42"
   },
@@ -2424,6 +2645,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 834,
     "bidsReceived": 1164,
     "premium": 3709,
+    "pqp": 3198,
     "successRate": "71.65",
     "oversubscriptionRate": "139.57"
   },
@@ -2435,6 +2657,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 817,
     "bidsReceived": 1100,
     "premium": 3689,
+    "pqp": 3198,
     "successRate": "74.27",
     "oversubscriptionRate": "133.17"
   },
@@ -2446,6 +2669,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 822,
     "bidsReceived": 1175,
     "premium": 3602,
+    "pqp": 3515,
     "successRate": "69.96",
     "oversubscriptionRate": "142.42"
   },
@@ -2457,6 +2681,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 825,
     "bidsReceived": 1039,
     "premium": 3469,
+    "pqp": 3515,
     "successRate": "79.40",
     "oversubscriptionRate": "124.58"
   },
@@ -2468,6 +2693,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 803,
     "bidsReceived": 1193,
     "premium": 3501,
+    "pqp": 3495,
     "successRate": "67.31",
     "oversubscriptionRate": "143.91"
   },
@@ -2479,6 +2705,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 834,
     "bidsReceived": 1129,
     "premium": 3452,
+    "pqp": 3495,
     "successRate": "73.87",
     "oversubscriptionRate": "135.21"
   },
@@ -2490,6 +2717,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 896,
     "bidsReceived": 1154,
     "premium": 3352,
+    "pqp": 3571,
     "successRate": "77.64",
     "oversubscriptionRate": "125.03"
   },
@@ -2501,6 +2729,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 886,
     "bidsReceived": 1193,
     "premium": 3202,
+    "pqp": 3571,
     "successRate": "74.27",
     "oversubscriptionRate": "132.85"
   },
@@ -2512,6 +2741,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 920,
     "bidsReceived": 1149,
     "premium": 3090,
+    "pqp": 3430,
     "successRate": "80.07",
     "oversubscriptionRate": "124.22"
   },
@@ -2523,6 +2753,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 906,
     "bidsReceived": 1187,
     "premium": 3000,
+    "pqp": 3430,
     "successRate": "76.33",
     "oversubscriptionRate": "130.58"
   },
@@ -2534,6 +2765,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 890,
     "bidsReceived": 1141,
     "premium": 3081,
+    "pqp": 3267,
     "successRate": "78.00",
     "oversubscriptionRate": "126.50"
   },
@@ -2545,6 +2777,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 897,
     "bidsReceived": 1193,
     "premium": 3554,
+    "pqp": 3267,
     "successRate": "75.19",
     "oversubscriptionRate": "132.56"
   },
@@ -2556,6 +2789,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 751,
     "bidsReceived": 1040,
     "premium": 4400,
+    "pqp": 3214,
     "successRate": "72.21",
     "oversubscriptionRate": "138.48"
   },
@@ -2567,6 +2801,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 574,
     "bidsReceived": 1010,
     "premium": 4301,
+    "pqp": 3214,
     "successRate": "56.83",
     "oversubscriptionRate": "136.12"
   },
@@ -2578,6 +2813,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 712,
     "bidsReceived": 1086,
     "premium": 4089,
+    "pqp": 3571,
     "successRate": "65.56",
     "oversubscriptionRate": "146.96"
   },
@@ -2589,6 +2825,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 893,
     "bidsReceived": 1197,
     "premium": 3601,
+    "pqp": 3571,
     "successRate": "74.60",
     "oversubscriptionRate": "131.97"
   },
@@ -2600,6 +2837,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 763,
     "bidsReceived": 1036,
     "premium": 3800,
+    "pqp": 3838,
     "successRate": "73.65",
     "oversubscriptionRate": "135.42"
   },
@@ -2611,6 +2849,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 746,
     "bidsReceived": 989,
     "premium": 3889,
+    "pqp": 3838,
     "successRate": "75.43",
     "oversubscriptionRate": "131.34"
   },
@@ -2622,6 +2861,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 691,
     "bidsReceived": 831,
     "premium": 4100,
+    "pqp": 4014,
     "successRate": "83.15",
     "oversubscriptionRate": "119.91"
   },
@@ -2633,6 +2873,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 692,
     "bidsReceived": 974,
     "premium": 3921,
+    "pqp": 4014,
     "successRate": "71.05",
     "oversubscriptionRate": "139.54"
   },
@@ -2644,6 +2885,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 678,
     "bidsReceived": 908,
     "premium": 3789,
+    "pqp": 3900,
     "successRate": "74.67",
     "oversubscriptionRate": "131.02"
   },
@@ -2655,6 +2897,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 696,
     "bidsReceived": 850,
     "premium": 3658,
+    "pqp": 3900,
     "successRate": "81.88",
     "oversubscriptionRate": "121.95"
   },
@@ -2666,6 +2909,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 706,
     "bidsReceived": 1084,
     "premium": 3989,
+    "pqp": 3860,
     "successRate": "65.13",
     "oversubscriptionRate": "153.32"
   },
@@ -2677,6 +2921,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 693,
     "bidsReceived": 936,
     "premium": 4610,
+    "pqp": 3860,
     "successRate": "74.04",
     "oversubscriptionRate": "135.06"
   },
@@ -2688,6 +2933,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 562,
     "bidsReceived": 821,
     "premium": 4401,
+    "pqp": 4012,
     "successRate": "68.45",
     "oversubscriptionRate": "142.04"
   },
@@ -2699,6 +2945,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 574,
     "bidsReceived": 729,
     "premium": 4309,
+    "pqp": 4012,
     "successRate": "78.74",
     "oversubscriptionRate": "126.34"
   },
@@ -2710,6 +2957,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 587,
     "bidsReceived": 785,
     "premium": 4310,
+    "pqp": 4126,
     "successRate": "74.78",
     "oversubscriptionRate": "132.38"
   },
@@ -2721,6 +2969,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 576,
     "bidsReceived": 757,
     "premium": 4489,
+    "pqp": 4126,
     "successRate": "76.09",
     "oversubscriptionRate": "130.29"
   },
@@ -2732,6 +2981,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 856,
     "bidsReceived": 1611,
     "premium": 7702,
+    "pqp": 4352,
     "successRate": "53.13",
     "oversubscriptionRate": "185.39"
   },
@@ -2743,6 +2993,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 864,
     "bidsReceived": 1355,
     "premium": 6510,
+    "pqp": 4352,
     "successRate": "63.76",
     "oversubscriptionRate": "155.93"
   },
@@ -2754,6 +3005,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 497,
     "bidsReceived": 720,
     "premium": 7701,
+    "pqp": 5287,
     "successRate": "69.03",
     "oversubscriptionRate": "143.14"
   },
@@ -2765,6 +3017,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 491,
     "bidsReceived": 797,
     "premium": 7432,
+    "pqp": 5287,
     "successRate": "61.61",
     "oversubscriptionRate": "161.01"
   },
@@ -2776,6 +3029,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 488,
     "bidsReceived": 691,
     "premium": 7399,
+    "pqp": 6358,
     "successRate": "70.62",
     "oversubscriptionRate": "139.31"
   },
@@ -2787,6 +3041,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 492,
     "bidsReceived": 642,
     "premium": 7331,
+    "pqp": 6358,
     "successRate": "76.64",
     "oversubscriptionRate": "129.96"
   },
@@ -2798,6 +3053,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 420,
     "bidsReceived": 677,
     "premium": 7451,
+    "pqp": 7346,
     "successRate": "62.04",
     "oversubscriptionRate": "157.81"
   },
@@ -2809,6 +3065,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 410,
     "bidsReceived": 560,
     "premium": 7300,
+    "pqp": 7346,
     "successRate": "73.21",
     "oversubscriptionRate": "132.39"
   },
@@ -2820,6 +3077,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 532,
     "bidsReceived": 727,
     "premium": 7251,
+    "pqp": 7436,
     "successRate": "73.18",
     "oversubscriptionRate": "136.40"
   },
@@ -2831,6 +3089,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 532,
     "bidsReceived": 679,
     "premium": 7300,
+    "pqp": 7436,
     "successRate": "78.35",
     "oversubscriptionRate": "126.44"
   },
@@ -2842,6 +3101,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 522,
     "bidsReceived": 767,
     "premium": 7670,
+    "pqp": 7339,
     "successRate": "68.06",
     "oversubscriptionRate": "145.82"
   },
@@ -2853,6 +3113,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 507,
     "bidsReceived": 710,
     "premium": 7689,
+    "pqp": 7339,
     "successRate": "71.41",
     "oversubscriptionRate": "133.96"
   },
@@ -2864,6 +3125,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 498,
     "bidsReceived": 692,
     "premium": 7501,
+    "pqp": 7444,
     "successRate": "71.97",
     "oversubscriptionRate": "130.81"
   },
@@ -2875,6 +3137,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 535,
     "bidsReceived": 706,
     "premium": 7589,
+    "pqp": 7444,
     "successRate": "75.78",
     "oversubscriptionRate": "128.83"
   },
@@ -2886,6 +3149,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 572,
     "bidsReceived": 705,
     "premium": 7506,
+    "pqp": 7500,
     "successRate": "81.13",
     "oversubscriptionRate": "123.25"
   },
@@ -2897,6 +3161,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 554,
     "bidsReceived": 715,
     "premium": 7500,
+    "pqp": 7500,
     "successRate": "77.48",
     "oversubscriptionRate": "129.06"
   },
@@ -2908,6 +3173,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 524,
     "bidsReceived": 707,
     "premium": 7752,
+    "pqp": 7576,
     "successRate": "74.12",
     "oversubscriptionRate": "130.44"
   },
@@ -2919,6 +3185,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 538,
     "bidsReceived": 700,
     "premium": 7791,
+    "pqp": 7576,
     "successRate": "76.86",
     "oversubscriptionRate": "129.15"
   },
@@ -2930,6 +3197,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 524,
     "bidsReceived": 735,
     "premium": 8000,
+    "pqp": 7607,
     "successRate": "71.29",
     "oversubscriptionRate": "131.25"
   },
@@ -2941,6 +3209,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 532,
     "bidsReceived": 734,
     "premium": 8000,
+    "pqp": 7607,
     "successRate": "72.48",
     "oversubscriptionRate": "134.43"
   },
@@ -2952,6 +3221,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 639,
     "bidsReceived": 901,
     "premium": 8011,
+    "pqp": 7759,
     "successRate": "70.92",
     "oversubscriptionRate": "138.62"
   },
@@ -2963,6 +3233,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 625,
     "bidsReceived": 904,
     "premium": 8701,
+    "pqp": 7759,
     "successRate": "69.14",
     "oversubscriptionRate": "143.95"
   },
@@ -2974,6 +3245,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 624,
     "bidsReceived": 776,
     "premium": 8703,
+    "pqp": 8043,
     "successRate": "80.41",
     "oversubscriptionRate": "123.96"
   },
@@ -2985,6 +3257,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 577,
     "bidsReceived": 864,
     "premium": 8501,
+    "pqp": 8043,
     "successRate": "66.78",
     "oversubscriptionRate": "139.81"
   },
@@ -2996,6 +3269,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 612,
     "bidsReceived": 760,
     "premium": 8502,
+    "pqp": 8320,
     "successRate": "80.53",
     "oversubscriptionRate": "123.38"
   },
@@ -3007,6 +3281,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 649,
     "bidsReceived": 863,
     "premium": 8689,
+    "pqp": 8320,
     "successRate": "75.20",
     "oversubscriptionRate": "131.76"
   },
@@ -3018,6 +3293,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 449,
     "bidsReceived": 667,
     "premium": 8899,
+    "pqp": 8518,
     "successRate": "67.32",
     "oversubscriptionRate": "148.55"
   },
@@ -3029,6 +3305,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 447,
     "bidsReceived": 635,
     "premium": 9500,
+    "pqp": 8518,
     "successRate": "70.39",
     "oversubscriptionRate": "140.80"
   },
@@ -3040,6 +3317,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 445,
     "bidsReceived": 562,
     "premium": 9689,
+    "pqp": 8799,
     "successRate": "79.18",
     "oversubscriptionRate": "126.29"
   },
@@ -3051,6 +3329,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 443,
     "bidsReceived": 658,
     "premium": 9089,
+    "pqp": 8799,
     "successRate": "67.33",
     "oversubscriptionRate": "146.55"
   },
@@ -3062,6 +3341,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 438,
     "bidsReceived": 633,
     "premium": 9052,
+    "pqp": 9062,
     "successRate": "69.19",
     "oversubscriptionRate": "142.57"
   },
@@ -3073,6 +3353,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 449,
     "bidsReceived": 597,
     "premium": 9310,
+    "pqp": 9062,
     "successRate": "75.21",
     "oversubscriptionRate": "132.67"
   },
@@ -3084,6 +3365,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 409,
     "bidsReceived": 543,
     "premium": 9381,
+    "pqp": 9257,
     "successRate": "75.32",
     "oversubscriptionRate": "130.22"
   },
@@ -3095,6 +3377,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 397,
     "bidsReceived": 557,
     "premium": 9381,
+    "pqp": 9257,
     "successRate": "71.27",
     "oversubscriptionRate": "135.19"
   },
@@ -3106,6 +3389,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 400,
     "bidsReceived": 584,
     "premium": 9401,
+    "pqp": 9317,
     "successRate": "68.49",
     "oversubscriptionRate": "139.05"
   },
@@ -3117,6 +3401,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 422,
     "bidsReceived": 562,
     "premium": 9601,
+    "pqp": 9317,
     "successRate": "75.09",
     "oversubscriptionRate": "131.92"
   },
@@ -3128,6 +3413,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 429,
     "bidsReceived": 573,
     "premium": 9689,
+    "pqp": 9355,
     "successRate": "74.87",
     "oversubscriptionRate": "132.95"
   },
@@ -3139,6 +3425,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 401,
     "bidsReceived": 520,
     "premium": 10000,
+    "pqp": 9355,
     "successRate": "77.12",
     "oversubscriptionRate": "125.00"
   },
@@ -3150,6 +3437,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 405,
     "bidsReceived": 555,
     "premium": 10010,
+    "pqp": 9576,
     "successRate": "72.97",
     "oversubscriptionRate": "136.70"
   },
@@ -3161,6 +3449,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 416,
     "bidsReceived": 521,
     "premium": 10589,
+    "pqp": 9576,
     "successRate": "79.85",
     "oversubscriptionRate": "124.05"
   },
@@ -3172,6 +3461,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 403,
     "bidsReceived": 602,
     "premium": 11400,
+    "pqp": 9882,
     "successRate": "66.94",
     "oversubscriptionRate": "148.64"
   },
@@ -3183,6 +3473,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 409,
     "bidsReceived": 575,
     "premium": 10501,
+    "pqp": 9882,
     "successRate": "71.13",
     "oversubscriptionRate": "140.59"
   },
@@ -3194,6 +3485,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 405,
     "bidsReceived": 561,
     "premium": 10503,
+    "pqp": 10365,
     "successRate": "72.19",
     "oversubscriptionRate": "137.84"
   },
@@ -3205,6 +3497,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 355,
     "bidsReceived": 539,
     "premium": 9801,
+    "pqp": 10365,
     "successRate": "65.86",
     "oversubscriptionRate": "133.42"
   },
@@ -3216,6 +3509,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 560,
     "bidsReceived": 773,
     "premium": 9489,
+    "pqp": 10468,
     "successRate": "72.45",
     "oversubscriptionRate": "137.30"
   },
@@ -3227,6 +3521,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 600,
     "bidsReceived": 899,
     "premium": 9490,
+    "pqp": 10468,
     "successRate": "66.74",
     "oversubscriptionRate": "147.62"
   },
@@ -3238,6 +3533,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 542,
     "bidsReceived": 859,
     "premium": 10000,
+    "pqp": 10198,
     "successRate": "63.10",
     "oversubscriptionRate": "152.58"
   },
@@ -3249,6 +3545,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 570,
     "bidsReceived": 717,
     "premium": 10302,
+    "pqp": 10198,
     "successRate": "79.50",
     "oversubscriptionRate": "125.79"
   },
@@ -3260,6 +3557,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 513,
     "bidsReceived": 768,
     "premium": 10889,
+    "pqp": 9931,
     "successRate": "66.80",
     "oversubscriptionRate": "131.96"
   },
@@ -3271,6 +3569,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 555,
     "bidsReceived": 723,
     "premium": 10910,
+    "pqp": 9931,
     "successRate": "76.76",
     "oversubscriptionRate": "128.88"
   },
@@ -3282,6 +3581,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 562,
     "bidsReceived": 696,
     "premium": 11000,
+    "pqp": 10180,
     "successRate": "80.75",
     "oversubscriptionRate": "121.47"
   },
@@ -3293,6 +3593,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 502,
     "bidsReceived": 673,
     "premium": 11101,
+    "pqp": 10180,
     "successRate": "74.59",
     "oversubscriptionRate": "131.96"
   },
@@ -3304,6 +3605,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 514,
     "bidsReceived": 588,
     "premium": 11301,
+    "pqp": 10701,
     "successRate": "87.41",
     "oversubscriptionRate": "114.17"
   },
@@ -3315,6 +3617,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 500,
     "bidsReceived": 658,
     "premium": 11589,
+    "pqp": 10701,
     "successRate": "75.99",
     "oversubscriptionRate": "128.52"
   },
@@ -3326,6 +3629,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 504,
     "bidsReceived": 624,
     "premium": 11751,
+    "pqp": 11132,
     "successRate": "80.77",
     "oversubscriptionRate": "123.56"
   },
@@ -3337,6 +3641,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 511,
     "bidsReceived": 632,
     "premium": 12801,
+    "pqp": 11132,
     "successRate": "80.85",
     "oversubscriptionRate": "122.48"
   },
@@ -3348,6 +3653,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 440,
     "bidsReceived": 537,
     "premium": 13189,
+    "pqp": 11591,
     "successRate": "81.94",
     "oversubscriptionRate": "121.77"
   },
@@ -3359,6 +3665,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 420,
     "bidsReceived": 594,
     "premium": 12589,
+    "pqp": 11591,
     "successRate": "70.71",
     "oversubscriptionRate": "133.48"
   },
@@ -3370,6 +3677,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 437,
     "bidsReceived": 544,
     "premium": 12100,
+    "pqp": 12204,
     "successRate": "80.33",
     "oversubscriptionRate": "123.36"
   },
@@ -3381,6 +3689,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 461,
     "bidsReceived": 647,
     "premium": 11690,
+    "pqp": 12204,
     "successRate": "71.25",
     "oversubscriptionRate": "139.14"
   },
@@ -3392,6 +3701,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 432,
     "bidsReceived": 678,
     "premium": 10890,
+    "pqp": 12354,
     "successRate": "63.72",
     "oversubscriptionRate": "152.36"
   },
@@ -3403,6 +3713,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 431,
     "bidsReceived": 572,
     "premium": 11101,
+    "pqp": 12354,
     "successRate": "75.35",
     "oversubscriptionRate": "128.54"
   },
@@ -3414,6 +3725,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 475,
     "bidsReceived": 594,
     "premium": 11602,
+    "pqp": 11927,
     "successRate": "79.97",
     "oversubscriptionRate": "124.53"
   },
@@ -3425,6 +3737,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 453,
     "bidsReceived": 611,
     "premium": 12189,
+    "pqp": 11927,
     "successRate": "74.14",
     "oversubscriptionRate": "127.56"
   },
@@ -3436,6 +3749,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 465,
     "bidsReceived": 566,
     "premium": 12390,
+    "pqp": 11596,
     "successRate": "82.16",
     "oversubscriptionRate": "121.20"
   },
@@ -3447,6 +3761,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 490,
     "bidsReceived": 616,
     "premium": 12001,
+    "pqp": 11596,
     "successRate": "79.55",
     "oversubscriptionRate": "125.71"
   },
@@ -3458,6 +3773,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 454,
     "bidsReceived": 529,
     "premium": 12001,
+    "pqp": 11696,
     "successRate": "85.82",
     "oversubscriptionRate": "113.52"
   },
@@ -3469,6 +3785,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 436,
     "bidsReceived": 510,
     "premium": 12179,
+    "pqp": 11696,
     "successRate": "85.49",
     "oversubscriptionRate": "109.68"
   },
@@ -3480,6 +3797,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 542,
     "bidsReceived": 670,
     "premium": 5002,
+    "pqp": 12061,
     "successRate": "80.90",
     "oversubscriptionRate": "120.94"
   },
@@ -3491,6 +3809,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 562,
     "bidsReceived": 1,
     "premium": 10602,
+    "pqp": 12061,
     "successRate": "56200.00",
     "oversubscriptionRate": "0.18"
   },
@@ -3502,6 +3821,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 519,
     "bidsReceived": 972,
     "premium": 11001,
+    "pqp": 10696,
     "successRate": "53.40",
     "oversubscriptionRate": "175.14"
   },
@@ -3513,6 +3833,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 543,
     "bidsReceived": 796,
     "premium": 10709,
+    "pqp": 10696,
     "successRate": "68.22",
     "oversubscriptionRate": "144.46"
   },
@@ -3524,6 +3845,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 550,
     "bidsReceived": 846,
     "premium": 10090,
+    "pqp": 10249,
     "successRate": "65.01",
     "oversubscriptionRate": "146.11"
   },
@@ -3535,6 +3857,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 550,
     "bidsReceived": 840,
     "premium": 10501,
+    "pqp": 10249,
     "successRate": "65.48",
     "oversubscriptionRate": "152.45"
   },
@@ -3546,6 +3869,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 443,
     "bidsReceived": 759,
     "premium": 11501,
+    "pqp": 9651,
     "successRate": "58.37",
     "oversubscriptionRate": "145.40"
   },
@@ -3557,6 +3881,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 486,
     "bidsReceived": 654,
     "premium": 11402,
+    "pqp": 9651,
     "successRate": "74.31",
     "oversubscriptionRate": "132.12"
   },
@@ -3568,6 +3893,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 569,
     "bidsReceived": 758,
     "premium": 10901,
+    "pqp": 10868,
     "successRate": "75.07",
     "oversubscriptionRate": "132.29"
   },
@@ -3579,6 +3905,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 494,
     "bidsReceived": 639,
     "premium": 10700,
+    "pqp": 10868,
     "successRate": "77.31",
     "oversubscriptionRate": "127.29"
   },
@@ -3590,6 +3917,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 494,
     "bidsReceived": 661,
     "premium": 10856,
+    "pqp": 10850,
     "successRate": "74.74",
     "oversubscriptionRate": "133.00"
   },
@@ -3601,6 +3929,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 474,
     "bidsReceived": 632,
     "premium": 11201,
+    "pqp": 10850,
     "successRate": "75.00",
     "oversubscriptionRate": "125.90"
   },
@@ -3612,6 +3941,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 512,
     "bidsReceived": 630,
     "premium": 10889,
+    "pqp": 11094,
     "successRate": "81.27",
     "oversubscriptionRate": "121.15"
   },
@@ -3623,6 +3953,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 518,
     "bidsReceived": 702,
     "premium": 10001,
+    "pqp": 11094,
     "successRate": "73.79",
     "oversubscriptionRate": "128.81"
   },
@@ -3634,6 +3965,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 527,
     "bidsReceived": 731,
     "premium": 9858,
+    "pqp": 10758,
     "successRate": "72.09",
     "oversubscriptionRate": "138.19"
   },
@@ -3645,6 +3977,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 545,
     "bidsReceived": 646,
     "premium": 9002,
+    "pqp": 10758,
     "successRate": "84.37",
     "oversubscriptionRate": "118.32"
   },
@@ -3656,6 +3989,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 514,
     "bidsReceived": 666,
     "premium": 9114,
+    "pqp": 10302,
     "successRate": "77.18",
     "oversubscriptionRate": "127.34"
   },
@@ -3667,6 +4001,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 491,
     "bidsReceived": 615,
     "premium": 9309,
+    "pqp": 10302,
     "successRate": "79.84",
     "oversubscriptionRate": "118.27"
   },
@@ -3678,6 +4013,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 528,
     "bidsReceived": 717,
     "premium": 9290,
+    "pqp": 9696,
     "successRate": "73.64",
     "oversubscriptionRate": "135.28"
   },
@@ -3689,6 +4025,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 548,
     "bidsReceived": 689,
     "premium": 8911,
+    "pqp": 9696,
     "successRate": "79.54",
     "oversubscriptionRate": "125.73"
   },
@@ -3700,6 +4037,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 518,
     "bidsReceived": 646,
     "premium": 9400,
+    "pqp": 9248,
     "successRate": "80.19",
     "oversubscriptionRate": "124.23"
   },
@@ -3711,6 +4049,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 516,
     "bidsReceived": 629,
     "premium": 9689,
+    "pqp": 9248,
     "successRate": "82.03",
     "oversubscriptionRate": "120.73"
   },
@@ -3722,6 +4061,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 510,
     "bidsReceived": 610,
     "premium": 10000,
+    "pqp": 9286,
     "successRate": "83.61",
     "oversubscriptionRate": "117.31"
   },
@@ -3733,6 +4073,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 514,
     "bidsReceived": 625,
     "premium": 9990,
+    "pqp": 9286,
     "successRate": "82.24",
     "oversubscriptionRate": "119.73"
   },
@@ -3744,6 +4085,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 528,
     "bidsReceived": 630,
     "premium": 9503,
+    "pqp": 9547,
     "successRate": "83.81",
     "oversubscriptionRate": "119.32"
   },
@@ -3755,6 +4097,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 523,
     "bidsReceived": 604,
     "premium": 9311,
+    "pqp": 9547,
     "successRate": "86.59",
     "oversubscriptionRate": "114.83"
   },
@@ -3766,6 +4109,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 519,
     "bidsReceived": 628,
     "premium": 8989,
+    "pqp": 9649,
     "successRate": "82.64",
     "oversubscriptionRate": "121.00"
   },
@@ -3777,6 +4121,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 519,
     "bidsReceived": 620,
     "premium": 9002,
+    "pqp": 9649,
     "successRate": "83.71",
     "oversubscriptionRate": "119.23"
   },
@@ -3788,6 +4133,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 517,
     "bidsReceived": 571,
     "premium": 8900,
+    "pqp": 9466,
     "successRate": "90.54",
     "oversubscriptionRate": "110.44"
   },
@@ -3799,6 +4145,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 512,
     "bidsReceived": 591,
     "premium": 9089,
+    "pqp": 9466,
     "successRate": "86.63",
     "oversubscriptionRate": "114.09"
   },
@@ -3810,6 +4157,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 513,
     "bidsReceived": 599,
     "premium": 9601,
+    "pqp": 9133,
     "successRate": "85.64",
     "oversubscriptionRate": "115.86"
   },
@@ -3821,6 +4169,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 522,
     "bidsReceived": 614,
     "premium": 9310,
+    "pqp": 9133,
     "successRate": "85.02",
     "oversubscriptionRate": "117.40"
   },
@@ -3832,6 +4181,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 520,
     "bidsReceived": 622,
     "premium": 9801,
+    "pqp": 9149,
     "successRate": "83.60",
     "oversubscriptionRate": "119.16"
   },
@@ -3843,6 +4193,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 516,
     "bidsReceived": 636,
     "premium": 9900,
+    "pqp": 9149,
     "successRate": "81.13",
     "oversubscriptionRate": "122.31"
   },
@@ -3854,6 +4205,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 519,
     "bidsReceived": 604,
     "premium": 10001,
+    "pqp": 9434,
     "successRate": "85.93",
     "oversubscriptionRate": "116.15"
   },
@@ -3865,6 +4217,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 515,
     "bidsReceived": 626,
     "premium": 9589,
+    "pqp": 9434,
     "successRate": "82.27",
     "oversubscriptionRate": "119.92"
   },
@@ -3876,6 +4229,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 520,
     "bidsReceived": 598,
     "premium": 9089,
+    "pqp": 9701,
     "successRate": "86.96",
     "oversubscriptionRate": "115.00"
   },
@@ -3887,6 +4241,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 524,
     "bidsReceived": 637,
     "premium": 8669,
+    "pqp": 9701,
     "successRate": "82.26",
     "oversubscriptionRate": "121.56"
   },
@@ -3898,6 +4253,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 516,
     "bidsReceived": 570,
     "premium": 7878,
+    "pqp": 9509,
     "successRate": "90.53",
     "oversubscriptionRate": "110.25"
   },
@@ -3909,6 +4265,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 504,
     "bidsReceived": 641,
     "premium": 8381,
+    "pqp": 9509,
     "successRate": "78.63",
     "oversubscriptionRate": "123.51"
   },
@@ -3920,6 +4277,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 513,
     "bidsReceived": 595,
     "premium": 9001,
+    "pqp": 8935,
     "successRate": "86.22",
     "oversubscriptionRate": "114.42"
   },
@@ -3931,6 +4289,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 530,
     "bidsReceived": 651,
     "premium": 7721,
+    "pqp": 8935,
     "successRate": "81.41",
     "oversubscriptionRate": "121.46"
   },
@@ -3942,6 +4301,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 523,
     "bidsReceived": 718,
     "premium": 8289,
+    "pqp": 8457,
     "successRate": "72.84",
     "oversubscriptionRate": "137.02"
   },
@@ -3953,6 +4313,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 517,
     "bidsReceived": 645,
     "premium": 8791,
+    "pqp": 8457,
     "successRate": "80.16",
     "oversubscriptionRate": "123.09"
   },
@@ -3964,6 +4325,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 519,
     "bidsReceived": 624,
     "premium": 9201,
+    "pqp": 8344,
     "successRate": "83.17",
     "oversubscriptionRate": "120.23"
   },
@@ -3975,6 +4337,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 525,
     "bidsReceived": 626,
     "premium": 9511,
+    "pqp": 8344,
     "successRate": "83.87",
     "oversubscriptionRate": "119.24"
   },
@@ -3986,6 +4349,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 515,
     "bidsReceived": 603,
     "premium": 9889,
+    "pqp": 8753,
     "successRate": "85.41",
     "oversubscriptionRate": "116.63"
   },
@@ -3997,6 +4361,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 518,
     "bidsReceived": 660,
     "premium": 9309,
+    "pqp": 8753,
     "successRate": "78.48",
     "oversubscriptionRate": "127.17"
   },
@@ -4008,6 +4373,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 532,
     "bidsReceived": 676,
     "premium": 8709,
+    "pqp": 9165,
     "successRate": "78.70",
     "oversubscriptionRate": "126.12"
   },
@@ -4019,6 +4385,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 532,
     "bidsReceived": 655,
     "premium": 8707,
+    "pqp": 9165,
     "successRate": "81.22",
     "oversubscriptionRate": "122.66"
   },
@@ -4030,6 +4397,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 538,
     "bidsReceived": 631,
     "premium": 9000,
+    "pqp": 9221,
     "successRate": "85.26",
     "oversubscriptionRate": "117.29"
   },
@@ -4041,6 +4409,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 528,
     "bidsReceived": 605,
     "premium": 8600,
+    "pqp": 9221,
     "successRate": "87.27",
     "oversubscriptionRate": "113.08"
   },
@@ -4052,6 +4421,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 533,
     "bidsReceived": 629,
     "premium": 9389,
+    "pqp": 9036,
     "successRate": "84.74",
     "oversubscriptionRate": "118.01"
   },
@@ -4063,6 +4433,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 534,
     "bidsReceived": 622,
     "premium": 9511,
+    "pqp": 9036,
     "successRate": "85.85",
     "oversubscriptionRate": "115.19"
   },
@@ -4074,6 +4445,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 526,
     "bidsReceived": 633,
     "premium": 9189,
+    "pqp": 8986,
     "successRate": "83.10",
     "oversubscriptionRate": "118.76"
   },
@@ -4085,6 +4457,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 535,
     "bidsReceived": 654,
     "premium": 8809,
+    "pqp": 8986,
     "successRate": "81.80",
     "oversubscriptionRate": "121.11"
   },
@@ -4096,6 +4469,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 540,
     "bidsReceived": 633,
     "premium": 9101,
+    "pqp": 9083,
     "successRate": "85.31",
     "oversubscriptionRate": "117.22"
   },
@@ -4107,6 +4481,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 539,
     "bidsReceived": 617,
     "premium": 9209,
+    "pqp": 9083,
     "successRate": "87.36",
     "oversubscriptionRate": "114.47"
   },
@@ -4118,6 +4493,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 528,
     "bidsReceived": 630,
     "premium": 9810,
+    "pqp": 9202,
     "successRate": "83.81",
     "oversubscriptionRate": "118.20"
   },
@@ -4129,6 +4505,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 528,
     "bidsReceived": 598,
     "premium": 9389,
+    "pqp": 9202,
     "successRate": "88.29",
     "oversubscriptionRate": "112.20"
   },
@@ -4140,6 +4517,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 537,
     "bidsReceived": 631,
     "premium": 8600,
+    "pqp": 9252,
     "successRate": "85.10",
     "oversubscriptionRate": "117.29"
   },
@@ -4151,6 +4529,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 535,
     "bidsReceived": 595,
     "premium": 8729,
+    "pqp": 9252,
     "successRate": "89.92",
     "oversubscriptionRate": "110.59"
   },
@@ -4162,6 +4541,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 523,
     "bidsReceived": 627,
     "premium": 8289,
+    "pqp": 9140,
     "successRate": "83.41",
     "oversubscriptionRate": "117.42"
   },
@@ -4173,6 +4553,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 532,
     "bidsReceived": 632,
     "premium": 8081,
+    "pqp": 9140,
     "successRate": "84.18",
     "oversubscriptionRate": "117.91"
   },
@@ -4184,6 +4565,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 527,
     "bidsReceived": 639,
     "premium": 8689,
+    "pqp": 8817,
     "successRate": "82.47",
     "oversubscriptionRate": "117.46"
   },
@@ -4195,6 +4577,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 523,
     "bidsReceived": 609,
     "premium": 8860,
+    "pqp": 8817,
     "successRate": "85.88",
     "oversubscriptionRate": "113.20"
   },
@@ -4206,6 +4589,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 538,
     "bidsReceived": 645,
     "premium": 8289,
+    "pqp": 8542,
     "successRate": "83.41",
     "oversubscriptionRate": "117.27"
   },
@@ -4217,6 +4601,7 @@ export const motorcycleCOEHistory = [
     "bidsSuccess": 535,
     "bidsReceived": 665,
     "premium": 7989,
+    "pqp": 8542,
     "successRate": "80.45",
     "oversubscriptionRate": "121.35"
   }
@@ -4229,6 +4614,18 @@ export const motorcycleCOEHistory = [
 export function getLatestCOEPrice() {
   if (motorcycleCOEHistory.length === 0) return 9511; // Fallback
   return motorcycleCOEHistory[motorcycleCOEHistory.length - 1].premium;
+}
+
+/**
+ * Get the latest PQP for motorcycles
+ * @returns {number|null} Latest PQP in SGD
+ */
+export function getLatestPQP() {
+  if (motorcycleCOEHistory.length === 0) return null;
+  for (let i = motorcycleCOEHistory.length - 1; i >= 0; i--) {
+    if (motorcycleCOEHistory[i].pqp !== null) return motorcycleCOEHistory[i].pqp;
+  }
+  return null;
 }
 
 /**
@@ -4255,19 +4652,25 @@ export function getAverageCOEPrice(year) {
 
 /**
  * Get COE price statistics
- * @returns {Object} Statistics including min, max, average prices
+ * @returns {Object} Statistics including min, max, average prices and PQP info
  */
 export function getCOEStatistics() {
   if (motorcycleCOEHistory.length === 0) return null;
   
   const prices = motorcycleCOEHistory.map(record => record.premium);
+  const pqpValues = motorcycleCOEHistory
+    .filter(record => record.pqp !== null)
+    .map(record => record.pqp);
   
   return {
     count: prices.length,
     min: Math.min(...prices),
     max: Math.max(...prices),
     average: Math.round(prices.reduce((sum, price) => sum + price, 0) / prices.length),
-    latest: prices[prices.length - 1]
+    latest: prices[prices.length - 1],
+    latestPqp: pqpValues.length > 0 ? pqpValues[pqpValues.length - 1] : null,
+    pqpMin: pqpValues.length > 0 ? Math.min(...pqpValues) : null,
+    pqpMax: pqpValues.length > 0 ? Math.max(...pqpValues) : null,
   };
 }
 
