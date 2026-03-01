@@ -519,7 +519,7 @@ export default function COEChart({
               <ResponsiveContainer width="100%" height="100%">
                 {chartType === "line" ? (
                   <LineChart data={processedData}>
-                    <CartesianGrid strokeDasharray="3 3" />
+                    <CartesianGrid strokeDasharray="3 3" yAxisId="price" />
                     <XAxis
                       dataKey="date"
                       tick={{ fontSize: 12 }}
@@ -579,7 +579,7 @@ export default function COEChart({
                   </LineChart>
                 ) : (
                   <ComposedChart data={processedData}>
-                    <CartesianGrid strokeDasharray="3 3" />
+                    <CartesianGrid strokeDasharray="3 3" yAxisId="price" />
                     <XAxis
                       dataKey="date"
                       tick={{ fontSize: 12 }}
