@@ -7,7 +7,7 @@ const RATE_LIMIT_ROUTES: Record<string, { config: typeof RATE_LIMITS[keyof typeo
   "/api/knowledge-base/reindex": { config: RATE_LIMITS.reindex, prefix: "reindex" },
 };
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname.startsWith("/api/")) {
