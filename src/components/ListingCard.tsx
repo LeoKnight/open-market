@@ -4,6 +4,7 @@ import { Calendar, Gauge, Fuel, Eye, ShieldCheck } from "lucide-react";
 import FavoriteButton from "./FavoriteButton";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { normalizeImageUrl } from "@/lib/image-url";
 
 interface ListingCardProps {
   listing: {
@@ -63,7 +64,7 @@ export default function ListingCard({ listing }: ListingCardProps) {
         <div className="relative aspect-[4/3] overflow-hidden bg-muted">
           {hasImage ? (
             <Image
-              src={listing.images[0]}
+              src={normalizeImageUrl(listing.images[0])}
               alt={listing.title}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-300"

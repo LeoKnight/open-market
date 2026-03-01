@@ -62,14 +62,15 @@ export function useAIChat() {
           throw new Error("AI request failed");
         }
 
-        const ragIntent = res.headers.get("X-RAG-Intent") || undefined;
+        const rawIntent = res.headers.get("X-RAG-Intent");
+        const ragIntent = rawIntent ? decodeURIComponent(rawIntent) : undefined;
         let ragSources: RAGMetadata["sources"];
         let ragTools: string[] | undefined;
         try {
           const srcHeader = res.headers.get("X-RAG-Sources");
-          if (srcHeader) ragSources = JSON.parse(srcHeader);
+          if (srcHeader) ragSources = JSON.parse(decodeURIComponent(srcHeader));
           const toolHeader = res.headers.get("X-RAG-Tools");
-          if (toolHeader) ragTools = JSON.parse(toolHeader);
+          if (toolHeader) ragTools = JSON.parse(decodeURIComponent(toolHeader));
         } catch {
           // ignore parse errors
         }

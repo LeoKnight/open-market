@@ -5,6 +5,7 @@ import { useTranslations, useLocale } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { X, Bike, ArrowLeft, Fuel, Bot, Loader2 } from "lucide-react";
+import { normalizeImageUrl } from "@/lib/image-url";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {
@@ -275,7 +276,7 @@ export default function ComparePage() {
                     </Button>
                     <div className="relative w-full h-32 rounded-lg overflow-hidden bg-muted mb-3">
                       {l.images[0] ? (
-                        <Image src={l.images[0]} alt={l.title} fill className="object-cover" sizes="300px" />
+                        <Image src={normalizeImageUrl(l.images[0])} alt={l.title} fill className="object-cover" sizes="300px" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
                           <Fuel className="w-10 h-10 text-muted-foreground" />

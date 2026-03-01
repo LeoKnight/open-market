@@ -13,6 +13,7 @@ import AIListingConsult from "@/components/AIListingConsult";
 import AIPricingAnalysis from "@/components/AIPricingAnalysis";
 import AITotalCostAnalysis from "@/components/AITotalCostAnalysis";
 import VerificationBadge from "@/components/VerificationBadge";
+import { normalizeImageUrl } from "@/lib/image-url";
 import {
   Calendar, Gauge, Fuel, MapPin, User, ArrowLeft, Pencil, Bike, Eye, Shield,
 } from "lucide-react";
@@ -167,7 +168,7 @@ export default async function ListingDetailPage({
           {/* Right Sidebar */}
           <div className="space-y-6">
             {/* Price Card */}
-            <Card className="p-6 sticky top-24">
+            <Card className="p-6">
               <CardContent className="p-0">
                 <div className="flex items-center justify-between mb-2">
                   <h1 className="text-xl font-bold text-foreground flex-1">{listing.title}</h1>
@@ -227,7 +228,7 @@ export default async function ListingDetailPage({
                 brand: listing.brand,
                 model: listing.model,
                 price: listing.price,
-                image: listing.images[0],
+                image: normalizeImageUrl(listing.images[0]),
               }} />
 
                 <div className="mt-3">

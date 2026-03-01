@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { callVision } from "@/lib/ai";
+import { callVision, callTextExtraction } from "@/lib/ai";
+import { PDFParse } from "pdf-parse";
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,7 +14,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Image required" }, { status: 400 });
     }
 
-    const rawResult = await callVision(image, mimeType || "image/jpeg");
+    let rawResult: string;
+
+    if (mimeType === "application/pdf") {
+      const pdfBuffer = Buffer.from(image, "base64");
+      const pdf = new PDFParse({ data: new Uint8Array(pdfBuffer) });
+      const textResult = await pdf.getText();
+      await pdf.destroy();
+      rawResult = await callTextExtraction(textResult.text);
+    } else {
+      rawResult = await callVision(image, mimeType || "image/jpeg");
+    }
 
     const jsonMatch = rawResult.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {

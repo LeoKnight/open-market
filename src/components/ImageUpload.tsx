@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import Image from "next/image";
 import { Upload, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { normalizeImageUrl } from "@/lib/image-url";
 
 interface ImageUploadProps {
   images: string[];
@@ -59,7 +60,7 @@ export default function ImageUpload({
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
         {images.map((url, idx) => (
           <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border group">
-            <Image src={url} alt={`Upload ${idx + 1}`} fill className="object-cover" sizes="120px" />
+            <Image src={normalizeImageUrl(url)} alt={`Upload ${idx + 1}`} fill className="object-cover" sizes="120px" />
             <Button
               type="button"
               variant="destructive"

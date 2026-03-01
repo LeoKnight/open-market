@@ -4,23 +4,13 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ["pdf-parse", "pdfjs-dist"],
   cacheComponents: true,
   images: {
     remotePatterns: [
       {
-        protocol: "http",
-        hostname: "localhost",
-        port: "9000",
-      },
-      {
-        protocol: "http",
-        hostname: "leoknight.ddns.net",
-        port: "8080",
-      },
-      {
-        protocol: "http",
-        hostname: "leoknight.ddns.net",
-        port: "9000",
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
       },
     ],
   },

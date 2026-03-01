@@ -8,6 +8,7 @@ import DashboardActions from "@/components/DashboardActions";
 import ListingCard from "@/components/ListingCard";
 import { DashboardTabs } from "@/components/DashboardTabs";
 import { Plus, Bike, Fuel, Heart } from "lucide-react";
+import { normalizeImageUrl } from "@/lib/image-url";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -122,7 +123,7 @@ export default async function DashboardPage({
                 <CardContent className="p-0 flex flex-col sm:flex-row gap-4">
                   <div className="relative w-full sm:w-40 h-32 sm:h-28 flex-shrink-0 rounded-lg overflow-hidden bg-muted">
                     {listing.images.length > 0 ? (
-                      <Image src={listing.images[0]} alt={listing.title} fill className="object-cover" sizes="160px" />
+                      <Image src={normalizeImageUrl(listing.images[0])} alt={listing.title} fill className="object-cover" sizes="160px" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
                         <Fuel className="w-8 h-8 text-muted-foreground" />

@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { useTranslations } from "next-intl";
-import { Upload, ScanLine, CheckCircle, AlertCircle, Loader2, X } from "lucide-react";
+import { Upload, ScanLine, CheckCircle, AlertCircle, Loader2, X, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
@@ -16,16 +16,29 @@ export default function DetailCardUpload({ onExtracted }: DetailCardUploadProps)
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
+  const [isPdf, setIsPdf] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const processImage = async (file: File) => {
+  const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif", "application/pdf"];
+
+  const isValidFile = (file: File) =>
+    file.type.startsWith("image/") || file.type === "application/pdf";
+
+  const processFile = async (file: File) => {
     setError("");
     setSuccess(false);
     setLoading(true);
 
-    const reader = new FileReader();
-    reader.onload = () => setPreview(reader.result as string);
-    reader.readAsDataURL(file);
+    const filePdf = file.type === "application/pdf";
+    setIsPdf(filePdf);
+
+    if (!filePdf) {
+      const reader = new FileReader();
+      reader.onload = () => setPreview(reader.result as string);
+      reader.readAsDataURL(file);
+    } else {
+      setPreview(file.name);
+    }
 
     try {
       const base64 = await fileToBase64(file);
@@ -35,7 +48,7 @@ export default function DetailCardUpload({ onExtracted }: DetailCardUploadProps)
         body: JSON.stringify({ image: base64, mimeType: file.type }),
       });
 
-      if (!res.ok) throw new Error("Failed to process image");
+      if (!res.ok) throw new Error("Failed to process file");
 
       const result = await res.json();
       if (result.data) {
@@ -54,19 +67,20 @@ export default function DetailCardUpload({ onExtracted }: DetailCardUploadProps)
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (!file.type.startsWith("image/")) { setError(t("imageOnly")); return; }
-    if (file.size > 10 * 1024 * 1024) { setError(t("imageTooLarge")); return; }
-    processImage(file);
+    if (!isValidFile(file)) { setError(t("fileTypeError")); return; }
+    if (file.size > 10 * 1024 * 1024) { setError(t("fileTooLarge")); return; }
+    processFile(file);
   };
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
-    if (file?.type.startsWith("image/")) processImage(file);
+    if (file && isValidFile(file)) processFile(file);
   };
 
   const clearPreview = () => {
     setPreview(null);
+    setIsPdf(false);
     setSuccess(false);
     setError("");
     if (fileRef.current) fileRef.current.value = "";
@@ -84,7 +98,7 @@ export default function DetailCardUpload({ onExtracted }: DetailCardUploadProps)
           : "border-border hover:border-primary/50 hover:bg-primary/5"
         }`}
       >
-        <input ref={fileRef} type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
+        <input ref={fileRef} type="file" accept={ACCEPTED_TYPES.join(",")} onChange={handleFileChange} className="hidden" />
 
         {preview && (
           <Button
@@ -99,8 +113,13 @@ export default function DetailCardUpload({ onExtracted }: DetailCardUploadProps)
         )}
 
         <div className="flex items-center gap-4">
-          {preview ? (
+          {preview && !isPdf ? (
             <img src={preview} alt="Card preview" className="w-20 h-20 object-cover rounded-lg border" />
+          ) : preview && isPdf ? (
+            <div className="w-20 h-20 bg-red-50 rounded-lg border flex flex-col items-center justify-center gap-1">
+              <FileText className="h-7 w-7 text-red-500" />
+              <span className="text-[10px] text-muted-foreground truncate max-w-[72px]">PDF</span>
+            </div>
           ) : (
             <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center shrink-0">
               <ScanLine className="h-7 w-7 text-primary" />
@@ -129,7 +148,7 @@ export default function DetailCardUpload({ onExtracted }: DetailCardUploadProps)
             ) : (
               <Button type="button" size="sm" onClick={() => fileRef.current?.click()}>
                 <Upload className="h-3.5 w-3.5" />
-                {t("selectImage")}
+                {t("selectFile")}
               </Button>
             )}
           </div>

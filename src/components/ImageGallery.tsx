@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, Fuel } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { normalizeImageUrl } from "@/lib/image-url";
 
 interface ImageGalleryProps {
   images: string[];
@@ -32,7 +33,7 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
     <Card className="overflow-hidden">
       <div className="relative aspect-[16/10]">
         <Image
-          src={images[current]}
+          src={normalizeImageUrl(images[current])}
           alt={`${title} - Image ${current + 1}`}
           fill
           className="object-cover"
@@ -76,7 +77,7 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
                 idx === current ? "border-primary" : "border-transparent hover:border-muted-foreground/30"
               }`}
             >
-              <Image src={img} alt={`Thumbnail ${idx + 1}`} fill className="object-cover" sizes="64px" />
+              <Image src={normalizeImageUrl(img)} alt={`Thumbnail ${idx + 1}`} fill className="object-cover" sizes="64px" />
             </button>
           ))}
         </div>

@@ -106,6 +106,34 @@ export async function streamChat(
   return response.body!;
 }
 
+export async function callTextExtraction(text: string): Promise<string> {
+  const response = await fetch(AI_CONFIG.endpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${AI_CONFIG.apiKey}`,
+    },
+    body: JSON.stringify({
+      model: AI_CONFIG.model,
+      messages: [
+        {
+          role: "user",
+          content: `${buildVisionPrompt()}\n\nHere is the text content extracted from a motorcycle detail card / registration document:\n\n${text}`,
+        },
+      ],
+      max_tokens: 1024,
+      temperature: 0.1,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Text extraction API error: ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data.choices?.[0]?.message?.content || "";
+}
+
 export async function callVision(
   imageBase64: string,
   mimeType: string = "image/jpeg"

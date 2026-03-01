@@ -28,6 +28,5 @@ export async function uploadFile(
 }
 
 export function getPublicUrl(key: string): string {
-  const publicUrl = process.env.S3_PUBLIC_URL!;
-  return `${publicUrl}/${S3_BUCKET}/${key}`;
+  return `/api/s3/${S3_BUCKET}/${key}`;
 }

@@ -23,14 +23,16 @@ export async function POST(request: NextRequest) {
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache",
       Connection: "keep-alive",
-      "X-RAG-Intent": intent.type,
-      "X-RAG-Sources": JSON.stringify(
-        sources.map((s) => ({ source: s.source, section: s.section }))
+      "X-RAG-Intent": encodeURIComponent(intent.type),
+      "X-RAG-Sources": encodeURIComponent(
+        JSON.stringify(
+          sources.map((s) => ({ source: s.source, section: s.section }))
+        )
       ),
     });
 
     if (toolsUsed.length > 0) {
-      headers.set("X-RAG-Tools", JSON.stringify(toolsUsed));
+      headers.set("X-RAG-Tools", encodeURIComponent(JSON.stringify(toolsUsed)));
     }
 
     return new Response(stream, { headers });

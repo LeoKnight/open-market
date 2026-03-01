@@ -147,8 +147,28 @@ export default function ListingForm({
   const [aiLoading, setAiLoading] = useState<string | null>(null);
   const [isVerified, setIsVerified] = useState(false);
 
+  const normalize = (s: string) => s.toLowerCase().replace(/[\s.\-_/]/g, "");
+
+  const matchBrand = (raw: string): string => {
+    const key = normalize(raw);
+    return BRANDS.find((b) => normalize(b) === key) || raw;
+  };
+
+  const inferLicenseClass = (cc: number): string => {
+    if (cc <= 0) return "";
+    if (cc <= 200) return "CLASS_2B";
+    if (cc <= 400) return "CLASS_2A";
+    return "CLASS_2";
+  };
+
   const updateField = (field: string, value: string | number | string[]) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
+    setForm((prev) => {
+      const next = { ...prev, [field]: value };
+      if (field === "engineSize" && typeof value === "number") {
+        next.licenseClass = inferLicenseClass(value);
+      }
+      return next;
+    });
   };
 
   const aiGenerate = useCallback(
@@ -240,9 +260,19 @@ export default function ListingForm({
       const updated = { ...prev };
       for (const [key, formKey] of Object.entries(fieldMap)) {
         if (data[key] != null && data[key] !== "") {
-          (updated as Record<string, unknown>)[formKey] = data[key];
+          let val = data[key];
+          if (key === "brand" && typeof val === "string") {
+            val = matchBrand(val);
+          }
+          (updated as Record<string, unknown>)[formKey] = val;
         }
       }
+
+      const cc = Number(updated.engineSize) || 0;
+      if (cc > 0) {
+        updated.licenseClass = inferLicenseClass(cc);
+      }
+
       return updated;
     });
     setIsVerified(true);
@@ -367,7 +397,7 @@ export default function ListingForm({
                   <Label>{t("description")}</Label>
                   <AIButton onClick={handleAIDescription} loading={aiLoading === "description"} label={tAI("generateDescription")} disabled={!form.brand && !form.model} />
                 </div>
-                <Textarea value={form.description} onChange={(e) => updateField("description", e.target.value)} placeholder={t("descriptionPlaceholder")} rows={4} />
+                <Textarea value={form.description} onChange={(e) => updateField("description", e.target.value)} placeholder={t("descriptionPlaceholder")} rows={4} className="min-h-[150px]" />
               </div>
             </div>
           </div>
