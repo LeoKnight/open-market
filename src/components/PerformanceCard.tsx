@@ -14,12 +14,12 @@ interface PerformanceCardProps {
   engineSize: number;
 }
 
-function getPerformanceLevel(ratio: number) {
-  if (ratio >= 1.2) return { level: "Superbike", variant: "destructive" as const, pct: 100 };
-  if (ratio >= 0.8) return { level: "Sport", variant: "default" as const, pct: 75 };
-  if (ratio >= 0.5) return { level: "Standard", variant: "secondary" as const, pct: 50 };
-  if (ratio >= 0.3) return { level: "Entry", variant: "outline" as const, pct: 30 };
-  return { level: "Cruiser", variant: "outline" as const, pct: 15 };
+function getPerformanceLevel(ratio: number, t: (key: string) => string) {
+  if (ratio >= 1.2) return { level: t("trackOnly"), variant: "destructive" as const };
+  if (ratio >= 1.0) return { level: t("hyperbike"), variant: "destructive" as const };
+  if (ratio >= 0.5) return { level: t("highPerformance"), variant: "default" as const };
+  if (ratio >= 0.1) return { level: t("standard"), variant: "secondary" as const };
+  return { level: t("entry"), variant: "outline" as const };
 }
 
 const FUEL_PRICE_SGD = 3.0;
@@ -32,7 +32,7 @@ export default function PerformanceCard({
   if (!power && !weight && !torque && !fuelConsumption) return null;
 
   const ratio = power && weight ? power / weight : null;
-  const perfLevel = ratio ? getPerformanceLevel(ratio) : null;
+  const perfLevel = ratio ? getPerformanceLevel(ratio, t) : null;
   const monthlyFuelCost = fuelConsumption ? Math.round((fuelConsumption / 100) * 500 * FUEL_PRICE_SGD) : null;
 
   return (
@@ -52,7 +52,7 @@ export default function PerformanceCard({
             </div>
             <Progress value={Math.min(100, (ratio / 1.5) * 100)} className="h-2" />
             <div className="flex justify-between text-xs text-muted-foreground mt-1">
-              <span>0</span><span>0.5</span><span>1.0</span><span>1.5+</span>
+              <span>0</span><span>0.1</span><span>0.5</span><span>1.0</span><span>1.2+</span>
             </div>
           </div>
         )}

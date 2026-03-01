@@ -99,7 +99,7 @@ export default function PriceAnalysis({
         {pieData && (
           <div>
             <p className="text-sm font-medium mb-2">{t("newBikeCostBreakdown")}</p>
-            <div className="h-48">
+            <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={pieData} cx="50%" cy="50%" innerRadius={40} outerRadius={70} dataKey="value" label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}>

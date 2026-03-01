@@ -424,7 +424,12 @@
     "fuelConsumption": "Fuel Consumption",
     "estimatedMonthlyFuel": "Est. Monthly Fuel Cost",
     "month": "mo",
-    "basedOnKm": "Based on 500km/month, S$3.00/L"
+    "basedOnKm": "Based on 500km/month, S$3.00/L",
+    "trackOnly": "Track Only",
+    "hyperbike": "Hyperbike",
+    "highPerformance": "High Performance",
+    "standard": "Standard",
+    "entry": "Entry"
   },
   "COEInfo": {
     "title": "COE Information",

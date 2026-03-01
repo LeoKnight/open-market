@@ -420,7 +420,12 @@
     "fuelConsumption": "Consommation",
     "estimatedMonthlyFuel": "Coût carburant mensuel est.",
     "month": "mois",
-    "basedOnKm": "Basé sur 500km/mois, S$3,00/L"
+    "basedOnKm": "Basé sur 500km/mois, S$3,00/L",
+    "trackOnly": "Circuit uniquement",
+    "hyperbike": "Hyperbike",
+    "highPerformance": "Haute performance",
+    "standard": "Standard",
+    "entry": "Débutant"
   },
   "COEInfo": {
     "title": "Informations COE",

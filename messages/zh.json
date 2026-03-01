@@ -420,7 +420,12 @@
     "fuelConsumption": "油耗",
     "estimatedMonthlyFuel": "预估月油费",
     "month": "月",
-    "basedOnKm": "基于每月500公里，S$3.00/升"
+    "basedOnKm": "基于每月500公里，S$3.00/升",
+    "trackOnly": "赛道专用",
+    "hyperbike": "超级性能车",
+    "highPerformance": "高性能车",
+    "standard": "标准车",
+    "entry": "入门车"
   },
   "COEInfo": {
     "title": "COE信息",

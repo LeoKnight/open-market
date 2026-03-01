@@ -21,10 +21,11 @@ interface PowerToWeightRankingProps {
 
 export default function PowerToWeightRanking({ motorcycles, onClear }: PowerToWeightRankingProps) {
   const getPerformanceCategory = (ratio: number) => {
-    if (ratio >= 1.2) return { level: "Superbike", variant: "destructive" as const };
-    if (ratio >= 0.8) return { level: "High Performance", variant: "default" as const };
-    if (ratio >= 0.5) return { level: "Mid Performance", variant: "secondary" as const };
-    return { level: "Entry Level", variant: "outline" as const };
+    if (ratio >= 1.2) return { level: "Track Only", variant: "destructive" as const };
+    if (ratio >= 1.0) return { level: "Hyperbike", variant: "destructive" as const };
+    if (ratio >= 0.5) return { level: "High Performance", variant: "default" as const };
+    if (ratio >= 0.1) return { level: "Standard", variant: "secondary" as const };
+    return { level: "Entry", variant: "outline" as const };
   };
 
   const getRankIcon = (index: number) => {
@@ -56,19 +57,17 @@ export default function PowerToWeightRanking({ motorcycles, onClear }: PowerToWe
             {motorcycles.map((motorcycle, index) => {
               const category = getPerformanceCategory(motorcycle.powerToWeightRatio);
               return (
-                <div key={motorcycle.id} className="border rounded-lg p-4 hover:shadow-md transition-all">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="flex-shrink-0">{getRankIcon(index)}</div>
-                      <div className="flex-grow min-w-0">
-                        <h3 className="font-semibold truncate">{motorcycle.name}</h3>
-                        <div className="flex items-center space-x-4 text-sm text-muted-foreground mt-1">
-                          <span>{motorcycle.weight}kg</span>
-                          <span>{motorcycle.power}HP</span>
-                        </div>
+                <div key={motorcycle.id} className="border rounded-lg p-4 hover:shadow-md transition-all overflow-hidden">
+                  <div className="flex items-center gap-3">
+                    <div className="flex-shrink-0">{getRankIcon(index)}</div>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-semibold truncate">{motorcycle.name}</h3>
+                      <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1">
+                        <span>{motorcycle.weight}kg</span>
+                        <span>{motorcycle.power}HP</span>
                       </div>
                     </div>
-                    <div className="flex-shrink-0 text-right">
+                    <div className="flex-shrink-0 text-right pl-2">
                       <div className="text-lg font-bold">{motorcycle.powerToWeightRatio.toFixed(3)}</div>
                       <div className="text-xs text-muted-foreground">HP/kg</div>
                     </div>
