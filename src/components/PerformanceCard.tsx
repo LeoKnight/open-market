@@ -24,6 +24,28 @@ function getPerformanceLevel(ratio: number, t: (key: string) => string) {
 
 const FUEL_PRICE_SGD = 3.0;
 
+const RATIO_BREAKPOINTS = [
+  { value: 0, percent: 0 },
+  { value: 0.1, percent: 25 },
+  { value: 0.5, percent: 50 },
+  { value: 1.0, percent: 75 },
+  { value: 1.2, percent: 100 },
+];
+
+function ratioToProgress(ratio: number): number {
+  if (ratio <= 0) return 0;
+  if (ratio >= 1.2) return 100;
+  for (let i = 1; i < RATIO_BREAKPOINTS.length; i++) {
+    if (ratio <= RATIO_BREAKPOINTS[i].value) {
+      const prev = RATIO_BREAKPOINTS[i - 1];
+      const curr = RATIO_BREAKPOINTS[i];
+      const t = (ratio - prev.value) / (curr.value - prev.value);
+      return prev.percent + t * (curr.percent - prev.percent);
+    }
+  }
+  return 100;
+}
+
 export default function PerformanceCard({
   power, weight, torque, fuelConsumption, engineSize,
 }: PerformanceCardProps) {
@@ -50,7 +72,7 @@ export default function PerformanceCard({
               <Badge variant={perfLevel.variant}>{perfLevel.level}</Badge>
               <span className="text-sm font-bold">{ratio.toFixed(3)} HP/kg</span>
             </div>
-            <Progress value={Math.min(100, (ratio / 1.5) * 100)} className="h-2" />
+            <Progress value={ratioToProgress(ratio)} className="h-2" />
             <div className="flex justify-between text-xs text-muted-foreground mt-1">
               <span>0</span><span>0.1</span><span>0.5</span><span>1.0</span><span>1.2+</span>
             </div>
